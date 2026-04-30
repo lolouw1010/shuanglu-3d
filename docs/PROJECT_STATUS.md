@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-30 19:40:48 CST
+Last updated: 2026-04-30 22:10 CST
 
 ## Current Target
 
@@ -53,6 +53,8 @@ Implemented:
 - Added atmospheric board motion: lacquer-board glow, center-rail shimmer, arrival ripple, and horse-piece hover glints.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
+- Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
+- Production runtime is PM2 process `shuanglu` behind Nginx, bound internally to `127.0.0.1:3002`.
 
 ## Verified Commands
 
@@ -89,6 +91,25 @@ Result:
 Local: http://localhost:3000
 ```
 
+Last deployed on 2026-04-30 22:10 CST:
+
+```bash
+npm ci
+npm run build
+pm2 start npm --name shuanglu -- start -- --hostname 127.0.0.1 --port 3002
+nginx -t
+systemctl reload nginx
+```
+
+Result:
+
+```txt
+Server build passed.
+PM2 process shuanglu is online.
+Nginx configuration test passed.
+Public URL http://47.121.182.144/ returns <title>双陆 Shuanglu.
+```
+
 ## Running Local Server
 
 The local development server was started successfully on:
@@ -105,7 +126,9 @@ npm run dev
 
 ## Known Risks
 
-- Aliyun GD deployment is blocked until the SSH host/user/path are confirmed. The local SSH config has no working `aliyun-gd` target.
+- The Aliyun GD server currently runs Node `18.19.1`; `npm ci` completed, but one transitive development dependency warned that newer Node versions are preferred.
+- The deployed public endpoint is plain HTTP on the server IP. A production hostname and HTTPS certificate are still needed before a public launch.
+- The server could not reliably fetch the GitHub repository directly, so the first deployment used a local Git archive upload from the synced commit.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
 - In-game text has only had an initial audit through the rules modal; character and future story text still need review against `docs/HISTORICAL_NOTES.md`.
 - `npm install` reported 7 moderate severity vulnerabilities. Do not run `npm audit fix --force` without reviewing the dependency changes.
@@ -117,7 +140,7 @@ npm run dev
 
 ## Next Engineering Priorities
 
-1. Confirm Aliyun GD server SSH target and deploy.
+1. Assign a production hostname and enable HTTPS for the Aliyun GD deployment.
 2. Manual playtest a complete Human vs Human match.
 3. Manual playtest a complete Human vs AI match.
 4. Add explicit reason feedback when clicking non-highlighted or blocked points.

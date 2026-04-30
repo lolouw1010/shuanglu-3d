@@ -274,6 +274,97 @@ Clarified the documentation distinction between:
 
 No code was changed. No tests were run for this documentation-only update.
 
+## 2026-04-26 21:13 CST
+
+### Objective
+
+Create a dedicated historical-claim boundary document. Do not implement code.
+
+### Documents Changed
+
+- `docs/HISTORICAL_NOTES.md`
+- `docs/PROJECT_STATUS.md`
+- `docs/DEV_LOG.md`
+
+### Changes Made
+
+Created `docs/HISTORICAL_NOTES.md` with five required sections:
+
+1. Historically Supported Elements
+2. Historically Suggested but Under-Specified Elements
+3. Playable Reconstruction Mechanics
+4. Game Adaptation / Story Mode Mechanics
+5. Claims We Must Not Make
+
+The new document clearly labels rule material as:
+
+- `supported`
+- `suggested`
+- `reconstructed`
+- `game adaptation`
+- `must not claim`
+
+It records the following project constraints:
+
+- The MVP uses 15 horses per side.
+- The MVP uses 24 abstract board points.
+- `doubles as four steps` belongs to Reconstruction Mode, not Classical Mode.
+- Oversized bearing-off is a playable reconstruction mechanic.
+- Character skills are future Story Mode adaptations and not MVP rules.
+- Crushing win is not part of MVP.
+- The project must not claim to be a perfect Tang-Song rule restoration.
+- The project must not claim all board terms and layouts are universally fixed across all historical periods.
+
+Each major rule item includes a `Recommended In-Game Wording` subsection and an `Avoid` example.
+
+### Verification
+
+No code was changed. No tests were run for this documentation-only update.
+
+### Open Follow-Up
+
+Future UI copy, help text, character dialogue, marketing text, and AI-generated commentary should be checked against `docs/HISTORICAL_NOTES.md`.
+
+## 2026-04-26 21:19 CST
+
+### Objective
+
+Record future data derivatives from `docs/HISTORICAL_NOTES.md`. Do not implement code.
+
+### Documents Changed
+
+- `docs/HISTORICAL_NOTES.md`
+- `docs/PROJECT_STATUS.md`
+- `docs/DEV_LOG.md`
+
+### Changes Made
+
+Added `Future Data Derivatives` to `docs/HISTORICAL_NOTES.md`.
+
+Documented future `src/data/lore.ts` contract:
+
+```ts
+type LoreEntry = {
+  id: string;
+  title: string;
+  category: 'rules' | 'history' | 'equipment' | 'adaptation';
+  confidence: 'supported' | 'suggested' | 'reconstructed' | 'adaptation';
+  body: string;
+};
+```
+
+Documented future `src/data/ruleNotes.ts` purpose and starter notes:
+
+- Classical Mode: conservative rules.
+- Reconstruction Mode: modern playability completion.
+- Story Mode: character skills and narrative adaptations, not Classical rules.
+
+Added a process guardrail: future lore and rule-note entries should be traceable back to `docs/HISTORICAL_NOTES.md`.
+
+### Verification
+
+No code was changed. No tests were run for this documentation-only update.
+
 ## 2026-04-26 23:17 CST
 
 ### Objective
@@ -1104,93 +1195,130 @@ Required to proceed:
 - Deploy to Aliyun GD after receiving the correct SSH target.
 - Add server-side deployment notes once the target is confirmed.
 
-## 2026-04-26 21:13 CST
+## 2026-04-30 22:10 CST
 
 ### Objective
 
-Create a dedicated historical-claim boundary document. Do not implement code.
+Sync the project to GitHub and deploy the current `0.5` prototype to the Aliyun GD server using a Next.js Node process behind Nginx.
 
-### Documents Changed
+### Deployment Target
 
-- `docs/HISTORICAL_NOTES.md`
-- `docs/PROJECT_STATUS.md`
-- `docs/DEV_LOG.md`
+- GitHub repository: `louiezhelee-uway/shuanglu`
+- Synced commit: `b7b9e554787ae3f62e08f2b8f7160c84bf2f6982`
+- Public URL: `http://47.121.182.144/`
+- Server app path: `/opt/shuanglu`
+- Internal app address: `127.0.0.1:3002`
+- PM2 process: `shuanglu`
+- Nginx config: `/etc/nginx/conf.d/shuanglu.conf`
 
-### Changes Made
+No server credentials are stored in repository documents.
 
-Created `docs/HISTORICAL_NOTES.md` with five required sections:
+### Server Findings
 
-1. Historically Supported Elements
-2. Historically Suggested but Under-Specified Elements
-3. Playable Reconstruction Mechanics
-4. Game Adaptation / Story Mode Mechanics
-5. Claims We Must Not Make
+The server is Ubuntu 24.04.4 LTS with:
 
-The new document clearly labels rule material as:
+- Node `v18.19.1`
+- npm `9.2.0`
+- Git `2.43.0`
+- Nginx `1.24.0`
+- PM2 already installed and active
 
-- `supported`
-- `suggested`
-- `reconstructed`
-- `game adaptation`
-- `must not claim`
+Existing services were preserved:
 
-It records the following project constraints:
+- PM2 process `school-application`
+- PM2 process `gaokao-sprint-coach`
+- Existing Nginx default server for `college.hkuway.com`
+- Existing `/gaokao` reverse proxy to `127.0.0.1:3001`
 
-- The MVP uses 15 horses per side.
-- The MVP uses 24 abstract board points.
-- `doubles as four steps` belongs to Reconstruction Mode, not Classical Mode.
-- Oversized bearing-off is a playable reconstruction mechanic.
-- Character skills are future Story Mode adaptations and not MVP rules.
-- Crushing win is not part of MVP.
-- The project must not claim to be a perfect Tang-Song rule restoration.
-- The project must not claim all board terms and layouts are universally fixed across all historical periods.
+### Deployment Work Completed
 
-Each major rule item includes a `Recommended In-Game Wording` subsection and an `Avoid` example.
+The server could not reliably fetch the GitHub repository directly within the deployment window, so the deployed package was created from the local synced Git commit:
 
-### Verification
-
-No code was changed. No tests were run for this documentation-only update.
-
-### Open Follow-Up
-
-Future UI copy, help text, character dialogue, marketing text, and AI-generated commentary should be checked against `docs/HISTORICAL_NOTES.md`.
-
-## 2026-04-26 21:19 CST
-
-### Objective
-
-Record future data derivatives from `docs/HISTORICAL_NOTES.md`. Do not implement code.
-
-### Documents Changed
-
-- `docs/HISTORICAL_NOTES.md`
-- `docs/PROJECT_STATUS.md`
-- `docs/DEV_LOG.md`
-
-### Changes Made
-
-Added `Future Data Derivatives` to `docs/HISTORICAL_NOTES.md`.
-
-Documented future `src/data/lore.ts` contract:
-
-```ts
-type LoreEntry = {
-  id: string;
-  title: string;
-  category: 'rules' | 'history' | 'equipment' | 'adaptation';
-  confidence: 'supported' | 'suggested' | 'reconstructed' | 'adaptation';
-  body: string;
-};
+```bash
+git archive --format=tar.gz -o /tmp/shuanglu-deploy-b7b9e55.tgz HEAD
 ```
 
-Documented future `src/data/ruleNotes.ts` purpose and starter notes:
+Uploaded the archive to the server and extracted it into:
 
-- Classical Mode: conservative rules.
-- Reconstruction Mode: modern playability completion.
-- Story Mode: character skills and narrative adaptations, not Classical rules.
+```txt
+/opt/shuanglu
+```
 
-Added a process guardrail: future lore and rule-note entries should be traceable back to `docs/HISTORICAL_NOTES.md`.
+Installed dependencies and built on the server:
+
+```bash
+npm ci
+npm run build
+```
+
+Started the production app with PM2:
+
+```bash
+pm2 start npm --name shuanglu -- start -- --hostname 127.0.0.1 --port 3002
+pm2 save
+```
+
+Added a dedicated Nginx server block for the IP host `47.121.182.144`, proxying to:
+
+```txt
+http://127.0.0.1:3002
+```
+
+Reloaded Nginx after configuration validation:
+
+```bash
+nginx -t
+systemctl reload nginx
+```
 
 ### Verification
 
-No code was changed. No tests were run for this documentation-only update.
+Server-side build passed:
+
+```txt
+Next.js production build passed.
+```
+
+Internal app check:
+
+```bash
+curl -I --max-time 10 http://127.0.0.1:3002/
+```
+
+Result:
+
+```txt
+HTTP/1.1 200 OK
+```
+
+PM2 status:
+
+```txt
+shuanglu online
+```
+
+Nginx status:
+
+```txt
+nginx configuration file syntax is ok
+nginx configuration test is successful
+```
+
+External public check:
+
+```bash
+curl -s --max-time 20 http://47.121.182.144/
+```
+
+Result:
+
+```txt
+The response contains <title>双陆 Shuanglu.
+```
+
+### Open Risks
+
+- The public deployment currently uses HTTP on an IP address. A real hostname and HTTPS certificate are still required for launch.
+- The server uses Node `18.19.1`. The build passed, but one transitive development dependency emitted a warning that newer Node versions are preferred.
+- `npm ci` reported 7 moderate severity advisories. They were not force-fixed because that could introduce breaking dependency changes.
+- Direct server-to-GitHub fetch was unreliable during this deployment. Future releases should use either a reliable server Git path or a scripted local archive upload process.
