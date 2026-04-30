@@ -1000,6 +1000,110 @@ Browser visual QA:
 - Improve dice motion further with a more physical roll path if needed.
 - Add optional audio only after the visual dice is acceptable.
 
+## 2026-04-30 19:40 CST
+
+### Objective
+
+Move the project out of local-only development by syncing it to GitHub and preparing for Aliyun GD deployment.
+
+### Files Changed
+
+- `.gitignore`
+- `docs/DEPLOYMENT.md`
+- `docs/PROJECT_STATUS.md`
+- `docs/DEV_LOG.md`
+
+### GitHub Sync
+
+Initialized a local Git repository in the project directory.
+
+Added `.obsidian` to `.gitignore` so local Obsidian workspace state is not pushed.
+
+Committed the initial project:
+
+```txt
+dd43221 Initial Shuanglu prototype
+```
+
+Configured remote:
+
+```txt
+origin git@github.com:louiezhelee-uway/shuanglu.git
+```
+
+The remote repository already had a placeholder commit:
+
+```txt
+95768b4 Initialize repository
+```
+
+Merged the remote placeholder history instead of force pushing:
+
+```txt
+9211616 Merge remote repository placeholder
+```
+
+Pushed `main` successfully:
+
+```txt
+95768b4..9211616 main -> main
+```
+
+Current synced commit:
+
+```txt
+921161631b11e92fcfa2f2a48e07d576f52e8fd5
+```
+
+### Verification
+
+Before the GitHub sync, the project had already passed:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed
+27 tests passed
+```
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed
+```
+
+### Aliyun GD Deployment Status
+
+Deployment is blocked pending server details.
+
+Findings:
+
+- No working `aliyun-gd` SSH config entry exists locally.
+- `ssh -G aliyun-gd` falls back to unresolved hostname defaults.
+- Direct `ssh aliyun-gd` fails DNS resolution.
+- Existing configured hosts do not clearly identify an Aliyun GD server.
+
+Required to proceed:
+
+- SSH host or SSH config alias
+- SSH user
+- Deployment path
+- Public domain or port
+- Whether to serve with static export or a Node/Next process
+
+### Open Follow-Up
+
+- Deploy to Aliyun GD after receiving the correct SSH target.
+- Add server-side deployment notes once the target is confirmed.
+
 ## 2026-04-26 21:13 CST
 
 ### Objective

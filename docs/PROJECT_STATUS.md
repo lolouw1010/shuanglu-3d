@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-29 20:20:16 CST
+Last updated: 2026-04-30 19:40:48 CST
 
 ## Current Target
 
@@ -51,6 +51,8 @@ Implemented:
 - Added a short dice rolling phase with changing preview dice and `听骰` button state before the roll resolves.
 - Replaced numeric dice blocks with actual pip-based dice faces.
 - Added atmospheric board motion: lacquer-board glow, center-rail shimmer, arrival ripple, and horse-piece hover glints.
+- Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
+- Added deployment tracking document at `docs/DEPLOYMENT.md`.
 
 ## Verified Commands
 
@@ -103,6 +105,7 @@ npm run dev
 
 ## Known Risks
 
+- Aliyun GD deployment is blocked until the SSH host/user/path are confirmed. The local SSH config has no working `aliyun-gd` target.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
 - In-game text has only had an initial audit through the rules modal; character and future story text still need review against `docs/HISTORICAL_NOTES.md`.
 - `npm install` reported 7 moderate severity vulnerabilities. Do not run `npm audit fix --force` without reviewing the dependency changes.
@@ -114,10 +117,10 @@ npm run dev
 
 ## Next Engineering Priorities
 
-1. Manual playtest a complete Human vs Human match.
-2. Manual playtest a complete Human vs AI match.
-3. Add explicit reason feedback when clicking non-highlighted or blocked points.
-4. Run mobile viewport screenshot QA for the compact HUD and triangular board.
-5. Add regression tests for full-turn sequences.
-6. Tune AI heuristics for fewer obvious tactical mistakes.
-7. Prepare deployment target and deployment checklist.
+1. Confirm Aliyun GD server SSH target and deploy.
+2. Manual playtest a complete Human vs Human match.
+3. Manual playtest a complete Human vs AI match.
+4. Add explicit reason feedback when clicking non-highlighted or blocked points.
+5. Run mobile viewport screenshot QA for the compact HUD and triangular board.
+6. Add regression tests for full-turn sequences.
+7. Tune AI heuristics for fewer obvious tactical mistakes.
