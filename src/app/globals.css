@@ -1,0 +1,381 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Songti SC", "Noto Serif CJK SC", "STSong", serif;
+  --font-sans: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #130e0d;
+  font-family: var(--font-sans);
+}
+
+button {
+  font: inherit;
+}
+
+button:focus-visible {
+  outline: 2px solid #f7d98b;
+  outline-offset: 2px;
+}
+
+@keyframes sourcePulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.2);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 2px rgba(251, 191, 36, 0.42),
+      0 0 16px rgba(251, 191, 36, 0.16);
+  }
+}
+
+@keyframes targetPulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 1px rgba(110, 231, 183, 0.22);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 2px rgba(110, 231, 183, 0.52),
+      0 0 18px rgba(16, 185, 129, 0.18);
+  }
+}
+
+@keyframes lastMoveGlow {
+  0% {
+    box-shadow: inset 0 0 0 2px rgba(125, 211, 252, 0.54);
+  }
+  100% {
+    box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.24);
+  }
+}
+
+@keyframes pieceArrive {
+  0% {
+    opacity: 0.35;
+    transform: translateY(-12px) scale(0.88);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hitFlash {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.82);
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes dicePop {
+  0% {
+    transform: translateY(-5px) rotateX(-18deg) rotateZ(-5deg) scale(0.9);
+  }
+  65% {
+    transform: translateY(1px) rotateX(8deg) rotateZ(2deg) scale(1.07);
+  }
+  100% {
+    transform: translateY(0) rotateX(0deg) rotateZ(0deg) scale(1);
+  }
+}
+
+@keyframes diceTumble {
+  0% {
+    transform: translateY(-2px) rotateX(0deg) rotateZ(-8deg) scale(0.96);
+  }
+  45% {
+    transform: translateY(3px) rotateX(160deg) rotateZ(9deg) scale(1.06);
+  }
+  100% {
+    transform: translateY(-1px) rotateX(340deg) rotateZ(-4deg) scale(0.98);
+  }
+}
+
+@keyframes diceIconSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes trayGlow {
+  0%,
+  100% {
+    box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.04);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 1px rgba(251, 191, 36, 0.12),
+      0 0 20px rgba(251, 191, 36, 0.06);
+  }
+}
+
+@keyframes boardBreath {
+  0%,
+  100% {
+    box-shadow:
+      0 16px 45px rgba(0, 0, 0, 0.26),
+      inset 0 0 34px rgba(0, 0, 0, 0.18);
+  }
+  50% {
+    box-shadow:
+      0 18px 52px rgba(0, 0, 0, 0.34),
+      inset 0 0 48px rgba(245, 158, 11, 0.06);
+  }
+}
+
+@keyframes railShimmer {
+  0%,
+  100% {
+    filter: brightness(0.92);
+  }
+  50% {
+    filter: brightness(1.18);
+  }
+}
+
+@keyframes pieceGlint {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.16);
+  }
+}
+
+@keyframes arrivalRipple {
+  0% {
+    opacity: 0.45;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.9);
+  }
+}
+
+@keyframes feedbackEnter {
+  0% {
+    opacity: 0.6;
+    transform: translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.source-pulse {
+  animation: sourcePulse 1.35s ease-in-out infinite;
+}
+
+.target-pulse {
+  animation: targetPulse 1.1s ease-in-out infinite;
+}
+
+.last-move-glow {
+  animation: lastMoveGlow 0.9s ease-out;
+}
+
+.piece-arrive {
+  animation: pieceArrive 0.42s ease-out;
+}
+
+.hit-flash {
+  animation: hitFlash 0.32s ease-out;
+}
+
+.dice-pop {
+  animation: dicePop 0.28s ease-out;
+}
+
+.dice-tumble {
+  animation: diceTumble 0.18s linear infinite;
+  transform-style: preserve-3d;
+}
+
+.dice-stage {
+  height: 48px;
+  perspective: 420px;
+  width: 48px;
+}
+
+.die-body {
+  align-items: center;
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.88), transparent 18%),
+    linear-gradient(145deg, #fff4d3, #dfbf7a 58%, #9f7231);
+  border: 1px solid rgba(80, 48, 15, 0.58);
+  border-radius: 10px;
+  box-shadow:
+    inset 2px 2px 5px rgba(255, 255, 255, 0.75),
+    inset -3px -4px 7px rgba(80, 42, 10, 0.35),
+    0 7px 16px rgba(0, 0, 0, 0.35);
+  display: flex;
+  height: 48px;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  width: 48px;
+}
+
+.die-body::before {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), transparent);
+  content: "";
+  height: 100%;
+  left: 3px;
+  opacity: 0.5;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 10px;
+}
+
+.die-body::after {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.34),
+    transparent 42%,
+    rgba(83, 47, 12, 0.18)
+  );
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.die-pip-grid {
+  display: grid;
+  gap: 4px;
+  grid-template-columns: repeat(3, 8px);
+  grid-template-rows: repeat(3, 8px);
+  position: relative;
+  z-index: 1;
+}
+
+.die-pip {
+  align-self: center;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.96));
+  border-radius: 999px;
+  box-shadow:
+    inset 1px 1px 2px rgba(255, 255, 255, 0.16),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.5);
+  height: 8px;
+  justify-self: center;
+  width: 8px;
+}
+
+.die-empty {
+  color: rgba(38, 24, 10, 0.58);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.dice-icon-spin {
+  animation: diceIconSpin 0.48s linear infinite;
+}
+
+.dice-tray {
+  animation: trayGlow 3.8s ease-in-out infinite;
+}
+
+.roll-ready {
+  animation: sourcePulse 1.45s ease-in-out infinite;
+}
+
+.feedback-enter {
+  animation: feedbackEnter 0.22s ease-out;
+}
+
+.board-ambient {
+  animation: boardBreath 5.8s ease-in-out infinite;
+}
+
+.center-rail {
+  animation: railShimmer 4.2s ease-in-out infinite;
+}
+
+.horse-piece {
+  position: relative;
+}
+
+.horse-piece::after {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.34),
+    transparent 42%
+  );
+  border-radius: inherit;
+  content: "";
+  inset: 3px 4px auto auto;
+  height: 8px;
+  opacity: 0.65;
+  pointer-events: none;
+  position: absolute;
+  width: 8px;
+}
+
+.point-surface:hover .horse-piece {
+  animation: pieceGlint 0.9s ease-in-out;
+}
+
+.arrival-ripple {
+  animation: arrivalRipple 0.55s ease-out;
+  border: 1px solid rgba(125, 211, 252, 0.55);
+  border-radius: 999px;
+  height: 76px;
+  left: 50%;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 76px;
+  z-index: 18;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
