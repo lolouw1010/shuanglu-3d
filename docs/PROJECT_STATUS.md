@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-04-30 22:10 CST
+Last updated: 2026-05-01 16:08 CST
 
 ## Current Target
 
@@ -51,6 +51,7 @@ Implemented:
 - Added a short dice rolling phase with changing preview dice and `听骰` button state before the roll resolves.
 - Replaced numeric dice blocks with actual pip-based dice faces.
 - Added atmospheric board motion: lacquer-board glow, center-rail shimmer, arrival ripple, and horse-piece hover glints.
+- Improved bar re-entry guidance: when a player has horses on the bar, the board now labels the bar control as `点这里复马` and the turn prompts explain the two-step action.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
@@ -108,6 +109,20 @@ Server build passed.
 PM2 process shuanglu is online.
 Nginx configuration test passed.
 Public URL http://47.121.182.144/ returns <title>双陆 Shuanglu.
+```
+
+Last verified locally on 2026-05-01 16:08 CST:
+
+```bash
+npm test
+npm run build
+```
+
+Result:
+
+```txt
+8 test files passed, 27 tests passed.
+Next.js production build passed.
 ```
 
 ## Running Local Server

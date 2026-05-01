@@ -58,7 +58,7 @@ function messageForState(state: BoardState): string {
     return `${playerLabel(state.currentPlayer)}请掷骰。目标是先出完 15 枚马。`;
   }
   if (state.bar[state.currentPlayer] > 0) {
-    return "尚有马在栏，必须先从马栏复马。";
+    return `尚有${playerLabel(state.currentPlayer)}马在栏：先点棋盘中部的“马栏/复马”按钮，再点绿色入口。`;
   }
   return `${playerLabel(state.currentPlayer)}行棋：先点发光的己方马。`;
 }
@@ -129,9 +129,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       targetMoves: moves,
       message:
         moves.length > 0
-          ? "请选择绿色落点。"
+          ? source === "bar"
+            ? "已选择马栏。现在点绿色入口，把栏中马复入棋盘。"
+            : "请选择绿色落点。"
           : state.bar[state.currentPlayer] > 0
-            ? "尚有马在栏，必须先从马栏复马。"
+            ? "栏中马必须先复入。请点棋盘中部的“马栏/复马”按钮。"
             : "此马暂无可行之步，请改选发光的己方马。",
     });
   },

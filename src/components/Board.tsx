@@ -23,6 +23,10 @@ export function Board({
 }: BoardProps) {
   const latestMove = state.moveHistory.at(-1);
   const selectableSources = new Set(availableMoves.map((move) => move.from));
+  const barMoves = availableMoves.filter((move) => move.from === "bar");
+  const mustEnterFromBar =
+    state.turnPhase === "awaiting_move" && state.bar[state.currentPlayer] > 0;
+  const canSelectBar = selectableSources.has("bar");
   const targetPoints = new Set(
     targetMoves
       .filter((move) => typeof move.to === "number")
@@ -70,17 +74,33 @@ export function Board({
                 type="button"
                 className={`rounded border px-4 py-3 text-sm transition ${
                   selectedSource === "bar"
-                    ? "border-amber-100 bg-amber-100/20 text-amber-50 shadow-[0_0_0_2px_rgba(251,191,36,.18)]"
-                    : selectableSources.has("bar")
-                    ? "border-amber-100 bg-amber-100/16 text-amber-50"
+                    ? "border-emerald-100 bg-emerald-300/18 text-emerald-50 shadow-[0_0_0_2px_rgba(110,231,183,.2)]"
+                    : canSelectBar
+                    ? "border-emerald-100 bg-emerald-300/14 text-emerald-50 shadow-[0_0_22px_rgba(16,185,129,.18)]"
                     : "border-amber-100/14 bg-black/22 text-stone-300"
                 }`}
                 onClick={() => onSelectSource("bar")}
               >
-                <span className="block text-xs text-stone-400">被打入栏，须先复马</span>
-                <span className="font-display text-xl text-amber-50">
-                  栏：白 {state.bar.white} / 黑 {state.bar.black}
+                <span className="flex flex-wrap items-center gap-2 text-xs text-stone-400">
+                  <span>被打入栏，须先复马</span>
+                  {mustEnterFromBar ? (
+                    <span className="rounded-full border border-emerald-200/45 bg-emerald-300/16 px-2 py-0.5 font-semibold text-emerald-100">
+                      点这里复马
+                    </span>
+                  ) : null}
                 </span>
+                <span className="mt-1 block font-display text-xl text-amber-50">
+                  马栏：白 {state.bar.white} / 黑 {state.bar.black}
+                </span>
+                {mustEnterFromBar ? (
+                  <span className="mt-1 block text-xs text-emerald-100/85">
+                    {selectedSource === "bar"
+                      ? "已选马栏，去点绿色入口。"
+                      : canSelectBar
+                        ? `先点此处；可复马入口 ${barMoves.length} 个。`
+                        : "本骰无可复马入口。"}
+                  </span>
+                ) : null}
               </button>
               <div className="center-rail rounded-full bg-[linear-gradient(#d6a250,#6f351c,#d6a250)]" />
               <button

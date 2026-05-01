@@ -1322,3 +1322,65 @@ The response contains <title>双陆 Shuanglu.
 - The server uses Node `18.19.1`. The build passed, but one transitive development dependency emitted a warning that newer Node versions are preferred.
 - `npm ci` reported 7 moderate severity advisories. They were not force-fixed because that could introduce breaking dependency changes.
 - Direct server-to-GitHub fetch was unreliable during this deployment. Future releases should use either a reliable server Git path or a scripted local archive upload process.
+
+## 2026-05-01 16:08 CST
+
+### Objective
+
+Fix a playability problem reported during manual play: when the game says `尚有马在栏，必须先从马栏复马。`, the player does not know what to click.
+
+### Files Changed
+
+- `src/store/gameStore.ts`
+- `src/components/Board.tsx`
+- `src/components/TurnCoach.tsx`
+- `docs/PROJECT_STATUS.md`
+- `docs/DEV_LOG.md`
+
+### Changes Made
+
+Clarified the bar re-entry flow in player-action language:
+
+1. Click the board's central `马栏` control.
+2. Then click the green entry point.
+
+Updated the board UI so the bar area becomes a clear operation control when re-entry is mandatory:
+
+- Shows `点这里复马`.
+- Uses green active styling when the bar is selectable.
+- Shows how many legal re-entry entrances are currently available.
+- Changes to `已选马栏，去点绿色入口。` after the player selects the bar.
+
+Updated turn guidance and store messages so they no longer only state the rule; they now tell the player the next click.
+
+### Verification
+
+Ran:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed
+27 tests passed
+```
+
+Ran:
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed
+```
+
+### Open Follow-Up
+
+- Add browser QA for an actual hit-and-re-entry scenario so the visual state can be checked in context.
+- Consider adding a one-turn tutorial overlay the first time a player has a horse on the bar.

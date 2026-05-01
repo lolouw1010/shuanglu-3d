@@ -40,7 +40,7 @@ function currentActionText(
   }
 
   if (state.bar[state.currentPlayer] > 0 && selectedSource !== "bar") {
-    return "栏中有马时必须先复马。点中间的马栏，再点绿色落点。";
+    return "栏中有马时必须先复马。先点棋盘中部写着“点这里复马”的马栏按钮，再点绿色入口。";
   }
 
   if (selectedSource !== null) {
@@ -105,7 +105,11 @@ export function TurnCoach({
               <MousePointer2 size={14} />
               点击
             </div>
-            <p>先点发光己方马，再点绿色落点。</p>
+            <p>
+              {state.bar[state.currentPlayer] > 0
+                ? "复马：先点马栏按钮，再点绿色入口。"
+                : "先点发光己方马，再点绿色落点。"}
+            </p>
           </div>
         </div>
       </div>
