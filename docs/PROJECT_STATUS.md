@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-01 16:08 CST
+Last updated: 2026-05-01 18:36 CST
 
 ## Current Target
 
@@ -111,6 +111,26 @@ Nginx configuration test passed.
 Public URL http://47.121.182.144/ returns <title>双陆 Shuanglu.
 ```
 
+Latest server recovery and deployment verification on 2026-05-01 18:36 CST:
+
+```bash
+npm ci --no-audit --no-fund
+npm run build
+pm2 restart shuanglu --update-env
+pm2 save
+curl -I --max-time 20 http://47.121.182.144/
+```
+
+Result:
+
+```txt
+Server build passed.
+PM2 process shuanglu is online.
+Next.js listens on 127.0.0.1:3002.
+Public URL http://47.121.182.144/ returns HTTP 200.
+Public JavaScript bundle contains 点这里复马.
+```
+
 Last verified locally on 2026-05-01 16:08 CST:
 
 ```bash
@@ -143,7 +163,8 @@ npm run dev
 
 - The Aliyun GD server currently runs Node `18.19.1`; `npm ci` completed, but one transitive development dependency warned that newer Node versions are preferred.
 - The deployed public endpoint is plain HTTP on the server IP. A production hostname and HTTPS certificate are still needed before a public launch.
-- The server could not reliably fetch the GitHub repository directly, so the first deployment used a local Git archive upload from the synced commit.
+- The server could not reliably fetch the GitHub repository directly, so deployments currently use local Git archive upload from the synced commit.
+- Interrupted dependency installs can leave `node_modules` in a broken state. If that happens, move the broken directory outside `/opt/shuanglu` before running a clean `npm ci --no-audit --no-fund`.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
 - In-game text has only had an initial audit through the rules modal; character and future story text still need review against `docs/HISTORICAL_NOTES.md`.
 - `npm install` reported 7 moderate severity vulnerabilities. Do not run `npm audit fix --force` without reviewing the dependency changes.

@@ -1384,3 +1384,125 @@ Next.js production build passed
 
 - Add browser QA for an actual hit-and-re-entry scenario so the visual state can be checked in context.
 - Consider adding a one-turn tutorial overlay the first time a player has a horse on the bar.
+
+## 2026-05-01 18:36 CST
+
+### Objective
+
+Recover the Aliyun GD deployment after the server became unresponsive during the first attempt to deploy the bar re-entry UX fix, then complete the deployment.
+
+### Incident
+
+During the first server-side update, `npm ci` was interrupted and left the app in a broken dependency state.
+
+Symptoms after reboot:
+
+- Nginx was online, but the public endpoint returned `502 Bad Gateway`.
+- PM2 process `shuanglu` was online only briefly and kept restarting.
+- `ss` showed no listener on `127.0.0.1:3002`.
+- PM2 logs first showed `next: not found`.
+- A partial repair then produced `Bus error (core dumped)` from `next start`.
+
+### Recovery Work Completed
+
+Logged in with the Aliyun PEM key:
+
+```txt
+/Users/louie/Downloads/aliyun_test.pem
+```
+
+Stopped the PM2 restart loop:
+
+```bash
+pm2 stop shuanglu
+```
+
+Moved the damaged dependency directory out of the app's active dependency path:
+
+```bash
+cd /opt/shuanglu
+mv node_modules node_modules.broken_20260501_183014
+```
+
+Reinstalled dependencies cleanly:
+
+```bash
+npm ci --no-audit --no-fund
+```
+
+Moved broken dependency backups out of the project root because Next.js/TypeScript scanned them during build:
+
+```bash
+mkdir -p /opt/shuanglu_backups
+mv /opt/shuanglu/node_modules.broken_* /opt/shuanglu_backups/
+```
+
+Built the server deployment:
+
+```bash
+npm run build
+```
+
+Restarted and saved PM2:
+
+```bash
+pm2 restart shuanglu --update-env
+pm2 save
+```
+
+### Verification
+
+Server build passed:
+
+```txt
+Next.js production build passed.
+```
+
+PM2 and port check:
+
+```txt
+shuanglu online
+127.0.0.1:3002 listening
+```
+
+Internal check:
+
+```bash
+curl -I --max-time 10 http://127.0.0.1:3002/
+```
+
+Result:
+
+```txt
+HTTP/1.1 200 OK
+```
+
+Public check:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+```
+
+Result:
+
+```txt
+HTTP/1.1 200 OK
+```
+
+Bundle content check:
+
+```bash
+curl -s --max-time 20 http://47.121.182.144/_next/static/chunks/app/page-29f06141854caf05.js
+```
+
+Result:
+
+```txt
+The public bundle contains 点这里复马 and 马栏/复马.
+```
+
+### Open Follow-Up
+
+- Replace ad hoc archive deployment with a repeatable deploy script.
+- Keep dependency backup directories outside `/opt/shuanglu` so Next.js builds do not scan them.
+- Consider upgrading the server runtime to Node 20 LTS after a controlled test.

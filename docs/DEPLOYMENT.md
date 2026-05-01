@@ -66,7 +66,7 @@ Deployment target:
 - PM2 process name: `shuanglu`
 - Reverse proxy: Nginx
 - Nginx config file: `/etc/nginx/conf.d/shuanglu.conf`
-- Deployment source: local Git archive from commit `b7b9e554787ae3f62e08f2b8f7160c84bf2f6982`
+- Deployment source: local Git archive from commit `bd798b2`
 
 Runtime model:
 
@@ -118,3 +118,47 @@ Operational notes:
 - The Shuanglu app uses a separate Nginx server block for `47.121.182.144`, so the existing site was not intentionally replaced.
 - The server could not reliably fetch the GitHub repository directly during deployment, so the deployed package was uploaded from the local verified Git commit.
 - `npm ci` reported 7 moderate severity dependency advisories. They were not auto-fixed because `npm audit fix --force` may introduce breaking changes.
+
+## 2026-05-01 Recovery Notes
+
+After deploying the bar re-entry UX fix, the server became unresponsive during an interrupted dependency install. The instance was rebooted from the Aliyun console.
+
+Observed after reboot:
+
+- Nginx was online.
+- Public HTTP returned `502 Bad Gateway`.
+- PM2 process `shuanglu` was repeatedly restarting.
+- `pm2 logs shuanglu` showed `next: not found`, then `Bus error (core dumped)` after a partial repair attempt.
+
+Recovery steps:
+
+```bash
+pm2 stop shuanglu
+cd /opt/shuanglu
+mv node_modules node_modules.broken_20260501_183014
+npm ci --no-audit --no-fund
+mkdir -p /opt/shuanglu_backups
+mv /opt/shuanglu/node_modules.broken_* /opt/shuanglu_backups/
+npm run build
+pm2 restart shuanglu --update-env
+pm2 save
+```
+
+Important operational lesson:
+
+- Do not leave backup directories such as `node_modules.broken_*` inside the Next.js project root. Next.js/TypeScript may scan them during build.
+- If a dependency install is interrupted, prefer moving `node_modules` out of the app directory and running a clean `npm ci --no-audit --no-fund`.
+
+Recovery verification:
+
+```bash
+curl -I --max-time 10 http://127.0.0.1:3002/
+curl -I --max-time 20 http://47.121.182.144/
+```
+
+Result:
+
+```txt
+Both internal Next.js and public Nginx endpoints returned HTTP 200.
+The public JavaScript bundle contains 点这里复马.
+```
