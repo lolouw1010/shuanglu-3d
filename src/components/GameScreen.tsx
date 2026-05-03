@@ -82,13 +82,23 @@ export function GameScreen() {
             <VictoryTracker state={state} />
             <DicePanel state={state} onRoll={() => rollCurrentPlayer()} />
           </div>
-          <TurnCoach
+          <Board
             state={state}
             availableMoves={availableMoves}
             selectedSource={selectedSource}
             targetMoves={targetMoves}
+            onSelectSource={selectSource}
+            onSelectTarget={selectTarget}
           />
-          <PlayFeedback state={state} message={message} />
+          <div className="grid gap-3 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,.95fr)]">
+            <TurnCoach
+              state={state}
+              availableMoves={availableMoves}
+              selectedSource={selectedSource}
+              targetMoves={targetMoves}
+            />
+            <PlayFeedback state={state} message={message} />
+          </div>
           {winner ? (
             <section className="rounded border border-amber-200/40 bg-amber-100/12 p-5 text-center">
               <p className="text-sm text-amber-200">胜负已分</p>
@@ -109,14 +119,6 @@ export function GameScreen() {
               </button>
             </section>
           ) : null}
-          <Board
-            state={state}
-            availableMoves={availableMoves}
-            selectedSource={selectedSource}
-            targetMoves={targetMoves}
-            onSelectSource={selectSource}
-            onSelectTarget={selectTarget}
-          />
         </div>
 
         <div className="order-4 xl:order-none">

@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-01 18:36 CST
+Last updated: 2026-05-03 10:54 CST
 
 ## Current Target
 
@@ -52,12 +52,40 @@ Implemented:
 - Replaced numeric dice blocks with actual pip-based dice faces.
 - Added atmospheric board motion: lacquer-board glow, center-rail shimmer, arrival ripple, and horse-piece hover glints.
 - Improved bar re-entry guidance: when a player has horses on the bar, the board now labels the bar control as `点这里复马` and the turn prompts explain the two-step action.
+- Started the visual-board upgrade from flat prototype to a more 3D-like lacquer table.
+- Reordered the game screen so the board appears before the turn coach and play feedback.
+- Reworked the board into a staged scene with perspective wrapper, thick lacquer shell, dark inner tray, gold center spine, bar well, and bearing-off well.
+- Added image asset slots for final bottle-shaped horse pieces at `public/assets/pieces/white-horse-idle.png` and `public/assets/pieces/black-horse-idle.png`.
+- Added CSS fallback vase-shaped horse pieces while the final image assets are not yet committed.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
 - Production runtime is PM2 process `shuanglu` behind Nginx, bound internally to `127.0.0.1:3002`.
+- Deployed the first 3D-like board visual pass to Aliyun GD from working-tree archive `/tmp/shuanglu-visual-20260502-2349.tgz`.
 
 ## Verified Commands
+
+Last verified locally on 2026-05-02 23:49 CST:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed, 27 tests passed.
+```
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+```
 
 Last verified on 2026-04-29 20:20 CST:
 
@@ -131,6 +159,28 @@ Public URL http://47.121.182.144/ returns HTTP 200.
 Public JavaScript bundle contains 点这里复马.
 ```
 
+Latest Aliyun visual deployment on 2026-05-03 10:54 CST:
+
+```bash
+npm ci --no-audit --no-fund
+npm run build
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+curl -I --max-time 20 http://47.121.182.144/
+```
+
+Result:
+
+```txt
+Server build passed.
+PM2 process shuanglu is online.
+Nginx configuration test passed.
+Public URL http://47.121.182.144/ returns HTTP 200.
+Public JavaScript bundle contains board-scene, board-shell, board-perspective, and white-horse-idle.
+```
+
 Last verified locally on 2026-05-01 16:08 CST:
 
 ```bash
@@ -164,15 +214,16 @@ npm run dev
 - The Aliyun GD server currently runs Node `18.19.1`; `npm ci` completed, but one transitive development dependency warned that newer Node versions are preferred.
 - The deployed public endpoint is plain HTTP on the server IP. A production hostname and HTTPS certificate are still needed before a public launch.
 - The server could not reliably fetch the GitHub repository directly, so deployments currently use local Git archive upload from the synced commit.
+- The latest visual deployment was made from a local working-tree archive and still needs to be committed and pushed to GitHub.
 - Interrupted dependency installs can leave `node_modules` in a broken state. If that happens, move the broken directory outside `/opt/shuanglu` before running a clean `npm ci --no-audit --no-fund`.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
 - In-game text has only had an initial audit through the rules modal; character and future story text still need review against `docs/HISTORICAL_NOTES.md`.
 - `npm install` reported 7 moderate severity vulnerabilities. Do not run `npm audit fix --force` without reviewing the dependency changes.
-- UI has had browser screenshot QA for the revised victory tracker, triangular board, gameplay feedback layer, and dice/board animation pass, but not a full mobile screenshot pass.
+- UI has had browser screenshot QA for the revised victory tracker, triangular board, gameplay feedback layer, and dice/board animation pass, but not for the latest 3D-like board shell pass or a full mobile pass.
 - The first-turn guidance is clearer, but a fresh user still needs a full five-minute comprehension test.
 - Human vs AI has basic heuristics only; it is not tuned for strong or historically flavored play.
 - Full-match manual testing is still required. Automated tests cover core rules but not a complete end-to-end game.
-- The board UI is no longer a pure debug grid and now includes basic gameplay motion and atmosphere, but still needs final art direction, audio, and mobile polish before launch.
+- The board UI is no longer a pure debug grid and now includes basic gameplay motion and a first 3D-like lacquer-table pass, but still needs final art direction, real piece assets, audio, and mobile polish before launch.
 
 ## Next Engineering Priorities
 
@@ -180,6 +231,6 @@ npm run dev
 2. Manual playtest a complete Human vs Human match.
 3. Manual playtest a complete Human vs AI match.
 4. Add explicit reason feedback when clicking non-highlighted or blocked points.
-5. Run mobile viewport screenshot QA for the compact HUD and triangular board.
+5. Run desktop and mobile viewport screenshot QA for the 3D-like board shell and compact HUD.
 6. Add regression tests for full-turn sequences.
 7. Tune AI heuristics for fewer obvious tactical mistakes.

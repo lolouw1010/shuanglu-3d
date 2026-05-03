@@ -66,7 +66,7 @@ Deployment target:
 - PM2 process name: `shuanglu`
 - Reverse proxy: Nginx
 - Nginx config file: `/etc/nginx/conf.d/shuanglu.conf`
-- Deployment source: local Git archive from commit `bd798b2`
+- Deployment source: local working-tree archive for latest visual pass; earlier deployments used local Git archives.
 
 Runtime model:
 
@@ -162,3 +162,75 @@ Result:
 Both internal Next.js and public Nginx endpoints returned HTTP 200.
 The public JavaScript bundle contains 点这里复马.
 ```
+
+## 2026-05-03 Visual Board Deployment
+
+Status: deployed.
+
+Purpose:
+
+- Publish the first 3D-like lacquer-board visual pass directly to Aliyun GD.
+- Include the new board shell, board point styling, and future piece asset slots.
+
+Deployment package:
+
+```txt
+/tmp/shuanglu-visual-20260502-2349.tgz
+```
+
+Server upload target:
+
+```txt
+/tmp/shuanglu-visual-20260502-2349.tgz
+```
+
+Build directory:
+
+```txt
+/opt/shuanglu_release_20260502_2349
+```
+
+Previous production backup:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_visual_20260502_2349
+```
+
+Commands used:
+
+```bash
+tar -xzf /tmp/shuanglu-visual-20260502-2349.tgz -C /opt/shuanglu_release_20260502_2349
+cd /opt/shuanglu_release_20260502_2349
+npm ci --no-audit --no-fund
+npm run build
+pm2 stop shuanglu
+mv /opt/shuanglu /opt/shuanglu_backups/shuanglu_before_visual_20260502_2349
+mv /opt/shuanglu_release_20260502_2349 /opt/shuanglu
+cd /opt/shuanglu
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+```
+
+Verification:
+
+```bash
+curl -I --max-time 10 http://127.0.0.1:3002/
+curl -I --max-time 20 http://47.121.182.144/
+curl -s --max-time 20 http://47.121.182.144/_next/static/chunks/app/page-25097f5190129d22.js
+```
+
+Result:
+
+```txt
+Internal Next.js endpoint returned HTTP 200.
+Public Nginx endpoint returned HTTP 200.
+PM2 process shuanglu is online.
+Nginx configuration test passed.
+Public JavaScript bundle contains board-scene, board-shell, board-perspective, and white-horse-idle.
+```
+
+Open deployment note:
+
+- This deployment used the local working tree, not a committed Git SHA. Commit and push the visual changes before the next source-controlled release.

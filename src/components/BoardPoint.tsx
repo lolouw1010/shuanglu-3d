@@ -1,4 +1,6 @@
+import type { CSSProperties } from "react";
 import type { Point, Player } from "@/game";
+import { pieceAssets } from "@/data/assets";
 
 type BoardPointProps = {
   index: number;
@@ -14,14 +16,49 @@ type BoardPointProps = {
   onSelectTarget: () => void;
 };
 
-function horseClass(owner: Player | null): string {
-  if (owner === "white") {
-    return "border-stone-900/40 bg-stone-100 text-stone-950";
-  }
-  if (owner === "black") {
-    return "border-amber-100/30 bg-stone-950 text-amber-100";
-  }
-  return "";
+function pieceAlt(owner: Player): string {
+  return owner === "white" ? "白马" : "黑马";
+}
+
+function piecePosition(
+  index: number,
+  visibleCount: number,
+  row: "top" | "bottom",
+): CSSProperties {
+  const layouts: Record<number, Array<[number, number, number]>> = {
+    1: [[0, 0, 1]],
+    2: [
+      [-8, 0, 1],
+      [8, 6, 1.01],
+    ],
+    3: [
+      [0, -2, 1],
+      [-9, 8, 1.01],
+      [9, 10, 1.02],
+    ],
+    4: [
+      [-8, -2, 0.98],
+      [8, 2, 0.99],
+      [-10, 13, 1.01],
+      [10, 16, 1.02],
+    ],
+    5: [
+      [0, -4, 0.96],
+      [-10, 5, 0.98],
+      [10, 8, 0.99],
+      [-11, 18, 1.01],
+      [11, 21, 1.02],
+    ],
+  };
+  const [x, y, scale] = layouts[visibleCount]?.[index] ?? [0, index * 7, 1];
+  const direction = row === "top" ? 1 : -1;
+
+  return {
+    "--piece-x": `${x}px`,
+    "--piece-y": `${y * direction}px`,
+    "--piece-scale": scale,
+    "--piece-z": index + 1,
+  } as CSSProperties;
 }
 
 export function BoardPoint({
@@ -44,20 +81,19 @@ export function BoardPoint({
     }
     if (canSelect) onSelectSource();
   };
-  const tone = index % 2 === 0 ? "bg-[#7b2d24]" : "bg-[#281412]";
+  const tone = index % 2 === 0 ? "point-lane-warm" : "point-lane-dark";
   const pointShape =
     row === "top"
-      ? "[clip-path:polygon(0_0,100%_0,50%_100%)] top-0"
-      : "[clip-path:polygon(50%_0,0_100%,100%_100%)] bottom-0";
-  const stackPosition =
-    row === "top"
-      ? "top-6 flex-col"
-      : "bottom-6 flex-col-reverse";
+      ? "point-lane-top [clip-path:polygon(0_0,100%_0,50%_100%)] top-0"
+      : "point-lane-bottom [clip-path:polygon(50%_0,0_100%,100%_100%)] bottom-0";
+  const owner = point.owner;
+  const visibleCount = Math.min(point.count, 5);
+  const stackPosition = row === "top" ? "top-8" : "bottom-8";
 
   return (
     <button
       type="button"
-      className={`point-surface relative min-h-40 overflow-hidden border transition ${
+      className={`point-surface point-${row} relative min-h-40 overflow-hidden border transition ${
         isTarget
           ? "target-pulse border-emerald-200 bg-emerald-300/12"
           : isSource
@@ -69,11 +105,11 @@ export function BoardPoint({
             : canSelect
               ? "source-pulse border-amber-100/65 bg-amber-100/8"
               : "border-amber-100/8 bg-black/14"
-      } ${canSelect || isTarget ? "cursor-pointer hover:border-amber-100" : "cursor-default"}`}
+      } ${canSelect || isTarget ? "point-interactive cursor-pointer hover:border-amber-100" : "cursor-default"}`}
       onClick={handleClick}
     >
       <span
-        className={`absolute inset-x-1 h-[78%] opacity-80 ${tone} ${pointShape}`}
+        className={`point-lane absolute inset-x-1 h-[78%] ${tone} ${pointShape}`}
       />
       {isLastTo ? <span className="arrival-ripple" /> : null}
       <span
@@ -83,19 +119,31 @@ export function BoardPoint({
       >
         {index}
       </span>
-      <div
-        className={`absolute inset-x-0 z-10 flex items-center gap-1 ${stackPosition}`}
-      >
-        {Array.from({ length: Math.min(point.count, 5) }).map((_, horseIndex) => (
-          <span
-            key={horseIndex}
-            className={`horse-piece grid size-7 place-items-center rounded-full border text-[11px] font-semibold shadow-[0_2px_8px_rgba(0,0,0,.35)] ${
-              isLastTo && horseIndex === 0 ? "piece-arrive" : ""
-            } ${horseClass(point.owner)}`}
-          >
-            {horseIndex === 4 && point.count > 5 ? point.count : ""}
-          </span>
-        ))}
+      <div className={`piece-stack absolute inset-x-0 z-10 ${stackPosition}`}>
+        {owner
+          ? Array.from({ length: visibleCount }).map((_, horseIndex) => (
+              <span
+                key={horseIndex}
+                className={`horse-piece ${owner}-vase-piece ${
+                  isLastTo && horseIndex === 0 ? "piece-arrive" : ""
+                } ${isSource ? "piece-selected" : ""}`}
+                style={piecePosition(horseIndex, visibleCount, row)}
+              >
+                <img
+                  src={pieceAssets[owner].idle}
+                  alt={pieceAlt(owner)}
+                  className="horse-piece-image"
+                  draggable={false}
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                  }}
+                />
+                {horseIndex === 4 && point.count > 5 ? (
+                  <span className="piece-count-sign">x{point.count}</span>
+                ) : null}
+              </span>
+            ))
+          : null}
       </div>
       {isLastFrom ? (
         <span

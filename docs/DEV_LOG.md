@@ -1506,3 +1506,199 @@ The public bundle contains 点这里复马 and 马栏/复马.
 - Replace ad hoc archive deployment with a repeatable deploy script.
 - Keep dependency backup directories outside `/opt/shuanglu` so Next.js builds do not scan them.
 - Consider upgrading the server runtime to Node 20 LTS after a controlled test.
+
+## 2026-05-02 23:49 CST
+
+### Objective
+
+Start the visual upgrade from a flat prototype board toward a more atmospheric, game-like table that can later use the approved slender bottle-shaped horse assets.
+
+### Context
+
+The previous playable prototype was understandable at the rules level after testing, but the board still read too much like a debug interface. The user clarified that the horse pieces should look like glossy small bottle/vase forms with a rounded belly and long narrow neck, and that the whole interface must become more 3D-like before final piece assets are placed into it.
+
+### Implementation Completed
+
+Changed the main playfield order:
+
+- Moved the board above the turn coach and play feedback in `src/components/GameScreen.tsx`.
+- Kept victory progress and dice controls above the board so the player still sees the immediate turn action.
+- Grouped turn guidance and play feedback below the board to reduce first-viewport visual clutter.
+
+Added a 3D-like board shell:
+
+- Reworked `src/components/Board.tsx` into a staged board scene with caption, perspective wrapper, lacquer shell, two ranks, center spine, bar well, and bearing-off well.
+- Added matching CSS in `src/app/globals.css` for a thick lacquer-board edge, dark inner tray, gold center spine, inset wells, board highlights, and subtle board breathing.
+
+Added piece asset slots:
+
+- Added `src/data/assets.ts` to define piece image paths.
+- Added `public/assets/pieces/.gitkeep` so the future piece asset directory exists.
+- Updated `src/components/BoardPoint.tsx` to render image-based horse pieces from:
+  - `/assets/pieces/white-horse-idle.png`
+  - `/assets/pieces/black-horse-idle.png`
+- Kept CSS fallback bottle-shaped pieces if the image assets are not present.
+
+Improved point and piece staging:
+
+- Added point lane classes for warm and dark alternating triangular points.
+- Added shadows and surface highlights to make each point read as part of a physical board.
+- Preserved existing state feedback for selectable source, legal target, last move, arrival, hit, and bearing-off.
+
+### Verification
+
+Ran:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed
+27 tests passed
+```
+
+Ran:
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed
+```
+
+### Open Follow-Up
+
+- Browser screenshot QA is still needed for desktop and mobile after this visual pass.
+- The real white and black piece PNG assets still need to be placed under `public/assets/pieces/`.
+- The broader HUD still has prototype-era panels; the board has been promoted visually, but side panels and guidance panels need a second art-direction pass.
+- No Aliyun deployment has been performed for this local visual change yet.
+
+## 2026-05-03 10:54 CST
+
+### Objective
+
+Deploy the first 3D-like board visual pass directly to Aliyun GD. Do not spend more time on local preview.
+
+### Deployment Package
+
+Created local deployment archive:
+
+```txt
+/tmp/shuanglu-visual-20260502-2349.tgz
+```
+
+Archive included the current working tree, including uncommitted visual changes and the new asset directory placeholders. Excluded generated and local-only directories:
+
+- `node_modules`
+- `.next`
+- `.git`
+- `.DS_Store`
+
+### Server Build
+
+Uploaded archive to:
+
+```txt
+root@47.121.182.144:/tmp/shuanglu-visual-20260502-2349.tgz
+```
+
+Built in a separate release directory before touching the running app:
+
+```bash
+release=/opt/shuanglu_release_20260502_2349
+mkdir -p $release
+tar -xzf /tmp/shuanglu-visual-20260502-2349.tgz -C $release
+cd $release
+npm ci --no-audit --no-fund
+npm run build
+```
+
+Result:
+
+```txt
+Server Next.js production build passed.
+```
+
+Notes:
+
+- `npm ci` repeated the known Node 18 engine warning for `eslint-visitor-keys@5.0.1`.
+- Linux `tar` printed warnings about unknown macOS extended header keywords. They were non-fatal.
+
+### Cutover
+
+Stopped the running PM2 process, archived the previous production directory, moved the new release into place, then restarted:
+
+```bash
+pm2 stop shuanglu
+mv /opt/shuanglu /opt/shuanglu_backups/shuanglu_before_visual_20260502_2349
+mv /opt/shuanglu_release_20260502_2349 /opt/shuanglu
+cd /opt/shuanglu
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+```
+
+### Verification
+
+PM2 result:
+
+```txt
+shuanglu online
+exec cwd /opt/shuanglu
+script args start -- --hostname 127.0.0.1 --port 3002
+```
+
+Nginx result:
+
+```txt
+nginx configuration test passed
+```
+
+Internal endpoint:
+
+```bash
+curl -I --max-time 10 http://127.0.0.1:3002/
+```
+
+Result:
+
+```txt
+HTTP/1.1 200 OK
+```
+
+Public endpoint:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+```
+
+Result:
+
+```txt
+HTTP/1.1 200 OK
+```
+
+Public bundle check:
+
+```bash
+curl -s --max-time 20 http://47.121.182.144/_next/static/chunks/app/page-25097f5190129d22.js
+```
+
+Result:
+
+```txt
+Bundle contains board-scene, board-shell, board-perspective, and white-horse-idle.
+```
+
+### Open Follow-Up
+
+- The deployed page still needs direct browser visual QA.
+- The published app currently uses CSS fallback pieces until final PNG assets are added under `public/assets/pieces/`.
+- This deployment used a working-tree archive rather than a Git commit. The changes still need to be committed and pushed to GitHub.

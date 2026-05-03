@@ -331,24 +331,404 @@ button:focus-visible {
   animation: railShimmer 4.2s ease-in-out infinite;
 }
 
-.horse-piece {
-  position: relative;
+.board-scene {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 226, 158, 0.18), transparent 34%),
+    radial-gradient(circle at 18% 105%, rgba(149, 37, 24, 0.22), transparent 42%),
+    linear-gradient(150deg, rgba(16, 11, 10, 0.96), rgba(47, 20, 16, 0.92) 48%, rgba(10, 8, 7, 0.98));
+  border: 1px solid rgba(253, 230, 138, 0.16);
+  border-radius: 0.9rem;
+  box-shadow:
+    0 1.5rem 4rem rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 247, 214, 0.08);
+  overflow: hidden;
+  padding: 1.1rem;
 }
 
-.horse-piece::after {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.34),
-    transparent 42%
-  );
-  border-radius: inherit;
+.board-scroll {
+  margin-inline: -0.2rem;
+  padding: 0.2rem;
+}
+
+.board-stage {
+  padding: 0.2rem 0.35rem 1.1rem;
+}
+
+.board-caption {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.board-inscription {
+  background:
+    linear-gradient(90deg, rgba(120, 53, 15, 0.38), rgba(250, 204, 21, 0.11), rgba(120, 53, 15, 0.38));
+  border: 1px solid rgba(253, 230, 138, 0.2);
+  color: rgba(254, 243, 199, 0.82);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.board-perspective {
+  perspective: 1500px;
+}
+
+.board-shell {
+  animation: boardBreath 6.4s ease-in-out infinite;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 7%, transparent 93%, rgba(255, 255, 255, 0.06)),
+    radial-gradient(circle at 50% 8%, rgba(255, 239, 194, 0.16), transparent 28%),
+    linear-gradient(145deg, #26100d, #080706 42%, #3a1511 70%, #120908);
+  border: 1px solid rgba(255, 236, 179, 0.2);
+  border-radius: 1.15rem;
+  box-shadow:
+    0 1.4rem 0 #090504,
+    0 2.2rem 3.2rem rgba(0, 0, 0, 0.54),
+    inset 0 0 0 0.42rem rgba(0, 0, 0, 0.24),
+    inset 0 0 0 0.56rem rgba(252, 211, 77, 0.1),
+    inset 0 1.2rem 2.2rem rgba(255, 247, 214, 0.05),
+    inset 0 -1.6rem 2rem rgba(0, 0, 0, 0.42);
+  padding: 1.05rem;
+  position: relative;
+  transform: rotateX(4deg);
+  transform-origin: center top;
+  transform-style: preserve-3d;
+}
+
+.board-shell::before {
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 230, 160, 0.2), transparent),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.11), transparent 36%);
+  border-radius: 0.95rem;
   content: "";
-  inset: 3px 4px auto auto;
-  height: 8px;
+  inset: 0.6rem;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+.board-shell::after {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 219, 134, 0.08) 0 1px,
+      transparent 1px 76px
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent);
+  border-radius: 0.8rem;
+  content: "";
+  inset: 1.05rem;
+  opacity: 0.42;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+}
+
+.board-rank {
+  display: grid;
+  gap: 0.38rem;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  position: relative;
+  z-index: 1;
+}
+
+.board-middle {
+  align-items: stretch;
+  display: grid;
+  gap: 0.95rem;
+  grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr);
+  margin: 0.95rem 0;
+  min-height: 6.4rem;
+  position: relative;
+  z-index: 2;
+}
+
+.board-well {
+  background:
+    linear-gradient(90deg, rgba(255, 247, 214, 0.06), transparent 18%, transparent 82%, rgba(255, 247, 214, 0.05)),
+    radial-gradient(circle at 50% 0%, rgba(253, 230, 138, 0.12), transparent 44%),
+    linear-gradient(145deg, rgba(10, 8, 7, 0.82), rgba(43, 18, 14, 0.9));
+  border: 1px solid rgba(253, 230, 138, 0.16);
+  border-radius: 0.55rem;
+  box-shadow:
+    inset 0 0.85rem 1.2rem rgba(0, 0, 0, 0.25),
+    inset 0 -0.6rem 1rem rgba(255, 226, 158, 0.04),
+    0 0.45rem 1.1rem rgba(0, 0, 0, 0.32);
+  color: rgb(254, 243, 199);
+  min-height: 5.7rem;
+  overflow: hidden;
+  padding: 0.85rem 1rem;
+  position: relative;
+  text-align: left;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.board-well::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  content: "";
+  height: 100%;
+  left: -35%;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transform: skewX(-18deg);
+  width: 32%;
+}
+
+.board-well-ready {
+  border-color: rgba(110, 231, 183, 0.52);
+  box-shadow:
+    inset 0 0 0 1px rgba(110, 231, 183, 0.18),
+    0 0.45rem 1.1rem rgba(0, 0, 0, 0.32),
+    0 0 1.1rem rgba(16, 185, 129, 0.12);
+  cursor: pointer;
+}
+
+.board-well-ready:hover {
+  transform: translateY(-1px);
+}
+
+.board-well-active {
+  border-color: rgba(253, 230, 138, 0.72);
+  box-shadow:
+    inset 0 0 0 2px rgba(251, 191, 36, 0.28),
+    0 0.55rem 1.25rem rgba(0, 0, 0, 0.36),
+    0 0 1.25rem rgba(251, 191, 36, 0.18);
+}
+
+.board-well:disabled {
+  opacity: 0.76;
+}
+
+.board-spine {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.18), transparent 35%),
+    linear-gradient(180deg, #f6d58a, #7c421c 48%, #120806);
+  border-radius: 999px;
+  box-shadow:
+    inset 0.18rem 0 0.2rem rgba(255, 255, 255, 0.24),
+    inset -0.2rem 0 0.25rem rgba(0, 0, 0, 0.5),
+    0 0 1rem rgba(251, 191, 36, 0.18);
+  opacity: 0.76;
+}
+
+.point-surface {
+  background:
+    radial-gradient(circle at 50% 16%, rgba(253, 230, 138, 0.06), transparent 34%),
+    linear-gradient(180deg, rgba(255, 245, 210, 0.05), transparent 18%, rgba(0, 0, 0, 0.16));
+  border-radius: 0.42rem;
+  box-shadow:
+    inset 0 0.65rem 0.85rem rgba(0, 0, 0, 0.22),
+    inset 0 -0.45rem 0.65rem rgba(255, 235, 170, 0.04);
+  isolation: isolate;
+}
+
+.point-surface::before {
+  background:
+    linear-gradient(90deg, rgba(255, 241, 190, 0.12), transparent 22%, transparent 78%, rgba(255, 241, 190, 0.08)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 34%);
+  content: "";
+  inset: 0;
+  opacity: 0.55;
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+}
+
+.point-surface::after {
+  background: radial-gradient(ellipse at 50% 84%, rgba(0, 0, 0, 0.34), transparent 58%);
+  bottom: 0.1rem;
+  content: "";
+  height: 2.3rem;
+  left: 8%;
   opacity: 0.65;
   pointer-events: none;
   position: absolute;
-  width: 8px;
+  width: 84%;
+  z-index: 1;
+}
+
+.point-top::after {
+  background: radial-gradient(ellipse at 50% 16%, rgba(0, 0, 0, 0.3), transparent 58%);
+  bottom: auto;
+  top: 0.1rem;
+}
+
+.point-interactive:hover {
+  transform: translateY(-1px);
+}
+
+.point-lane {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 236, 179, 0.08),
+    inset 0 0.8rem 0.9rem rgba(255, 241, 190, 0.04),
+    inset 0 -1rem 1rem rgba(0, 0, 0, 0.28),
+    0 0.5rem 0.8rem rgba(0, 0, 0, 0.22);
+  opacity: 0.88;
+  z-index: 0;
+}
+
+.point-lane-warm {
+  background:
+    linear-gradient(90deg, rgba(255, 233, 178, 0.08), transparent 34%, rgba(0, 0, 0, 0.2)),
+    linear-gradient(180deg, #8c3228, #571912 58%, #210908);
+}
+
+.point-lane-dark {
+  background:
+    linear-gradient(90deg, rgba(255, 233, 178, 0.07), transparent 35%, rgba(0, 0, 0, 0.28)),
+    linear-gradient(180deg, #26100d, #120706 62%, #050303);
+}
+
+.point-lane-top {
+  transform-origin: 50% 0;
+}
+
+.point-lane-bottom {
+  transform-origin: 50% 100%;
+}
+
+.piece-stack {
+  height: 6.25rem;
+  pointer-events: none;
+}
+
+.horse-piece {
+  --piece-scale: 1;
+  --piece-x: 0px;
+  --piece-y: 0px;
+  --piece-z: 1;
+  bottom: auto;
+  display: block;
+  height: 3.75rem;
+  left: 50%;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, 0) translate(var(--piece-x), var(--piece-y))
+    scale(var(--piece-scale));
+  transform-origin: 50% 82%;
+  width: 2.5rem;
+  z-index: var(--piece-z);
+}
+
+.horse-piece::before {
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.82), transparent 0.58rem),
+    radial-gradient(ellipse at 38% 58%, rgba(255, 255, 255, 0.34), transparent 0.8rem),
+    linear-gradient(90deg, transparent 18%, rgba(255, 255, 255, 0.22), transparent 38%),
+    var(--piece-body);
+  border: 1px solid var(--piece-edge);
+  border-radius: 48% 48% 42% 42% / 18% 18% 58% 58%;
+  box-shadow:
+    inset 0 0 0.55rem rgba(255, 255, 255, 0.18),
+    inset 0 -0.45rem 0.7rem rgba(0, 0, 0, 0.18),
+    0 0.42rem 0.55rem rgba(0, 0, 0, 0.4);
+  content: "";
+  height: 1.9rem;
+  left: 50%;
+  position: absolute;
+  top: 1.42rem;
+  transform: translateX(-50%);
+  width: 1.78rem;
+}
+
+.horse-piece::after {
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent),
+    var(--piece-neck);
+  border-left: 1px solid var(--piece-edge);
+  border-right: 1px solid var(--piece-edge);
+  border-radius: 44% 44% 34% 34% / 16% 16% 62% 62%;
+  box-shadow: inset 0.18rem 0 0.22rem rgba(255, 255, 255, 0.08);
+  content: "";
+  height: 1.78rem;
+  left: 50%;
+  position: absolute;
+  top: 0.34rem;
+  transform: translateX(-50%);
+  width: 0.86rem;
+}
+
+.horse-piece-image {
+  filter: drop-shadow(0 0.35rem 0.4rem rgba(0, 0, 0, 0.38));
+  height: 100%;
+  inset: 0;
+  object-fit: contain;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  z-index: 4;
+}
+
+.horse-piece .piece-count-sign {
+  align-items: center;
+  background: rgba(107, 24, 18, 0.92);
+  border: 1px solid rgba(253, 230, 138, 0.6);
+  border-radius: 999px;
+  bottom: 0.28rem;
+  color: rgb(254, 243, 199);
+  display: flex;
+  font-size: 0.68rem;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  min-width: 1.45rem;
+  padding: 0.15rem 0.28rem;
+  position: absolute;
+  right: -0.2rem;
+  z-index: 8;
+}
+
+.horse-piece .piece-count-sign::before {
+  content: "";
+}
+
+.horse-piece::marker {
+  content: "";
+}
+
+.white-vase-piece {
+  --piece-body: linear-gradient(145deg, #fffaf0, #f3e3bf 58%, #c8ac80);
+  --piece-edge: rgba(99, 73, 42, 0.34);
+  --piece-neck: linear-gradient(90deg, #d4bc8c, #fff9e8 42%, #c5a675);
+}
+
+.white-vase-piece .horse-piece-image {
+  filter:
+    drop-shadow(0 0.32rem 0.42rem rgba(0, 0, 0, 0.38))
+    drop-shadow(0 0 0.05rem rgba(96, 61, 25, 0.45));
+}
+
+.black-vase-piece {
+  --piece-body: linear-gradient(145deg, #090807, #020202 58%, #1e1712);
+  --piece-edge: rgba(246, 199, 124, 0.2);
+  --piece-neck: linear-gradient(90deg, #100d0b, #050505 56%, #2c2118);
+}
+
+.black-vase-piece .horse-piece-image {
+  filter:
+    drop-shadow(0 0.34rem 0.42rem rgba(0, 0, 0, 0.54))
+    drop-shadow(0 0 0.06rem rgba(251, 191, 36, 0.32));
+}
+
+.horse-piece:not(:has(.horse-piece-image[style*="display: none"]))::before,
+.horse-piece:not(:has(.horse-piece-image[style*="display: none"]))::after {
+  opacity: 0;
+}
+
+.piece-selected {
+  transform: translate(-50%, -0.2rem) translate(var(--piece-x), var(--piece-y))
+    scale(calc(var(--piece-scale) * 1.07));
+}
+
+.piece-selected .horse-piece-image,
+.piece-selected::before {
+  filter:
+    drop-shadow(0 0.45rem 0.5rem rgba(0, 0, 0, 0.44))
+    drop-shadow(0 0 0.55rem rgba(251, 191, 36, 0.36));
 }
 
 .point-surface:hover .horse-piece {
