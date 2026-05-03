@@ -1808,3 +1808,80 @@ Result:
 - Add explicit stale-room cleanup so old in-memory rooms do not accumulate.
 - Add browser screenshot QA for the new online menu and room status strip.
 - Decide whether the next online milestone needs WebSocket after the polling MVP is tested.
+
+## 2026-05-03 17:55 CST
+
+### Objective
+
+Deploy the online room MVP to Aliyun and verify the public API path.
+
+### Source
+
+Committed and pushed:
+
+```txt
+0108b27 Add online room play MVP
+```
+
+### Deployment
+
+Created a Git archive from `HEAD`:
+
+```txt
+/tmp/shuanglu-online-0108b27.tgz
+```
+
+Uploaded to:
+
+```txt
+root@47.121.182.144:/tmp/shuanglu-online-0108b27.tgz
+```
+
+Built in:
+
+```txt
+/opt/shuanglu_release_online_0108b27
+```
+
+Server build result:
+
+```txt
+Next.js production build passed.
+Dynamic API routes /api/rooms and /api/rooms/[roomId] compiled.
+```
+
+Cutover:
+
+```bash
+pm2 stop shuanglu
+mv /opt/shuanglu /opt/shuanglu_backups/shuanglu_before_online_0108b27
+mv /opt/shuanglu_release_online_0108b27 /opt/shuanglu
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+```
+
+### Verification
+
+Public app:
+
+```txt
+http://47.121.182.144/ returned HTTP 200.
+```
+
+Online API smoke test:
+
+```txt
+POST /api/rooms created room E0FCE0 and seated codex-white-test as white.
+POST /api/rooms/E0FCE0 join seated codex-black-test as black.
+GET /api/rooms/E0FCE0?playerId=codex-white-test returned the room to white.
+POST roll for white updated currentRoll and diceSteps.
+POST move from 12 to 6 applied a legal server-validated white move.
+```
+
+### Open Follow-Up
+
+- Run an actual browser-to-browser friend-play test.
+- Add shareable room URLs.
+- Add reconnect guidance and stale-room cleanup.

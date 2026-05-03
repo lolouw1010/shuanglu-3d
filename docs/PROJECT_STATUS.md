@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-03 17:11 CST
+Last updated: 2026-05-03 17:55 CST
 
 ## Current Target
 
@@ -71,6 +71,7 @@ Implemented:
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
 - Production runtime is PM2 process `shuanglu` behind Nginx, bound internally to `127.0.0.1:3002`.
 - Deployed the first 3D-like board visual pass to Aliyun GD from working-tree archive `/tmp/shuanglu-visual-20260502-2349.tgz`.
+- Deployed the online room MVP to Aliyun GD from source commit `0108b27`.
 
 ## Verified Commands
 
@@ -189,6 +190,29 @@ PM2 process shuanglu is online.
 Nginx configuration test passed.
 Public URL http://47.121.182.144/ returns HTTP 200.
 Public JavaScript bundle contains board-scene, board-shell, board-perspective, and white-horse-idle.
+```
+
+Latest Aliyun online room deployment on 2026-05-03 17:55 CST:
+
+```bash
+npm ci --no-audit --no-fund
+npm run build
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+curl -I --max-time 20 http://47.121.182.144/
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms
+```
+
+Result:
+
+```txt
+Server build passed.
+PM2 process shuanglu is online.
+Nginx configuration test passed.
+Public URL http://47.121.182.144/ returns HTTP 200.
+Online room API can create a room, join a second player, read room state, roll, and apply a legal move.
 ```
 
 Last verified locally on 2026-05-01 16:08 CST:

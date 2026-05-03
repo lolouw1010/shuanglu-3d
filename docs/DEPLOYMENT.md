@@ -234,3 +234,95 @@ Public JavaScript bundle contains board-scene, board-shell, board-perspective, a
 Open deployment note:
 
 - This deployment used the local working tree for the server cutover, then the same visual changes were committed and pushed to GitHub as `47d6f60`.
+
+## 2026-05-03 Online Room Deployment
+
+Status: deployed.
+
+Source commit:
+
+```txt
+0108b27 Add online room play MVP
+```
+
+Purpose:
+
+- Publish the first online friend-play MVP.
+- Add room-code creation, joining, polling sync, server-side roll validation, and server-side move validation.
+
+Deployment package:
+
+```txt
+/tmp/shuanglu-online-0108b27.tgz
+```
+
+Server upload target:
+
+```txt
+/tmp/shuanglu-online-0108b27.tgz
+```
+
+Build directory:
+
+```txt
+/opt/shuanglu_release_online_0108b27
+```
+
+Previous production backup:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_online_0108b27
+```
+
+Commands used:
+
+```bash
+tar -xzf /tmp/shuanglu-online-0108b27.tgz -C /opt/shuanglu_release_online_0108b27
+cd /opt/shuanglu_release_online_0108b27
+npm ci --no-audit --no-fund
+npm run build
+pm2 stop shuanglu
+mv /opt/shuanglu /opt/shuanglu_backups/shuanglu_before_online_0108b27
+mv /opt/shuanglu_release_online_0108b27 /opt/shuanglu
+cd /opt/shuanglu
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+```
+
+Verification:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-white-test"}'
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms/E0FCE0 \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-black-test","action":"join"}'
+curl -s --max-time 20 'http://47.121.182.144/api/rooms/E0FCE0?playerId=codex-white-test'
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms/E0FCE0 \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-white-test","action":"roll"}'
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms/E0FCE0 \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-white-test","action":"move","from":12,"to":6}'
+```
+
+Result:
+
+```txt
+Public app endpoint returned HTTP 200.
+PM2 process shuanglu is online.
+Nginx configuration test passed.
+POST /api/rooms created room E0FCE0 and seated creator as white.
+POST /api/rooms/E0FCE0 with join seated second player as black.
+GET /api/rooms/E0FCE0 returned the room to the white player.
+POST roll updated currentRoll and diceSteps server-side.
+POST move applied a legal white move from 12 to 6 and updated moveHistory.
+```
+
+Operational note:
+
+- Online rooms are in-memory in the Next.js Node process. Restarting PM2 clears active rooms.
