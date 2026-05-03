@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-03 10:54 CST
+Last updated: 2026-05-03 17:11 CST
 
 ## Current Target
 
@@ -57,6 +57,15 @@ Implemented:
 - Reworked the board into a staged scene with perspective wrapper, thick lacquer shell, dark inner tray, gold center spine, bar well, and bearing-off well.
 - Added image asset slots for final bottle-shaped horse pieces at `public/assets/pieces/white-horse-idle.png` and `public/assets/pieces/black-horse-idle.png`.
 - Added CSS fallback vase-shaped horse pieces while the final image assets are not yet committed.
+- Added first-pass online room play:
+  - Create room by six-character code.
+  - Creator plays white.
+  - First friend to join plays black.
+  - Additional clients join as spectators.
+  - Authoritative room state lives on the Next.js Node server.
+  - Online roll and move actions are validated server-side.
+  - Clients poll the room state for turn updates.
+- Added online entry UI to the main menu and online room status UI to the game screen.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
@@ -65,17 +74,7 @@ Implemented:
 
 ## Verified Commands
 
-Last verified locally on 2026-05-02 23:49 CST:
-
-```bash
-npm test
-```
-
-Result:
-
-```txt
-8 test files passed, 27 tests passed.
-```
+Last verified locally on 2026-05-03 17:11 CST:
 
 ```bash
 npm run build
@@ -85,6 +84,17 @@ Result:
 
 ```txt
 Next.js production build passed.
+API routes /api/rooms and /api/rooms/[roomId] compiled as dynamic server routes.
+```
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed, 27 tests passed.
 ```
 
 Last verified on 2026-04-29 20:20 CST:
@@ -215,6 +225,9 @@ npm run dev
 - The deployed public endpoint is plain HTTP on the server IP. A production hostname and HTTPS certificate are still needed before a public launch.
 - The server could not reliably fetch the GitHub repository directly, so deployments currently use local Git archive upload from the synced commit.
 - The latest visual deployment was made from a local working-tree archive, then committed and pushed to GitHub as `47d6f60`.
+- Online rooms are currently in-memory only. A PM2 restart will clear active rooms.
+- Online room access is intentionally lightweight for testing and does not yet include accounts, passwords, or private invites.
+- Online clients use polling rather than WebSocket. This is acceptable for the first turn-based friend-play test but should be reviewed after playtesting.
 - Interrupted dependency installs can leave `node_modules` in a broken state. If that happens, move the broken directory outside `/opt/shuanglu` before running a clean `npm ci --no-audit --no-fund`.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
 - In-game text has only had an initial audit through the rules modal; character and future story text still need review against `docs/HISTORICAL_NOTES.md`.
@@ -228,9 +241,12 @@ npm run dev
 ## Next Engineering Priorities
 
 1. Assign a production hostname and enable HTTPS for the Aliyun GD deployment.
-2. Manual playtest a complete Human vs Human match.
-3. Manual playtest a complete Human vs AI match.
-4. Add explicit reason feedback when clicking non-highlighted or blocked points.
-5. Run desktop and mobile viewport screenshot QA for the 3D-like board shell and compact HUD.
-6. Add regression tests for full-turn sequences.
-7. Tune AI heuristics for fewer obvious tactical mistakes.
+2. Deploy the online room build to Aliyun and test one match with two browsers or two devices.
+3. Add shareable room URLs and refresh/reconnect UX.
+4. Start the `0.6-3d-table` scene spike using React Three Fiber while preserving the online/rules boundary.
+5. Manual playtest a complete Human vs Human online match.
+6. Manual playtest a complete Human vs AI match.
+7. Add explicit reason feedback when clicking non-highlighted or blocked points.
+8. Run desktop and mobile viewport screenshot QA for the 3D-like board shell, online menu, and compact HUD.
+9. Add regression tests for full-turn sequences.
+10. Tune AI heuristics for fewer obvious tactical mistakes.

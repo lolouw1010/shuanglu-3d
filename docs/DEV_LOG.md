@@ -1702,3 +1702,109 @@ Bundle contains board-scene, board-shell, board-perspective, and white-horse-idl
 - The deployed page still needs direct browser visual QA.
 - The published app currently uses CSS fallback pieces until final PNG assets are added under `public/assets/pieces/`.
 - The deployment was made from a working-tree archive, then source was committed and pushed to GitHub as `47d6f60`.
+
+## 2026-05-03 17:11 CST
+
+### Objective
+
+Start the online play track so a friend can join by room code and play a real match remotely within the week.
+
+### Product Decision
+
+Use a room-code, polling-based online MVP rather than WebSocket for the first testable release.
+
+Reasoning:
+
+- Shuanglu is turn-based, so 1-2 second polling is sufficient for a first friend-play test.
+- The current production runtime is a single Next.js Node service behind Nginx, so in-memory rooms are acceptable for a short-lived test build.
+- Avoiding WebSocket and database setup reduces deployment risk while the visual direction is still changing.
+
+Known limitation:
+
+- Rooms are stored in server memory and will be lost if PM2 restarts.
+- Room access is casual, not secure: room code plus browser-local player identity is enough for the test build.
+- Refresh recovery is basic; players should keep their room code.
+
+### Implementation Completed
+
+Added shared online types:
+
+- `src/online/types.ts`
+
+Added server-side room manager:
+
+- `src/server/rooms.ts`
+
+Implemented server behavior:
+
+- Create room with a six-character room code.
+- Seat room creator as white.
+- Seat first joining friend as black.
+- Extra joiners become spectators.
+- Store authoritative `BoardState` on the server.
+- Server validates whose turn it is before rolling or moving.
+- Server reconstructs legal moves from the authoritative state before applying a move.
+- Server returns public room state and player seat.
+
+Added Next.js API routes:
+
+- `POST /api/rooms`
+- `GET /api/rooms/[roomId]?playerId=...`
+- `POST /api/rooms/[roomId]` with actions:
+  - `join`
+  - `roll`
+  - `move`
+
+Updated client state:
+
+- Extended game mode with `online`.
+- Added browser-local player identity.
+- Added online room/session metadata.
+- Added async create/join/sync behavior.
+- Online roll and move actions now submit to the server instead of mutating local state.
+- Polling skips local UI reset when the server room version has not changed.
+
+Updated UI:
+
+- Main menu now has `开房间`.
+- Main menu now has a room-code input and `加入房间`.
+- Online game header shows room code, player seat, and whether the opponent has joined.
+- Online game screen shows a shareable room-code strip.
+- Dice and board actions are disabled when it is not the local player's turn.
+
+### Verification
+
+Ran:
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+API routes /api/rooms and /api/rooms/[roomId] compiled as dynamic server routes.
+```
+
+Ran:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed
+27 tests passed
+```
+
+### Open Follow-Up
+
+- Deploy this online room build to Aliyun and test with two browsers or two devices.
+- Add direct room links so a room can be shared as a URL, not only as a code.
+- Add better reconnect UX after refresh.
+- Add explicit stale-room cleanup so old in-memory rooms do not accumulate.
+- Add browser screenshot QA for the new online menu and room status strip.
+- Decide whether the next online milestone needs WebSocket after the polling MVP is tested.

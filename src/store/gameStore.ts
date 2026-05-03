@@ -16,20 +16,40 @@ import {
   type Move,
 } from "@/game";
 import { characters } from "@/data/characters";
+import type {
+  OnlineActionResponse,
+  OnlineJoinResponse,
+  OnlineRoomView,
+  OnlineSeat,
+} from "@/online/types";
 
-type GameMode = "human" | "ai";
+type GameMode = "human" | "ai" | "online";
 type Screen = "menu" | "game";
 type Source = number | "bar";
+
+type OnlineSession = {
+  roomId: string;
+  playerId: string;
+  seat: OnlineSeat;
+  players: Record<"white" | "black", boolean>;
+  version: number;
+  updatedAt: number;
+};
 
 type GameStore = {
   screen: Screen;
   mode: GameMode;
   state: BoardState;
+  online: OnlineSession | null;
   selectedSource: Source | null;
   targetMoves: Move[];
   showRules: boolean;
   message: string;
+  onlineStatus: string | null;
   startMatch: (mode: GameMode) => void;
+  createOnlineRoom: () => Promise<void>;
+  joinOnlineRoom: (roomId: string) => Promise<void>;
+  syncOnlineRoom: () => Promise<void>;
   backToMenu: () => void;
   toggleRules: () => void;
   rollCurrentPlayer: (roll?: DiceRoll) => void;
@@ -68,14 +88,68 @@ function finishRollIfNoMoves(state: BoardState): BoardState {
   return state;
 }
 
+function getClientPlayerId(): string {
+  const storageKey = "shuanglu.playerId";
+  const existing = window.localStorage.getItem(storageKey);
+  if (existing) return existing;
+  const next =
+    window.crypto?.randomUUID?.() ??
+    `player-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  window.localStorage.setItem(storageKey, next);
+  return next;
+}
+
+async function readResponse<T>(response: Response): Promise<T> {
+  const body = (await response.json().catch(() => ({}))) as T & {
+    error?: string;
+  };
+  if (!response.ok) {
+    throw new Error(body.error ?? "online_request_failed");
+  }
+  return body;
+}
+
+function applyOnlineRoom(
+  room: OnlineRoomView,
+  playerId: string,
+  seat: OnlineSeat,
+): Partial<GameStore> {
+  return {
+    screen: "game",
+    mode: "online",
+    state: room.state,
+    online: {
+      roomId: room.id,
+      playerId,
+      seat,
+      players: room.players,
+      version: room.version,
+      updatedAt: room.updatedAt,
+    },
+    selectedSource: null,
+    targetMoves: [],
+    onlineStatus: null,
+    message:
+      seat === "spectator"
+        ? `正在旁观房间 ${room.id}。`
+        : `${seat === "white" ? "你执白" : "你执黑"}。${room.message}`,
+  };
+}
+
+function canActOnline(state: BoardState, online: OnlineSession | null): boolean {
+  return Boolean(online && online.seat === state.currentPlayer);
+}
+
 export const useGameStore = create<GameStore>((set, get) => ({
   screen: "menu",
   mode: "human",
   state: createInitialState(),
+  online: null,
   selectedSource: null,
   targetMoves: [],
   showRules: false,
   message: "请开始一局双陆。",
+  onlineStatus: null,
 
   startMatch: (mode) => {
     const state = createInitialState();
@@ -83,19 +157,102 @@ export const useGameStore = create<GameStore>((set, get) => ({
       screen: "game",
       mode,
       state,
+      online: null,
       selectedSource: null,
       targetMoves: [],
       showRules: false,
+      onlineStatus: null,
       message: messageForState(state),
     });
+  },
+
+  createOnlineRoom: async () => {
+    set({ onlineStatus: "正在开设房间..." });
+    try {
+      const playerId = getClientPlayerId();
+      const data = await readResponse<OnlineJoinResponse>(
+        await fetch("/api/rooms", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ playerId }),
+        }),
+      );
+      set(applyOnlineRoom(data.room, data.playerId, data.seat));
+    } catch (error) {
+      set({
+        onlineStatus:
+          error instanceof Error ? error.message : "创建房间失败，请重试。",
+      });
+    }
+  },
+
+  joinOnlineRoom: async (roomId) => {
+    const normalized = roomId.trim().toUpperCase();
+    if (!normalized) {
+      set({ onlineStatus: "请输入房间码。" });
+      return;
+    }
+
+    set({ onlineStatus: "正在加入房间..." });
+    try {
+      const playerId = getClientPlayerId();
+      const data = await readResponse<OnlineJoinResponse>(
+        await fetch(`/api/rooms/${encodeURIComponent(normalized)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ playerId, action: "join" }),
+        }),
+      );
+      set(applyOnlineRoom(data.room, data.playerId, data.seat));
+    } catch (error) {
+      set({
+        onlineStatus:
+          error instanceof Error ? error.message : "加入房间失败，请检查房间码。",
+      });
+    }
+  },
+
+  syncOnlineRoom: async () => {
+    const online = get().online;
+    if (!online) return;
+
+    try {
+      const data = await readResponse<OnlineActionResponse>(
+        await fetch(
+          `/api/rooms/${encodeURIComponent(online.roomId)}?playerId=${encodeURIComponent(
+            online.playerId,
+          )}`,
+          { cache: "no-store" },
+        ),
+      );
+      if (data.room.version === online.version && data.seat === online.seat) {
+        set({
+          online: {
+            ...online,
+            players: data.room.players,
+            updatedAt: data.room.updatedAt,
+          },
+          onlineStatus: null,
+        });
+        return;
+      }
+      set(applyOnlineRoom(data.room, online.playerId, data.seat));
+    } catch (error) {
+      set({
+        onlineStatus:
+          error instanceof Error ? error.message : "房间同步失败，稍后重试。",
+      });
+    }
   },
 
   backToMenu: () => {
     set({
       screen: "menu",
       state: createInitialState(),
+      online: null,
       selectedSource: null,
       targetMoves: [],
+      onlineStatus: null,
       message: "请开始一局双陆。",
     });
   },
@@ -105,6 +262,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
   rollCurrentPlayer: (forcedRoll) => {
     const current = get().state;
     if (current.turnPhase !== "awaiting_roll") return;
+
+    const online = get().online;
+    if (get().mode === "online") {
+      if (!online || !canActOnline(current, online)) {
+        set({ message: "等待对方行动。" });
+        return;
+      }
+
+      void fetch(`/api/rooms/${encodeURIComponent(online.roomId)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ playerId: online.playerId, action: "roll" }),
+      })
+        .then((response) => readResponse<OnlineActionResponse>(response))
+        .then((data) => {
+          set(applyOnlineRoom(data.room, online.playerId, data.seat));
+        })
+        .catch((error) => {
+          set({
+            onlineStatus:
+              error instanceof Error ? error.message : "掷骰失败，请重试。",
+          });
+        });
+      return;
+    }
 
     const rolled = rollIntoState(current, forcedRoll ?? rollDice());
     const next = finishRollIfNoMoves(rolled);
@@ -122,6 +304,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   selectSource: (source) => {
     const state = get().state;
     if (state.turnPhase !== "awaiting_move") return;
+    if (get().mode === "online" && !canActOnline(state, get().online)) {
+      set({ message: "等待对方行动。" });
+      return;
+    }
 
     const moves = generateLegalMoves(state).filter((move) => move.from === source);
     set({
@@ -142,6 +328,36 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const { state, targetMoves } = get();
     const move = targetMoves.find((candidate) => candidate.to === target);
     if (!move) return;
+
+    const online = get().online;
+    if (get().mode === "online") {
+      if (!online || !canActOnline(state, online)) {
+        set({ message: "等待对方行动。" });
+        return;
+      }
+
+      void fetch(`/api/rooms/${encodeURIComponent(online.roomId)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          playerId: online.playerId,
+          action: "move",
+          from: move.from,
+          to: move.to,
+        }),
+      })
+        .then((response) => readResponse<OnlineActionResponse>(response))
+        .then((data) => {
+          set(applyOnlineRoom(data.room, online.playerId, data.seat));
+        })
+        .catch((error) => {
+          set({
+            onlineStatus:
+              error instanceof Error ? error.message : "走子失败，请重试。",
+          });
+        });
+      return;
+    }
 
     const next = applyMove(state, move);
     const canContinue =

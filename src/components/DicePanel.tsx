@@ -8,12 +8,13 @@ import { DiceFace } from "./DiceFace";
 type DicePanelProps = {
   state: BoardState;
   onRoll: () => void;
+  canRollOverride?: boolean;
 };
 
-export function DicePanel({ state, onRoll }: DicePanelProps) {
+export function DicePanel({ state, onRoll, canRollOverride = true }: DicePanelProps) {
   const [isRolling, setIsRolling] = useState(false);
   const [previewRoll, setPreviewRoll] = useState<[number, number]>([1, 6]);
-  const canRoll = state.turnPhase === "awaiting_roll";
+  const canRoll = canRollOverride && state.turnPhase === "awaiting_roll";
   const rollKey = state.currentRoll ? state.currentRoll.join("-") : "empty";
   const idleRoll: Array<number | "-"> = state.currentRoll ?? ["-", "-"];
   const displayRoll: Array<number | "-"> = isRolling ? previewRoll : idleRoll;

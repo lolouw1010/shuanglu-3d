@@ -1,11 +1,16 @@
 "use client";
 
-import { BookOpen, Bot, Users } from "lucide-react";
+import { BookOpen, Bot, Globe2, Users } from "lucide-react";
+import { useState } from "react";
 import { useGameStore } from "@/store/gameStore";
 
 export function MainMenu() {
   const startMatch = useGameStore((store) => store.startMatch);
+  const createOnlineRoom = useGameStore((store) => store.createOnlineRoom);
+  const joinOnlineRoom = useGameStore((store) => store.joinOnlineRoom);
+  const onlineStatus = useGameStore((store) => store.onlineStatus);
   const toggleRules = useGameStore((store) => store.toggleRules);
+  const [roomCode, setRoomCode] = useState("");
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_50%_16%,rgba(209,168,87,.25),transparent_30%),linear-gradient(145deg,#1a1110,#4d171b_48%,#11100f)] px-4 py-8 text-stone-100">
@@ -20,31 +25,66 @@ export function MainMenu() {
           </p>
         </div>
 
-        <div className="grid gap-3 pb-10 sm:max-w-xl sm:grid-cols-3">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/40 bg-amber-100 px-4 py-3 font-semibold text-stone-950"
-            onClick={() => startMatch("human")}
-          >
-            <Users size={18} />
-            双人
-          </button>
-          <button
-            type="button"
-            className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/40 bg-[#2b1512] px-4 py-3 font-semibold text-amber-50"
-            onClick={() => startMatch("ai")}
-          >
-            <Bot size={18} />
-            人机
-          </button>
-          <button
-            type="button"
-            className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/25 bg-black/24 px-4 py-3 font-semibold text-amber-50"
-            onClick={toggleRules}
-          >
-            <BookOpen size={18} />
-            规则
-          </button>
+        <div className="grid gap-4 pb-10 sm:max-w-3xl">
+          <div className="grid gap-3 sm:grid-cols-4">
+            <button
+              type="button"
+              className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/40 bg-amber-100 px-4 py-3 font-semibold text-stone-950"
+              onClick={createOnlineRoom}
+            >
+              <Globe2 size={18} />
+              开房间
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/40 bg-[#2b1512] px-4 py-3 font-semibold text-amber-50"
+              onClick={() => startMatch("human")}
+            >
+              <Users size={18} />
+              本机双人
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/40 bg-[#2b1512] px-4 py-3 font-semibold text-amber-50"
+              onClick={() => startMatch("ai")}
+            >
+              <Bot size={18} />
+              人机
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/25 bg-black/24 px-4 py-3 font-semibold text-amber-50"
+              onClick={toggleRules}
+            >
+              <BookOpen size={18} />
+              规则
+            </button>
+          </div>
+          <div className="grid gap-2 rounded border border-amber-200/20 bg-black/22 p-3 sm:grid-cols-[1fr_auto]">
+            <input
+              aria-label="房间码"
+              className="rounded border border-amber-200/20 bg-black/32 px-3 py-2 text-sm uppercase text-amber-50 outline-none placeholder:text-stone-500 focus:border-amber-100"
+              placeholder="输入朋友给你的房间码"
+              value={roomCode}
+              onChange={(event) => setRoomCode(event.target.value.toUpperCase())}
+            />
+            <button
+              type="button"
+              className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/35 bg-black/30 px-4 py-2 text-sm font-semibold text-amber-50"
+              onClick={() => joinOnlineRoom(roomCode)}
+            >
+              加入房间
+            </button>
+            {onlineStatus ? (
+              <p className="text-sm text-amber-100 sm:col-span-2">
+                {onlineStatus}
+              </p>
+            ) : (
+              <p className="text-sm text-stone-400 sm:col-span-2">
+                开房间后，把房间码发给朋友；朋友输入房间码即可执黑加入。
+              </p>
+            )}
+          </div>
         </div>
       </section>
     </main>

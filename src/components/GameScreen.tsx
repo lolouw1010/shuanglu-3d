@@ -16,9 +16,11 @@ export function GameScreen() {
   const {
     mode,
     state,
+    online,
     selectedSource,
     targetMoves,
     message,
+    onlineStatus,
     backToMenu,
     toggleRules,
     rollCurrentPlayer,
@@ -26,11 +28,15 @@ export function GameScreen() {
     selectTarget,
     runAITurn,
     startMatch,
+    syncOnlineRoom,
   } = useGameStore();
 
   const winner = getWinner(state);
   const victoryType = getVictoryType(state);
-  const availableMoves = generateLegalMoves(state);
+  const canAct =
+    mode !== "online" ||
+    (online?.seat !== "spectator" && online?.seat === state.currentPlayer);
+  const availableMoves = canAct ? generateLegalMoves(state) : [];
 
   useEffect(() => {
     if (mode === "ai" && state.currentPlayer === "black") {
@@ -40,6 +46,14 @@ export function GameScreen() {
     return undefined;
   }, [mode, state.currentPlayer, state.turnPhase, runAITurn]);
 
+  useEffect(() => {
+    if (mode !== "online") return undefined;
+    const interval = window.setInterval(() => {
+      void syncOnlineRoom();
+    }, 1400);
+    return () => window.clearInterval(interval);
+  }, [mode, syncOnlineRoom]);
+
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_50%_0%,rgba(214,162,80,.16),transparent_28%),linear-gradient(140deg,#120d0c,#351317_48%,#15100e)] px-4 py-4 text-stone-100">
       <div className="mx-auto grid max-w-[1500px] gap-4 xl:grid-cols-[220px_1fr_220px]">
@@ -47,6 +61,17 @@ export function GameScreen() {
           <div>
             <p className="text-sm text-amber-200">双陆 0.5 Prototype</p>
             <h1 className="font-display text-3xl text-amber-50">宣和雅局</h1>
+            {mode === "online" && online ? (
+              <p className="mt-1 text-xs text-stone-300">
+                房间 {online.roomId} ·{" "}
+                {online.seat === "spectator"
+                  ? "旁观"
+                  : online.seat === "white"
+                    ? "你执白"
+                    : "你执黑"}{" "}
+                · {online.players.black ? "对手已入席" : "等待朋友加入"}
+              </p>
+            ) : null}
           </div>
           <div className="flex gap-2">
             <button
@@ -80,8 +105,29 @@ export function GameScreen() {
         <div className="order-2 grid gap-4 xl:order-none">
           <div className="grid gap-3 lg:grid-cols-[1fr_360px]">
             <VictoryTracker state={state} />
-            <DicePanel state={state} onRoll={() => rollCurrentPlayer()} />
+            <DicePanel
+              state={state}
+              onRoll={() => rollCurrentPlayer()}
+              canRollOverride={canAct}
+            />
           </div>
+          {mode === "online" && online ? (
+            <section className="flex flex-wrap items-center justify-between gap-3 rounded border border-amber-200/20 bg-black/24 px-3 py-2 text-sm text-stone-200">
+              <span>
+                分享房间码{" "}
+                <strong className="font-mono text-amber-100">
+                  {online.roomId}
+                </strong>
+                。白方创建，黑方加入。
+              </span>
+              <span className={canAct ? "text-emerald-100" : "text-stone-400"}>
+                {canAct ? "轮到你行动" : "等待对方行动"}
+              </span>
+              {onlineStatus ? (
+                <span className="basis-full text-amber-100">{onlineStatus}</span>
+              ) : null}
+            </section>
+          ) : null}
           <Board
             state={state}
             availableMoves={availableMoves}
