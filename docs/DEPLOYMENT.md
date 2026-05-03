@@ -233,4 +233,4 @@ Public JavaScript bundle contains board-scene, board-shell, board-perspective, a
 
 Open deployment note:
 
-- This deployment used the local working tree, not a committed Git SHA. Commit and push the visual changes before the next source-controlled release.
+- This deployment used the local working tree for the server cutover, then the same visual changes were committed and pushed to GitHub as `47d6f60`.

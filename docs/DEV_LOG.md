@@ -1701,4 +1701,4 @@ Bundle contains board-scene, board-shell, board-perspective, and white-horse-idl
 
 - The deployed page still needs direct browser visual QA.
 - The published app currently uses CSS fallback pieces until final PNG assets are added under `public/assets/pieces/`.
-- This deployment used a working-tree archive rather than a Git commit. The changes still need to be committed and pushed to GitHub.
+- The deployment was made from a working-tree archive, then source was committed and pushed to GitHub as `47d6f60`.
