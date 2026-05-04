@@ -2019,3 +2019,72 @@ Then stopped the local dev server processes.
   - dice
   - lacquer table
   - seated spectator figures
+
+## 2026-05-04 16:19 CST
+
+### Objective
+
+Stabilize the first 3D table scene after the initial animation-heavy version crashed during loading or early interaction.
+
+### Problem
+
+The first 3D pass introduced several runtime-risky pieces at once:
+
+- `drei/Text` labels in many places, which can involve font loading and text workers.
+- Per-frame `useFrame` animation on every visible horse piece.
+- Per-frame floating animation on spectators.
+- Per-frame dice tumble animation.
+- Higher DPR and larger shadow maps than needed for the first stability pass.
+
+For the test build, this was too much to introduce in one step.
+
+### Stabilization Completed
+
+Updated `src/components/three/GameTable3D.tsx`:
+
+- Removed all `drei/Text` usage from the scene.
+- Removed continuous `useFrame` animation from horse pieces.
+- Removed continuous `useFrame` animation from spectator figures.
+- Removed the scripted dice tumble loop.
+- Replaced text labels with simple geometric markers for now.
+- Replaced spectator capsule geometry with simpler cylinder body geometry.
+- Reduced bottle-piece lathe segment count from 40 to 28.
+- Reduced shadow map size from 2048 to 1024.
+- Forced Canvas DPR to `1` for the first stability pass.
+
+### Verification
+
+Ran:
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+```
+
+Ran:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed.
+27 tests passed.
+```
+
+### Follow-Up Rule
+
+Do not reintroduce multiple animation systems at once. Add back animation in this order:
+
+1. Single selected-piece hover pulse.
+2. Single move-path animation after a completed move.
+3. Dice roll animation without physics.
+4. Spectator ambient movement.
+5. Optional physics dice after the rest is stable.

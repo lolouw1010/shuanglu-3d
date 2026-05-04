@@ -1,14 +1,12 @@
 "use client";
 
-import { OrbitControls, Text } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { Mesh } from "three";
+import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { useMemo } from "react";
 import {
   CatmullRomCurve3,
   DoubleSide,
   LatheGeometry,
-  MathUtils,
   Shape,
   Vector2,
   Vector3,
@@ -83,7 +81,6 @@ function VasePiece({
   selected: boolean;
   active: boolean;
 }) {
-  const ref = useRef<Mesh>(null);
   const geometry = useMemo(() => {
     const profile = [
       new Vector2(0.24, 0),
@@ -97,24 +94,15 @@ function VasePiece({
       new Vector2(0.28, 1.58),
       new Vector2(0.08, 1.62),
     ];
-    return new LatheGeometry(profile, 40);
+    return new LatheGeometry(profile, 28);
   }, []);
 
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    const t = clock.getElapsedTime();
-    ref.current.position.y = position[1] + (active ? Math.sin(t * 3.2) * 0.035 : 0);
-    ref.current.rotation.y = Math.sin(t * 0.7 + position[0]) * 0.08;
-  });
-
   return (
-    <group position={position}>
+    <group position={position} scale={selected ? 1.12 : 1}>
       <mesh
-        ref={ref}
         castShadow
         receiveShadow
         geometry={geometry}
-        scale={selected ? 1.12 : 1}
       >
         <meshPhysicalMaterial
           color={owner === "white" ? "#fff1cd" : "#050505"}
@@ -197,16 +185,6 @@ function BoardPoint3D({
           emissiveIntensity={isTarget ? 0.55 : isSource || canSelect ? 0.22 : 0}
         />
       </mesh>
-      <Text
-        position={[0, 0.075, position.direction * 0.28]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        fontSize={0.16}
-        color="#f7dc9a"
-        anchorX="center"
-        anchorY="middle"
-      >
-        {position.index}
-      </Text>
       {owner
         ? pieceOffsets(point.count).map(([x, y, depth], pieceIndex) => (
             <VasePiece
@@ -223,15 +201,10 @@ function BoardPoint3D({
           ))
         : null}
       {point.count > 6 ? (
-        <Text
-          position={[0.3, 1.25, position.direction * 0.86]}
-          rotation={[-0.75, 0, 0]}
-          fontSize={0.18}
-          color="#fff4c2"
-          anchorX="center"
-        >
-          x{point.count}
-        </Text>
+        <mesh position={[0.3, 1.25, position.direction * 0.86]}>
+          <sphereGeometry args={[0.11, 16, 10]} />
+          <meshStandardMaterial color="#f5df9c" emissive="#6d3f0c" emissiveIntensity={0.25} />
+        </mesh>
       ) : null}
     </group>
   );
@@ -249,14 +222,10 @@ function Pip({ x, z }: { x: number; z: number }) {
 function DiceCube({
   value,
   position,
-  rollKey,
 }: {
   value: number | "-";
   position: [number, number, number];
-  rollKey: string;
 }) {
-  const ref = useRef<Mesh>(null);
-  const [rollingUntil, setRollingUntil] = useState(0);
   const pips: Record<number, Array<[number, number]>> = {
     1: [[0, 0]],
     2: [
@@ -291,28 +260,8 @@ function DiceCube({
     ],
   };
 
-  useEffect(() => {
-    setRollingUntil(performance.now() + 760);
-  }, [rollKey]);
-
-  useFrame(() => {
-    if (!ref.current) return;
-    const rolling = performance.now() < rollingUntil;
-    if (rolling) {
-      ref.current.rotation.x += 0.19;
-      ref.current.rotation.y += 0.14;
-      ref.current.rotation.z += 0.11;
-      ref.current.position.y = position[1] + Math.sin(performance.now() * 0.018) * 0.08;
-      return;
-    }
-    ref.current.rotation.x = MathUtils.lerp(ref.current.rotation.x, 0, 0.12);
-    ref.current.rotation.y = MathUtils.lerp(ref.current.rotation.y, 0, 0.12);
-    ref.current.rotation.z = MathUtils.lerp(ref.current.rotation.z, 0, 0.12);
-    ref.current.position.y = MathUtils.lerp(ref.current.position.y, position[1], 0.16);
-  });
-
   return (
-    <mesh ref={ref} castShadow receiveShadow position={position}>
+    <mesh castShadow receiveShadow position={position}>
       <boxGeometry args={[0.52, 0.52, 0.52]} />
       <meshPhysicalMaterial
         color="#f8dd99"
@@ -334,20 +283,14 @@ function Spectator({
   position: [number, number, number];
   color: string;
 }) {
-  const ref = useRef<Mesh>(null);
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    ref.current.position.y = position[1] + Math.sin(clock.getElapsedTime() * 1.2 + position[0]) * 0.025;
-  });
-
   return (
     <group position={position}>
       <mesh castShadow position={[0, 0.55, 0]}>
         <sphereGeometry args={[0.22, 28, 18]} />
         <meshStandardMaterial color="#d5b07d" roughness={0.55} />
       </mesh>
-      <mesh ref={ref} castShadow position={[0, 0.08, 0]}>
-        <capsuleGeometry args={[0.28, 0.72, 8, 18]} />
+      <mesh castShadow position={[0, 0.08, 0]}>
+        <cylinderGeometry args={[0.22, 0.34, 0.9, 18]} />
         <meshStandardMaterial color={color} roughness={0.68} />
       </mesh>
       <mesh position={[0, -0.34, 0]} rotation={[-Math.PI / 2, 0, 0]}>
@@ -377,15 +320,10 @@ function Room() {
         <boxGeometry args={[11, 4.5, 0.18]} />
         <meshStandardMaterial color="#1a1010" roughness={0.84} />
       </mesh>
-      <Text
-        position={[0, 2.05, -5.18]}
-        fontSize={0.48}
-        color="#a97937"
-        anchorX="center"
-        anchorY="middle"
-      >
-        宣和雅局
-      </Text>
+      <mesh position={[0, 2.05, -5.18]}>
+        <boxGeometry args={[2.2, 0.08, 0.08]} />
+        <meshStandardMaterial color="#a97937" metalness={0.25} roughness={0.38} />
+      </mesh>
       <mesh position={[0, 2.72, -4.82]}>
         <boxGeometry args={[4.6, 0.08, 0.08]} />
         <meshStandardMaterial color="#8a5a22" metalness={0.2} roughness={0.32} />
@@ -417,7 +355,6 @@ function TableSurface({
   );
   const canSelectBar = availableMoves.some((move) => move.from === "bar");
   const canBearOff = targetMoves.some((move) => move.to === "off");
-  const rollKey = state.currentRoll ? state.currentRoll.join("-") : "empty";
   const curve = useMemo(
     () =>
       new CatmullRomCurve3([
@@ -493,9 +430,6 @@ function TableSurface({
             emissiveIntensity={canSelectBar ? 0.34 : 0}
           />
         </mesh>
-        <Text position={[0, 0.18, 0]} rotation={[-Math.PI / 2, 0, Math.PI / 2]} fontSize={0.17} color="#f5df9c">
-          马栏 {state.bar.white}/{state.bar.black}
-        </Text>
       </group>
 
       <group position={[5.15, 0.22, 0]}>
@@ -514,20 +448,15 @@ function TableSurface({
             emissiveIntensity={canBearOff ? 0.34 : 0}
           />
         </mesh>
-        <Text position={[0, 0.18, 0]} rotation={[-Math.PI / 2, 0, -Math.PI / 2]} fontSize={0.17} color="#f5df9c">
-          出马 {state.borneOff.white}/{state.borneOff.black}
-        </Text>
       </group>
 
       <DiceCube
         value={state.currentRoll?.[0] ?? "-"}
         position={[-0.42, 0.56, 0]}
-        rollKey={`${rollKey}-0`}
       />
       <DiceCube
         value={state.currentRoll?.[1] ?? "-"}
         position={[0.42, 0.56, 0.08]}
-        rollKey={`${rollKey}-1`}
       />
     </group>
   );
@@ -543,7 +472,7 @@ function Scene(props: GameTable3DProps) {
         castShadow
         position={[3.8, 6.2, 3.2]}
         intensity={2.4}
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[1024, 1024]}
       />
       <pointLight position={[-3.2, 2.6, -2.3]} color="#f5b65a" intensity={1.35} />
       <pointLight position={[3.1, 2.8, 2.1]} color="#c95c43" intensity={0.75} />
@@ -571,7 +500,7 @@ export function GameTable3D(props: GameTable3DProps) {
       <div className="game-3d-canvas">
         <Canvas
           camera={{ position: [0, 6.2, 8.4], fov: 42 }}
-          dpr={[1, 1.7]}
+          dpr={1}
           shadows
         >
           <Scene {...props} />

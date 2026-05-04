@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-04 16:00 CST
+Last updated: 2026-05-04 16:19 CST
 
 ## Current Target
 
@@ -72,6 +72,10 @@ Implemented:
 - Added a programmatic 3D room, lacquer table, 24 board points, glossy bottle/vase horse pieces, dice, and spectator figures.
 - Wired 3D point/bar/off clicks into the existing legal move selection and target submission callbacks.
 - Removed external HDR environment dependency from the first 3D pass; the scene currently uses local procedural geometry and lights only.
+- Stabilized the 3D scene after the first animation-heavy version crashed:
+  - Removed `drei/Text` labels.
+  - Removed continuous per-frame horse, spectator, and dice animation.
+  - Reduced geometry/shadow/rendering cost for the first stable 3D baseline.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
@@ -243,6 +247,20 @@ The game route compiled and served without dev server runtime errors.
 The local dev server was stopped after the check.
 ```
 
+Latest 3D stabilization verification on 2026-05-04 16:19 CST:
+
+```bash
+npm run build
+npm test
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+8 test files passed, 27 tests passed.
+```
+
 Last verified locally on 2026-05-01 16:08 CST:
 
 ```bash
@@ -282,7 +300,7 @@ npm run dev
 - Online clients use polling rather than WebSocket. This is acceptable for the first turn-based friend-play test but should be reviewed after playtesting.
 - The 3D scene is a first procedural interface pass. It has not yet had full screenshot QA across desktop and mobile.
 - The 3D scene uses procedural placeholder pieces, dice, table, room, and spectators. Final art assets are still needed.
-- Current dice animation is scripted, not physics-based.
+- Current 3D animation is intentionally disabled after the first animation-heavy pass caused crashes. Animation must be reintroduced incrementally.
 - Interrupted dependency installs can leave `node_modules` in a broken state. If that happens, move the broken directory outside `/opt/shuanglu` before running a clean `npm ci --no-audit --no-fund`.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
 - In-game text has only had an initial audit through the rules modal; character and future story text still need review against `docs/HISTORICAL_NOTES.md`.
