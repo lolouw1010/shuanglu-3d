@@ -336,7 +336,7 @@ button:focus-visible {
     radial-gradient(circle at 50% 0%, rgba(245, 184, 89, 0.18), transparent 36%),
     linear-gradient(145deg, rgba(8, 6, 5, 0.94), rgba(45, 14, 12, 0.92) 54%, rgba(6, 5, 5, 0.96));
   border: 1px solid rgba(253, 230, 138, 0.16);
-  border-radius: 0.9rem;
+  border-radius: 8px;
   box-shadow:
     0 1.6rem 4.4rem rgba(0, 0, 0, 0.48),
     inset 0 1px 0 rgba(255, 244, 204, 0.08);
@@ -353,6 +353,33 @@ button:focus-visible {
   inset: 0;
   pointer-events: none;
   position: absolute;
+}
+
+.game-3d-badge {
+  align-items: center;
+  background: linear-gradient(135deg, rgba(10, 6, 5, 0.72), rgba(80, 48, 20, 0.52));
+  border: 1px solid rgba(245, 210, 137, 0.22);
+  border-radius: 8px;
+  color: rgba(255, 244, 216, 0.86);
+  display: flex;
+  gap: 0.55rem;
+  left: 0.85rem;
+  letter-spacing: 0;
+  padding: 0.42rem 0.58rem;
+  pointer-events: none;
+  position: absolute;
+  top: 0.85rem;
+  z-index: 2;
+}
+
+.game-3d-badge span {
+  font-size: 0.76rem;
+}
+
+.game-3d-badge strong {
+  color: #ffe6a3;
+  font-size: 0.72rem;
+  font-weight: 600;
 }
 
 .game-3d-canvas {

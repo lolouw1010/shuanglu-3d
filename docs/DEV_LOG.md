@@ -2218,3 +2218,137 @@ Nginx configuration test passed.
 - Full browser QA is still needed for `/3d`; HTTP 200 only proves the route serves.
 - Test `?room=` with two real browser clients.
 - Consider upgrading Aliyun Node runtime to Node 20 LTS before relying on the 3D dependency stack in production.
+
+## 2026-05-04 18:56 CST
+
+### Objective
+
+Change the 3D work process from code-first iteration to art-direction-first iteration after user review found the current 3D scene visually wrong and not aligned with the desired product.
+
+### Documents Changed
+
+- Added `docs/ART_DIRECTION_3D.md`.
+- Updated `docs/PROJECT_STATUS.md`.
+
+### Decisions Recorded
+
+- The current `/3d` route is a technical spike only, not the target visual direction.
+- Future 3D work must start from approved effect images before rebuilding the scene.
+- The first visual directions to test are:
+  - Courtly Table.
+  - Scholar's Study Table.
+  - Museum-Grade Reconstructed Tabletop.
+- The recommended first playable direction is Museum-Grade Reconstructed Tabletop with restrained Scholar's Study atmosphere.
+- The bottle-shaped horse form is now defined as rounded belly, long narrow neck, flared lip, small foot ring, pure glossy material, and strong highlight line.
+- Full room scenes and human figures are postponed until the tabletop view, board readability, and interaction model are stable.
+
+### Verification
+
+No code was changed in this step.
+
+### Open Follow-Up
+
+- Generate first-round effect images for courtly table, scholar's study table, and museum-grade tabletop.
+- Select one visual direction before changing `src/components/three/GameTable3D.tsx`.
+- After approval, build a greybox scene that matches the selected image and verify board readability before adding animation.
+
+## 2026-05-04 19:17 CST
+
+### Objective
+
+Lock the approved effect-image family and start rebuilding the isolated 3D scene toward that direction.
+
+### Art Direction Decision
+
+The user approved the first generated effect images and asked to proceed with that style.
+
+Saved concept references:
+
+- `public/assets/concepts/3d-courtly-table.png`
+- `public/assets/concepts/3d-scholars-study.png`
+- `public/assets/concepts/3d-museum-tabletop.png`
+
+Implementation target:
+
+- Museum-Grade Reconstructed Tabletop as the playable base.
+- Restrained court/study atmosphere at the edges.
+- No full animated character room yet.
+
+### Implementation Completed
+
+Updated `src/components/three/GameTable3D.tsx`:
+
+- Replaced the old procedural room/spectator scene with a close tabletop greybox.
+- Added a dark lacquer board and raised tray structure.
+- Added gold/brass inlay rails and 24 readable point zones.
+- Rebuilt the horse geometry toward the approved bottle form:
+  - Rounded belly.
+  - Long narrow neck.
+  - Flared lip.
+  - Small foot ring.
+  - Glossy white/black material treatment.
+- Added a dice tray and physical dice placement near the board center.
+- Added restrained study/court edge props: screen panels, paper, brush, scroll, cushions.
+- Kept 3D click wiring to the existing rules engine.
+- Added a small low-chrome `博物复原桌面 / 灰盒 01` badge.
+- After an initial browser check showed the WebGL area was too visually empty, reduced scene complexity:
+  - Removed `ContactShadows`.
+  - Removed the experimental spot-light target wiring.
+  - Raised ambient/hemisphere light.
+  - Brightened the lacquer board top and visible inlay area.
+
+Updated `src/app/globals.css`:
+
+- Added the 3D badge styles.
+- Reduced the 3D shell border radius to 8px.
+
+Updated `docs/ART_DIRECTION_3D.md`:
+
+- Recorded approved concept assets and the selected implementation target.
+
+### Verification
+
+Ran:
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+Routes include / and /3d.
+```
+
+Ran:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed.
+27 tests passed.
+```
+
+Browser check:
+
+- Opened local `http://127.0.0.1:3001/3d` in Chrome.
+- Confirmed the page shell and DOM content loaded.
+- Found the first WebGL pass could appear visually empty in the browser viewport, so simplified the scene as described above.
+- A reliable final screenshot check is still pending because the desktop browser automation switched between unrelated Chrome profiles/windows during verification.
+
+Process note:
+
+- One `npm run build` attempt failed while a local Next dev server was still active and `.next` was being used concurrently.
+- Stopped the local dev server and reran the production build successfully.
+- Confirmed port `3001` no longer has a listener after cleanup.
+
+### Open Follow-Up
+
+- Browser screenshot QA is still needed for the new `/3d` greybox.
+- If the greybox camera and board readability are acceptable, the next art task is replacing procedural horses with authored GLB assets.
+- Do not add dice rolling animation until the static tabletop passes visual QA.

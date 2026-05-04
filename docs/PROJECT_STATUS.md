@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-04 18:27 CST
+Last updated: 2026-05-04 21:50 CST
 
 ## Current Target
 
@@ -81,6 +81,22 @@ Implemented:
   - Online friend-play rooms use the stable 2D board.
   - 3D scene is isolated behind the `3D测试` menu entry and `/3d`.
 - Added shareable online room URLs with `?room=<ROOM_ID>`.
+- Added `docs/ART_DIRECTION_3D.md` to reset the 3D work process around approved effect images before further implementation.
+- Marked the current `/3d` route as a technical spike only, not the target visual direction.
+- Defined first visual directions to test:
+  - Courtly Table.
+  - Scholar's Study Table.
+  - Museum-Grade Reconstructed Tabletop.
+- Recommended Museum-Grade Reconstructed Tabletop with restrained Scholar's Study atmosphere as the first playable 3D target.
+- Saved approved first-round 3D concept references in `public/assets/concepts/`.
+- Started the approved 3D greybox implementation:
+  - Close tabletop camera.
+  - Dark lacquer board and tray.
+  - Gold/brass point inlays.
+  - Bottle-shaped glossy white/black horses.
+  - Physical dice tray.
+  - Restrained study/court atmosphere props at scene edges.
+- First browser check loaded `/3d` but found the WebGL area could appear visually empty, so the 3D scene was simplified by removing risky shadow/spotlight components and increasing scene visibility.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
@@ -308,6 +324,21 @@ Online room API can create a room.
 Public share URL with ?room=77E484 returns HTTP 200.
 ```
 
+Latest 3D art-direction greybox verification on 2026-05-04 21:50 CST:
+
+```bash
+npm run build
+npm test
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+Routes include / and /3d.
+8 test files passed, 27 tests passed.
+```
+
 Last verified locally on 2026-05-01 16:08 CST:
 
 ```bash
@@ -349,6 +380,9 @@ npm run dev
 - The 3D scene uses procedural placeholder pieces, dice, table, room, and spectators. Final art assets are still needed.
 - Current 3D animation is intentionally disabled after the first animation-heavy pass caused crashes. Animation must be reintroduced incrementally.
 - The `/3d` scene is intentionally isolated from the stable online room flow until it passes browser QA.
+- The current `/3d` scene is not the approved art target. It should not receive further polish until an effect image is selected and a new greybox plan is derived from that image.
+- Full court or full-room character scenes are a later expansion risk; the first 3D target should prioritize tabletop readability, bottle-shaped horses, dice, board points, bar, and borne-off area.
+- The first effect-image family is now approved, and the new `/3d` greybox has started from that target. It still needs reliable browser screenshot QA before cloud deployment; the first browser check found an empty-looking WebGL region and triggered a simplification pass.
 - Aliyun still runs Node 18.19.1. The new 3D dependency stack builds, but `camera-controls` warns that it prefers Node >=20.11.0.
 - Interrupted dependency installs can leave `node_modules` in a broken state. If that happens, move the broken directory outside `/opt/shuanglu` before running a clean `npm ci --no-audit --no-fund`.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
@@ -366,12 +400,14 @@ npm run dev
 2. Deploy the online room build to Aliyun and test one match with two browsers or two devices.
 3. Add shareable room URLs and refresh/reconnect UX.
 4. Browser-test `/?room=<ROOM_ID>` with two clients.
-5. Run desktop screenshot QA for `/3d`.
-6. Consider a controlled Node 20 LTS upgrade on Aliyun for the 3D dependency stack.
-7. Add 3D horse move-path animation and clearer stack layout.
-8. Manual playtest a complete Human vs Human online match.
-9. Manual playtest a complete Human vs AI match.
-10. Add explicit reason feedback when clicking non-highlighted or blocked points.
-11. Run mobile viewport QA for the online menu, compact HUD, and 3D scene fallback behavior.
-12. Add regression tests for full-turn sequences.
-13. Tune AI heuristics for fewer obvious tactical mistakes.
+5. Run desktop screenshot QA for the new `/3d` greybox.
+6. Tune camera, board scale, and point spacing against the approved concept images.
+7. Prepare authored GLB assets for the bottle-shaped white/black horses.
+8. Consider a controlled Node 20 LTS upgrade on Aliyun for the 3D dependency stack.
+9. Add 3D horse move-path animation and clearer stack layout only after the static tabletop passes QA.
+10. Manual playtest a complete Human vs Human online match.
+11. Manual playtest a complete Human vs AI match.
+12. Add explicit reason feedback when clicking non-highlighted or blocked points.
+13. Run mobile viewport QA for the online menu, compact HUD, and 3D scene fallback behavior.
+14. Add regression tests for full-turn sequences.
+15. Tune AI heuristics for fewer obvious tactical mistakes.
