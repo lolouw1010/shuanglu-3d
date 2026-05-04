@@ -326,3 +326,81 @@ POST move applied a legal white move from 12 to 6 and updated moveHistory.
 Operational note:
 
 - Online rooms are in-memory in the Next.js Node process. Restarting PM2 clears active rooms.
+
+## 2026-05-04 3D Isolated Test Route Deployment
+
+Status: deployed.
+
+Source commit:
+
+```txt
+7f73e37 Isolate 3D table test route
+```
+
+Purpose:
+
+- Keep the stable online play flow on `/`.
+- Add the experimental 3D table scene behind `/3d` and the `3D测试` menu entry.
+- Add shareable online room links using `?room=<ROOM_ID>`.
+
+Deployment package:
+
+```txt
+/tmp/shuanglu-3d-isolated-7f73e37.tgz
+```
+
+Server build directory:
+
+```txt
+/opt/shuanglu_release_3d_isolated_7f73e37
+```
+
+Previous production backup:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_3d_isolated_7f73e37
+```
+
+Commands used:
+
+```bash
+tar -xzf /tmp/shuanglu-3d-isolated-7f73e37.tgz -C /opt/shuanglu_release_3d_isolated_7f73e37
+cd /opt/shuanglu_release_3d_isolated_7f73e37
+npm ci --no-audit --no-fund
+npm run build
+pm2 stop shuanglu
+mv /opt/shuanglu /opt/shuanglu_backups/shuanglu_before_3d_isolated_7f73e37
+mv /opt/shuanglu_release_3d_isolated_7f73e37 /opt/shuanglu
+cd /opt/shuanglu
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+```
+
+Verification:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -I --max-time 20 http://47.121.182.144/3d
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-share-test"}'
+curl -I --max-time 20 'http://47.121.182.144/?room=77E484'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+Public /3d path returned HTTP 200.
+POST /api/rooms created room 77E484.
+Public ?room=77E484 share URL returned HTTP 200.
+PM2 process shuanglu is online.
+Nginx configuration test passed.
+```
+
+Operational notes:
+
+- `camera-controls@3.1.0`, pulled by the 3D dependency stack, warns that it prefers Node >=20.11.0. The server currently runs Node 18.19.1. The production build passed, but runtime QA on `/3d` is still required.
+- The stable online play flow remains available on `/`; `/3d` is experimental.

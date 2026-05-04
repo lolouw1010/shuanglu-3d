@@ -2153,3 +2153,68 @@ Result:
 - Browser-test `/?room=<ROOM_ID>` with two clients.
 - Browser-test `/3d` separately from the stable online flow.
 - Add a visible warning badge on `/3d` that it is experimental.
+
+## 2026-05-04 18:27 CST
+
+### Objective
+
+Deploy the isolated 3D test route and share-link build to Aliyun without replacing the stable online play flow.
+
+### Source
+
+Committed and pushed:
+
+```txt
+7f73e37 Isolate 3D table test route
+```
+
+### Deployment
+
+Created archive:
+
+```txt
+/tmp/shuanglu-3d-isolated-7f73e37.tgz
+```
+
+Built in:
+
+```txt
+/opt/shuanglu_release_3d_isolated_7f73e37
+```
+
+Server build result:
+
+```txt
+Next.js production build passed.
+Routes include / and /3d.
+```
+
+Cutover backup:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_3d_isolated_7f73e37
+```
+
+### Verification
+
+Public checks:
+
+```txt
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/3d returned HTTP 200.
+POST /api/rooms created room 77E484.
+http://47.121.182.144/?room=77E484 returned HTTP 200.
+```
+
+Runtime checks:
+
+```txt
+PM2 process shuanglu is online.
+Nginx configuration test passed.
+```
+
+### Open Follow-Up
+
+- Full browser QA is still needed for `/3d`; HTTP 200 only proves the route serves.
+- Test `?room=` with two real browser clients.
+- Consider upgrading Aliyun Node runtime to Node 20 LTS before relying on the 3D dependency stack in production.

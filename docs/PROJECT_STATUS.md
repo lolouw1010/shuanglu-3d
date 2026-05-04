@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-04 17:09 CST
+Last updated: 2026-05-04 18:27 CST
 
 ## Current Target
 
@@ -281,6 +281,33 @@ Routes include / and /3d.
 8 test files passed, 27 tests passed.
 ```
 
+Latest Aliyun 3D isolation deployment on 2026-05-04 18:27 CST:
+
+```bash
+npm ci --no-audit --no-fund
+npm run build
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+curl -I --max-time 20 http://47.121.182.144/
+curl -I --max-time 20 http://47.121.182.144/3d
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms
+curl -I --max-time 20 'http://47.121.182.144/?room=77E484'
+```
+
+Result:
+
+```txt
+Server build passed.
+PM2 process shuanglu is online.
+Nginx configuration test passed.
+Public root path returns HTTP 200.
+Public /3d path returns HTTP 200.
+Online room API can create a room.
+Public share URL with ?room=77E484 returns HTTP 200.
+```
+
 Last verified locally on 2026-05-01 16:08 CST:
 
 ```bash
@@ -322,6 +349,7 @@ npm run dev
 - The 3D scene uses procedural placeholder pieces, dice, table, room, and spectators. Final art assets are still needed.
 - Current 3D animation is intentionally disabled after the first animation-heavy pass caused crashes. Animation must be reintroduced incrementally.
 - The `/3d` scene is intentionally isolated from the stable online room flow until it passes browser QA.
+- Aliyun still runs Node 18.19.1. The new 3D dependency stack builds, but `camera-controls` warns that it prefers Node >=20.11.0.
 - Interrupted dependency installs can leave `node_modules` in a broken state. If that happens, move the broken directory outside `/opt/shuanglu` before running a clean `npm ci --no-audit --no-fund`.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
 - In-game text has only had an initial audit through the rules modal; character and future story text still need review against `docs/HISTORICAL_NOTES.md`.
@@ -337,9 +365,9 @@ npm run dev
 1. Assign a production hostname and enable HTTPS for the Aliyun GD deployment.
 2. Deploy the online room build to Aliyun and test one match with two browsers or two devices.
 3. Add shareable room URLs and refresh/reconnect UX.
-4. Deploy the isolated 3D/share-link build to Aliyun.
-5. Browser-test `/?room=<ROOM_ID>` with two clients.
-6. Run desktop screenshot QA for `/3d`.
+4. Browser-test `/?room=<ROOM_ID>` with two clients.
+5. Run desktop screenshot QA for `/3d`.
+6. Consider a controlled Node 20 LTS upgrade on Aliyun for the 3D dependency stack.
 7. Add 3D horse move-path animation and clearer stack layout.
 8. Manual playtest a complete Human vs Human online match.
 9. Manual playtest a complete Human vs AI match.
