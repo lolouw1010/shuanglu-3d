@@ -1,16 +1,31 @@
 "use client";
 
 import { ArrowLeft, BookOpen } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { characters } from "@/data/characters";
 import { generateLegalMoves, getVictoryType, getWinner } from "@/game";
 import { useGameStore } from "@/store/gameStore";
-import { Board } from "./Board";
 import { CharacterPanel } from "./CharacterPanel";
 import { DicePanel } from "./DicePanel";
 import { PlayFeedback } from "./PlayFeedback";
 import { TurnCoach } from "./TurnCoach";
 import { VictoryTracker } from "./VictoryTracker";
+
+const GameTable3D = dynamic(
+  () =>
+    import("./three/GameTable3D").then((module) => module.GameTable3D),
+  {
+    ssr: false,
+    loading: () => (
+      <section className="game-3d-shell">
+        <div className="flex min-h-[520px] items-center justify-center text-sm text-amber-100/75">
+          正在布置三维棋局...
+        </div>
+      </section>
+    ),
+  },
+);
 
 export function GameScreen() {
   const {
@@ -128,7 +143,7 @@ export function GameScreen() {
               ) : null}
             </section>
           ) : null}
-          <Board
+          <GameTable3D
             state={state}
             availableMoves={availableMoves}
             selectedSource={selectedSource}

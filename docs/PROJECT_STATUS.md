@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-03 17:55 CST
+Last updated: 2026-05-04 16:00 CST
 
 ## Current Target
 
@@ -66,6 +66,12 @@ Implemented:
   - Online roll and move actions are validated server-side.
   - Clients poll the room state for turn updates.
 - Added online entry UI to the main menu and online room status UI to the game screen.
+- Opened the `0.6-3d-table` interface phase.
+- Added Three.js / React Three Fiber / Drei runtime dependencies.
+- Added a dynamically loaded WebGL game table scene as the primary board presentation.
+- Added a programmatic 3D room, lacquer table, 24 board points, glossy bottle/vase horse pieces, dice, and spectator figures.
+- Wired 3D point/bar/off clicks into the existing legal move selection and target submission callbacks.
+- Removed external HDR environment dependency from the first 3D pass; the scene currently uses local procedural geometry and lights only.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
@@ -215,6 +221,28 @@ Public URL http://47.121.182.144/ returns HTTP 200.
 Online room API can create a room, join a second player, read room state, roll, and apply a legal move.
 ```
 
+Latest local 3D interface verification on 2026-05-04 16:00 CST:
+
+```bash
+npm run build
+npm test
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+8 test files passed, 27 tests passed.
+```
+
+Dev server smoke check:
+
+```txt
+npm run dev started on http://localhost:3000.
+The game route compiled and served without dev server runtime errors.
+The local dev server was stopped after the check.
+```
+
 Last verified locally on 2026-05-01 16:08 CST:
 
 ```bash
@@ -252,6 +280,9 @@ npm run dev
 - Online rooms are currently in-memory only. A PM2 restart will clear active rooms.
 - Online room access is intentionally lightweight for testing and does not yet include accounts, passwords, or private invites.
 - Online clients use polling rather than WebSocket. This is acceptable for the first turn-based friend-play test but should be reviewed after playtesting.
+- The 3D scene is a first procedural interface pass. It has not yet had full screenshot QA across desktop and mobile.
+- The 3D scene uses procedural placeholder pieces, dice, table, room, and spectators. Final art assets are still needed.
+- Current dice animation is scripted, not physics-based.
 - Interrupted dependency installs can leave `node_modules` in a broken state. If that happens, move the broken directory outside `/opt/shuanglu` before running a clean `npm ci --no-audit --no-fund`.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
 - In-game text has only had an initial audit through the rules modal; character and future story text still need review against `docs/HISTORICAL_NOTES.md`.
@@ -267,10 +298,12 @@ npm run dev
 1. Assign a production hostname and enable HTTPS for the Aliyun GD deployment.
 2. Deploy the online room build to Aliyun and test one match with two browsers or two devices.
 3. Add shareable room URLs and refresh/reconnect UX.
-4. Start the `0.6-3d-table` scene spike using React Three Fiber while preserving the online/rules boundary.
-5. Manual playtest a complete Human vs Human online match.
-6. Manual playtest a complete Human vs AI match.
-7. Add explicit reason feedback when clicking non-highlighted or blocked points.
-8. Run desktop and mobile viewport screenshot QA for the 3D-like board shell, online menu, and compact HUD.
-9. Add regression tests for full-turn sequences.
-10. Tune AI heuristics for fewer obvious tactical mistakes.
+4. Run desktop screenshot QA for the new WebGL 3D table scene.
+5. Add 3D horse move-path animation and clearer stack layout.
+6. Add shareable room URLs and refresh/reconnect UX.
+7. Manual playtest a complete Human vs Human online match.
+8. Manual playtest a complete Human vs AI match.
+9. Add explicit reason feedback when clicking non-highlighted or blocked points.
+10. Run mobile viewport QA for the online menu, compact HUD, and 3D scene fallback behavior.
+11. Add regression tests for full-turn sequences.
+12. Tune AI heuristics for fewer obvious tactical mistakes.

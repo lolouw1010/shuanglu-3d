@@ -1885,3 +1885,137 @@ POST move from 12 to 6 applied a legal server-validated white move.
 - Run an actual browser-to-browser friend-play test.
 - Add shareable room URLs.
 - Add reconnect guidance and stale-room cleanup.
+
+## 2026-05-04 16:00 CST
+
+### Objective
+
+Open the real 3D interface phase for the Shuanglu test build. The goal is no longer to keep polishing the DOM board, but to establish a WebGL scene that can become the room/table/board/pieces/dice presentation.
+
+### Product Decision
+
+Use React Three Fiber inside the existing Next.js React app.
+
+Reasoning:
+
+- The existing rules, online room, and HUD are already React-based.
+- The 3D scene needs to read from the existing `BoardState` and submit existing selection callbacks.
+- DOM remains better for text-heavy panels, rules, online room status, and turn coaching.
+- 3D should own the playfield: room, table, board, pieces, dice, and atmosphere.
+
+### Dependencies Added
+
+Installed:
+
+```bash
+npm install three @react-three/fiber @react-three/drei
+```
+
+Notes:
+
+- Initial sandboxed install failed with a proxy/network EPERM.
+- Re-ran with approval and installation succeeded.
+- `npm install` still reports the existing 7 moderate advisories. No forced audit fix was run.
+
+### Implementation Completed
+
+Added the first 3D table scene:
+
+- `src/components/three/GameTable3D.tsx`
+
+Scene contents:
+
+- WebGL `Canvas` loaded dynamically from `GameScreen`.
+- Programmatic room shell with floor and walls.
+- Low lacquer table and inset board surface.
+- Twenty-four triangular board points mapped from the existing `BoardState`.
+- Programmatic glossy bottle/vase-shaped horse pieces using `LatheGeometry`.
+- White and black material variants with clearcoat for ceramic/lacquer feel.
+- Two dice cubes with top-face pip rendering.
+- First-pass scripted dice tumble animation when roll values change.
+- Four low-detail seated spectator figures around the table.
+- Gold center spine and table rim details.
+- Orbit camera controls for inspection.
+
+Interaction wiring:
+
+- 3D points use the same `availableMoves`, `selectedSource`, and `targetMoves` data as the previous board.
+- Clicking a legal source point selects it.
+- Clicking a legal target point submits the target.
+- Clicking the 3D bar well selects `bar` when bar entry is available.
+- Clicking the 3D bearing-off well submits `off` when bearing off is available.
+- Online turn gating still uses `availableMoves`, so non-current online players cannot act through the 3D board.
+
+Updated game screen:
+
+- Removed the 2D board as the primary game board.
+- Dynamically imports `GameTable3D` with `ssr: false` to avoid server-side WebGL issues.
+- Keeps victory, dice, online room status, turn coach, and play feedback as DOM HUD around the 3D scene.
+
+Updated global CSS:
+
+- Added `.game-3d-shell` and `.game-3d-canvas` styles for a large, low-chrome WebGL playfield.
+- Kept the shell consistent with the dark lacquer visual direction.
+
+Runtime asset policy:
+
+- No external 3D models, textures, or HDR environment maps are required for this first pass.
+- Removed `drei` `Environment preset` use to avoid runtime network dependency on external HDR assets.
+
+### Verification
+
+Ran:
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+```
+
+Ran:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed.
+27 tests passed.
+```
+
+Started local dev server for a browser smoke check:
+
+```bash
+npm run dev
+```
+
+Result:
+
+```txt
+Local: http://localhost:3000
+The app loaded and compiled the game route without runtime errors in the dev server output.
+```
+
+Then stopped the local dev server processes.
+
+### Open Follow-Up
+
+- Complete direct visual QA of the WebGL canvas in a browser screenshot workflow.
+- Add mobile viewport checks; current 3D scene targets desktop first.
+- Improve piece placement readability for large stacks.
+- Add move-path animation for horses instead of instant state-position updates.
+- Replace scripted dice tumble with table-aware physics or a better deterministic roll animation.
+- Add shareable room URL before deploying this as the main public test link.
+- Decide whether to keep a collapsed 2D rules/debug board for testing only.
+- User may later provide GLB models for:
+  - white bottle/vase horse
+  - black bottle/vase horse
+  - dice
+  - lacquer table
+  - seated spectator figures
