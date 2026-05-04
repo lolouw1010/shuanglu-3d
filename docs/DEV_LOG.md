@@ -2088,3 +2088,68 @@ Do not reintroduce multiple animation systems at once. Add back animation in thi
 3. Dice roll animation without physics.
 4. Spectator ambient movement.
 5. Optional physics dice after the rest is stable.
+
+## 2026-05-04 17:09 CST
+
+### Objective
+
+Continue after the 3D crash by isolating the experimental 3D scene from the stable playable flow, then improve online-room sharing.
+
+### Implementation Completed
+
+Added board-view separation:
+
+- Added `boardView: "classic" | "3d"` to `src/store/gameStore.ts`.
+- Default matches now use `classic`.
+- Online rooms are forced to `classic` so friend-play testing is protected from 3D instability.
+- The existing 2D board is restored as the default board in `GameScreen`.
+- The WebGL table scene is only used when `boardView === "3d"`.
+
+Added 3D test entry:
+
+- Main menu now has a `3D测试` button.
+- Added `src/app/3d/page.tsx`.
+- Added `src/components/ThreeTestApp.tsx`, which starts a local human match with `boardView: "3d"`.
+
+Added shareable online room URLs:
+
+- Creating a room updates the browser URL to `/?room=<ROOM_ID>`.
+- Joining a room updates the browser URL to `/?room=<ROOM_ID>`.
+- Returning to menu clears the query string.
+- Opening a URL with `?room=<ROOM_ID>` auto-fills and auto-joins that room.
+- Online game screen now displays the share URL.
+
+### Verification
+
+Ran:
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+Routes include / and /3d.
+```
+
+Ran:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed.
+27 tests passed.
+```
+
+### Open Follow-Up
+
+- Deploy this isolated 3D/share-link build to Aliyun.
+- Browser-test `/?room=<ROOM_ID>` with two clients.
+- Browser-test `/3d` separately from the stable online flow.
+- Add a visible warning badge on `/3d` that it is experimental.

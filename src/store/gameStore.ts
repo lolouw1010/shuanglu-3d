@@ -24,6 +24,7 @@ import type {
 } from "@/online/types";
 
 type GameMode = "human" | "ai" | "online";
+type BoardView = "classic" | "3d";
 type Screen = "menu" | "game";
 type Source = number | "bar";
 
@@ -39,6 +40,7 @@ type OnlineSession = {
 type GameStore = {
   screen: Screen;
   mode: GameMode;
+  boardView: BoardView;
   state: BoardState;
   online: OnlineSession | null;
   selectedSource: Source | null;
@@ -46,7 +48,7 @@ type GameStore = {
   showRules: boolean;
   message: string;
   onlineStatus: string | null;
-  startMatch: (mode: GameMode) => void;
+  startMatch: (mode: GameMode, boardView?: BoardView) => void;
   createOnlineRoom: () => Promise<void>;
   joinOnlineRoom: (roomId: string) => Promise<void>;
   syncOnlineRoom: () => Promise<void>;
@@ -117,6 +119,7 @@ function applyOnlineRoom(
   return {
     screen: "game",
     mode: "online",
+    boardView: "classic",
     state: room.state,
     online: {
       roomId: room.id,
@@ -143,6 +146,7 @@ function canActOnline(state: BoardState, online: OnlineSession | null): boolean 
 export const useGameStore = create<GameStore>((set, get) => ({
   screen: "menu",
   mode: "human",
+  boardView: "classic",
   state: createInitialState(),
   online: null,
   selectedSource: null,
@@ -151,11 +155,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   message: "请开始一局双陆。",
   onlineStatus: null,
 
-  startMatch: (mode) => {
+  startMatch: (mode, boardView = "classic") => {
     const state = createInitialState();
     set({
       screen: "game",
       mode,
+      boardView,
       state,
       online: null,
       selectedSource: null,
@@ -177,6 +182,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           body: JSON.stringify({ playerId }),
         }),
       );
+      window.history.replaceState(null, "", `/?room=${data.room.id}`);
       set(applyOnlineRoom(data.room, data.playerId, data.seat));
     } catch (error) {
       set({
@@ -203,6 +209,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           body: JSON.stringify({ playerId, action: "join" }),
         }),
       );
+      window.history.replaceState(null, "", `/?room=${data.room.id}`);
       set(applyOnlineRoom(data.room, data.playerId, data.seat));
     } catch (error) {
       set({
@@ -249,12 +256,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       screen: "menu",
       state: createInitialState(),
+      boardView: "classic",
       online: null,
       selectedSource: null,
       targetMoves: [],
       onlineStatus: null,
       message: "请开始一局双陆。",
     });
+    window.history.replaceState(null, "", "/");
   },
 
   toggleRules: () => set((store) => ({ showRules: !store.showRules })),

@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-04 16:19 CST
+Last updated: 2026-05-04 17:09 CST
 
 ## Current Target
 
@@ -76,6 +76,11 @@ Implemented:
   - Removed `drei/Text` labels.
   - Removed continuous per-frame horse, spectator, and dice animation.
   - Reduced geometry/shadow/rendering cost for the first stable 3D baseline.
+- Separated board presentation into `classic` and `3d` views:
+  - Stable 2D board is the default.
+  - Online friend-play rooms use the stable 2D board.
+  - 3D scene is isolated behind the `3D测试` menu entry and `/3d`.
+- Added shareable online room URLs with `?room=<ROOM_ID>`.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
@@ -261,6 +266,21 @@ Next.js production build passed.
 8 test files passed, 27 tests passed.
 ```
 
+Latest 3D isolation and share-link verification on 2026-05-04 17:09 CST:
+
+```bash
+npm run build
+npm test
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+Routes include / and /3d.
+8 test files passed, 27 tests passed.
+```
+
 Last verified locally on 2026-05-01 16:08 CST:
 
 ```bash
@@ -301,6 +321,7 @@ npm run dev
 - The 3D scene is a first procedural interface pass. It has not yet had full screenshot QA across desktop and mobile.
 - The 3D scene uses procedural placeholder pieces, dice, table, room, and spectators. Final art assets are still needed.
 - Current 3D animation is intentionally disabled after the first animation-heavy pass caused crashes. Animation must be reintroduced incrementally.
+- The `/3d` scene is intentionally isolated from the stable online room flow until it passes browser QA.
 - Interrupted dependency installs can leave `node_modules` in a broken state. If that happens, move the broken directory outside `/opt/shuanglu` before running a clean `npm ci --no-audit --no-fund`.
 - Quick Mode is documented but not implemented. `createInitialState` intentionally rejects non-15-horse layouts until quick layouts exist.
 - In-game text has only had an initial audit through the rules modal; character and future story text still need review against `docs/HISTORICAL_NOTES.md`.
@@ -316,12 +337,13 @@ npm run dev
 1. Assign a production hostname and enable HTTPS for the Aliyun GD deployment.
 2. Deploy the online room build to Aliyun and test one match with two browsers or two devices.
 3. Add shareable room URLs and refresh/reconnect UX.
-4. Run desktop screenshot QA for the new WebGL 3D table scene.
-5. Add 3D horse move-path animation and clearer stack layout.
-6. Add shareable room URLs and refresh/reconnect UX.
-7. Manual playtest a complete Human vs Human online match.
-8. Manual playtest a complete Human vs AI match.
-9. Add explicit reason feedback when clicking non-highlighted or blocked points.
-10. Run mobile viewport QA for the online menu, compact HUD, and 3D scene fallback behavior.
-11. Add regression tests for full-turn sequences.
-12. Tune AI heuristics for fewer obvious tactical mistakes.
+4. Deploy the isolated 3D/share-link build to Aliyun.
+5. Browser-test `/?room=<ROOM_ID>` with two clients.
+6. Run desktop screenshot QA for `/3d`.
+7. Add 3D horse move-path animation and clearer stack layout.
+8. Manual playtest a complete Human vs Human online match.
+9. Manual playtest a complete Human vs AI match.
+10. Add explicit reason feedback when clicking non-highlighted or blocked points.
+11. Run mobile viewport QA for the online menu, compact HUD, and 3D scene fallback behavior.
+12. Add regression tests for full-turn sequences.
+13. Tune AI heuristics for fewer obvious tactical mistakes.

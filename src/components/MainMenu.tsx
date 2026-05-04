@@ -1,7 +1,7 @@
 "use client";
 
-import { BookOpen, Bot, Globe2, Users } from "lucide-react";
-import { useState } from "react";
+import { Box, BookOpen, Bot, Globe2, Users } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useGameStore } from "@/store/gameStore";
 
 export function MainMenu() {
@@ -11,6 +11,16 @@ export function MainMenu() {
   const onlineStatus = useGameStore((store) => store.onlineStatus);
   const toggleRules = useGameStore((store) => store.toggleRules);
   const [roomCode, setRoomCode] = useState("");
+  const joinedFromUrl = useRef(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const room = params.get("room")?.trim().toUpperCase();
+    if (!room || joinedFromUrl.current) return;
+    joinedFromUrl.current = true;
+    setRoomCode(room);
+    void joinOnlineRoom(room);
+  }, [joinOnlineRoom]);
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_50%_16%,rgba(209,168,87,.25),transparent_30%),linear-gradient(145deg,#1a1110,#4d171b_48%,#11100f)] px-4 py-8 text-stone-100">
@@ -26,7 +36,7 @@ export function MainMenu() {
         </div>
 
         <div className="grid gap-4 pb-10 sm:max-w-3xl">
-          <div className="grid gap-3 sm:grid-cols-4">
+          <div className="grid gap-3 sm:grid-cols-5">
             <button
               type="button"
               className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/40 bg-amber-100 px-4 py-3 font-semibold text-stone-950"
@@ -42,6 +52,14 @@ export function MainMenu() {
             >
               <Users size={18} />
               本机双人
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center justify-center gap-2 rounded border border-amber-200/40 bg-[#2b1512] px-4 py-3 font-semibold text-amber-50"
+              onClick={() => startMatch("human", "3d")}
+            >
+              <Box size={18} />
+              3D测试
             </button>
             <button
               type="button"

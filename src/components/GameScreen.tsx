@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { characters } from "@/data/characters";
 import { generateLegalMoves, getVictoryType, getWinner } from "@/game";
 import { useGameStore } from "@/store/gameStore";
+import { Board } from "./Board";
 import { CharacterPanel } from "./CharacterPanel";
 import { DicePanel } from "./DicePanel";
 import { PlayFeedback } from "./PlayFeedback";
@@ -30,6 +31,7 @@ const GameTable3D = dynamic(
 export function GameScreen() {
   const {
     mode,
+    boardView,
     state,
     online,
     selectedSource,
@@ -48,6 +50,10 @@ export function GameScreen() {
 
   const winner = getWinner(state);
   const victoryType = getVictoryType(state);
+  const onlineShareUrl =
+    typeof window !== "undefined" && online
+      ? `${window.location.origin}/?room=${online.roomId}`
+      : "";
   const canAct =
     mode !== "online" ||
     (online?.seat !== "spectator" && online?.seat === state.currentPlayer);
@@ -76,6 +82,11 @@ export function GameScreen() {
           <div>
             <p className="text-sm text-amber-200">双陆 0.5 Prototype</p>
             <h1 className="font-display text-3xl text-amber-50">宣和雅局</h1>
+            {boardView === "3d" ? (
+              <p className="mt-1 text-xs text-amber-100/80">
+                3D 测试局：当前使用 WebGL 棋桌，动画分阶段恢复。
+              </p>
+            ) : null}
             {mode === "online" && online ? (
               <p className="mt-1 text-xs text-stone-300">
                 房间 {online.roomId} ·{" "}
@@ -129,11 +140,14 @@ export function GameScreen() {
           {mode === "online" && online ? (
             <section className="flex flex-wrap items-center justify-between gap-3 rounded border border-amber-200/20 bg-black/24 px-3 py-2 text-sm text-stone-200">
               <span>
-                分享房间码{" "}
+                分享房间{" "}
                 <strong className="font-mono text-amber-100">
                   {online.roomId}
                 </strong>
-                。白方创建，黑方加入。
+                。朋友打开链接即可加入。
+              </span>
+              <span className="max-w-full truncate font-mono text-xs text-amber-100/75">
+                {onlineShareUrl}
               </span>
               <span className={canAct ? "text-emerald-100" : "text-stone-400"}>
                 {canAct ? "轮到你行动" : "等待对方行动"}
@@ -143,14 +157,25 @@ export function GameScreen() {
               ) : null}
             </section>
           ) : null}
-          <GameTable3D
-            state={state}
-            availableMoves={availableMoves}
-            selectedSource={selectedSource}
-            targetMoves={targetMoves}
-            onSelectSource={selectSource}
-            onSelectTarget={selectTarget}
-          />
+          {boardView === "3d" ? (
+            <GameTable3D
+              state={state}
+              availableMoves={availableMoves}
+              selectedSource={selectedSource}
+              targetMoves={targetMoves}
+              onSelectSource={selectSource}
+              onSelectTarget={selectTarget}
+            />
+          ) : (
+            <Board
+              state={state}
+              availableMoves={availableMoves}
+              selectedSource={selectedSource}
+              targetMoves={targetMoves}
+              onSelectSource={selectSource}
+              onSelectTarget={selectTarget}
+            />
+          )}
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,.95fr)]">
             <TurnCoach
               state={state}
@@ -174,7 +199,7 @@ export function GameScreen() {
               <button
                 type="button"
                 className="mt-4 rounded border border-amber-200/40 bg-amber-100 px-4 py-2 text-sm font-semibold text-stone-950"
-                onClick={() => startMatch(mode)}
+                onClick={() => startMatch(mode, boardView)}
               >
                 再开一局
               </button>
