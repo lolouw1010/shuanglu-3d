@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-04 21:50 CST
+Last updated: 2026-05-05 23:31 CST
 
 ## Current Target
 
@@ -97,6 +97,12 @@ Implemented:
   - Physical dice tray.
   - Restrained study/court atmosphere props at scene edges.
 - First browser check loaded `/3d` but found the WebGL area could appear visually empty, so the 3D scene was simplified by removing risky shadow/spotlight components and increasing scene visibility.
+- Tuned the `/3d` horse-to-board ratio after user review:
+  - Reduced procedural bottle horse world scale.
+  - Tightened stack spacing on each point.
+  - Lowered the overflow marker to match the smaller pieces.
+- Deployed the `/3d` horse-scale correction to Aliyun GD at `http://47.121.182.144/3d`.
+- Stopped local development listeners on `127.0.0.1:3001` and `127.0.0.1:3004` during the cloud handoff.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
@@ -117,6 +123,39 @@ Result:
 ```txt
 Next.js production build passed.
 API routes /api/rooms and /api/rooms/[roomId] compiled as dynamic server routes.
+```
+
+Last verified locally on 2026-05-05 12:53 CST:
+
+```bash
+npm test
+npx tsc --noEmit
+```
+
+Result:
+
+```txt
+8 test files passed, 27 tests passed.
+TypeScript no-emit check passed.
+```
+
+Last verified on Aliyun GD on 2026-05-05 23:31 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -I --max-time 20 http://47.121.182.144/3d
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-deploy-test"}'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+Public /3d path returned HTTP 200.
+POST /api/rooms created room 89E372.
+PM2 process shuanglu is online with cwd /opt/shuanglu.
 ```
 
 ```bash

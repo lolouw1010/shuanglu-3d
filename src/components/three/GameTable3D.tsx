@@ -30,6 +30,8 @@ const BOARD_WIDTH = 11.35;
 const BOARD_DEPTH = 6.15;
 const POINT_STEP = 0.76;
 const POINT_LENGTH = 2.34;
+const PIECE_SCALE = 0.35;
+const SELECTED_PIECE_SCALE = 0.4;
 
 function pointPosition(index: number): PointPosition {
   if (index >= 12) {
@@ -60,7 +62,7 @@ function pieceOffsets(count: number): Array<[number, number, number]> {
   return Array.from({ length: visible }, (_, index) => {
     const lane = index % 2;
     const row = Math.floor(index / 2);
-    return [(lane - 0.5) * 0.19, row * 0.26, index * 0.22];
+    return [(lane - 0.5) * 0.12, row * 0.105, index * 0.12];
   });
 }
 
@@ -122,7 +124,7 @@ function VasePiece({
   const highlightColor = isWhite ? "#fff9e8" : "#e6ddd1";
 
   return (
-    <group position={position} scale={selected ? 1.1 : 1}>
+    <group position={position} scale={selected ? SELECTED_PIECE_SCALE : PIECE_SCALE}>
       <mesh castShadow receiveShadow geometry={geometry}>
         <meshPhysicalMaterial
           color={bodyColor}
@@ -243,15 +245,15 @@ function BoardPoint3D({
               active={isTarget || canSelect || isSource}
               position={[
                 x,
-                0.17 + y,
-                position.direction * (0.18 + depth),
+                0.13 + y,
+                position.direction * (0.16 + depth),
               ]}
             />
           ))
         : null}
       {point.count > 7 ? (
-        <mesh position={[0.32, 1.54, position.direction * 0.78]}>
-          <sphereGeometry args={[0.11, 20, 12]} />
+        <mesh position={[0.2, 0.63, position.direction * 0.54]}>
+          <sphereGeometry args={[0.065, 20, 12]} />
           <meshStandardMaterial
             color="#f3d589"
             emissive="#6e3f08"

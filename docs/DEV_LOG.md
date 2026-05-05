@@ -1980,6 +1980,7 @@ Ran:
 
 ```bash
 npm test
+npx tsc --noEmit
 ```
 
 Result:
@@ -1987,6 +1988,7 @@ Result:
 ```txt
 8 test files passed.
 27 tests passed.
+TypeScript no-emit check passed.
 ```
 
 Started local dev server for a browser smoke check:
@@ -2352,3 +2354,148 @@ Process note:
 - Browser screenshot QA is still needed for the new `/3d` greybox.
 - If the greybox camera and board readability are acceptable, the next art task is replacing procedural horses with authored GLB assets.
 - Do not add dice rolling animation until the static tabletop passes visual QA.
+
+## 2026-05-05 11:46 CST
+
+### Objective
+
+Correct the first visible scale mismatch in the `/3d` tabletop scene after user review: the bottle-shaped horses were too large relative to the board and points.
+
+### Implementation Completed
+
+Updated `src/components/three/GameTable3D.tsx`:
+
+- Added explicit 3D horse scale constants so the procedural vase model can be tuned independently of board size.
+- Reduced normal horse scale to `0.35` and selected horse scale to `0.4`.
+- Tightened per-point horse stack offsets so smaller horses stay visually grouped on each playable point.
+- Lowered and reduced the overflow count marker so it no longer floats at the old oversized horse height.
+- Kept rules, move selection, dice logic, and board point click geometry unchanged.
+
+### Verification
+
+Ran:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+8 test files passed.
+27 tests passed.
+```
+
+Opened the current-source dev server at:
+
+```txt
+http://127.0.0.1:3004/3d
+```
+
+Browser result:
+
+- Confirmed `/3d` enters the WebGL board after client hydration.
+- Confirmed the smaller horse scale renders on the board.
+- Console shows Three.js deprecation warnings for `THREE.Clock` and `PCFSoftShadowMap`; no application error was found during this check.
+
+### Open Follow-Up
+
+- If the revised horse-to-board ratio is accepted by user review, the next 3D pass should tune camera framing and dice/table prop scale against the approved concept images.
+- `/assets/pieces/white-horse-idle.png` and `/assets/pieces/black-horse-idle.png` still return 404 from legacy 2D image preload slots; either commit real assets or remove the preload path before launch.
+
+## 2026-05-05 17:48 CST
+
+### Objective
+
+Move the current `/3d` scale-correction build off the user's laptop and onto Aliyun, and stop local development services.
+
+### Local Actions Completed
+
+- Stopped project listeners on `127.0.0.1:3001` and `127.0.0.1:3004`.
+- Confirmed both ports no longer had local listeners.
+- Built the current source locally before deployment:
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+Routes include / and /3d.
+```
+
+### Cloud Actions Completed Before Blockage
+
+- Confirmed SSH key `/Users/louie/Downloads/aliyun_test.pem` could authenticate to `47.121.182.144`.
+- Created local deployment package:
+
+```txt
+/tmp/shuanglu-3d-scale-20260505_1458.tgz
+```
+
+- Uploaded it to Aliyun:
+
+```txt
+/tmp/shuanglu-3d-scale-20260505_1458.tgz
+```
+
+- Extracted it on the server into:
+
+```txt
+/opt/shuanglu_release_3d_scale_20260505_1458
+```
+
+### Blocker
+
+The server became unresponsive during `npm ci --no-audit --no-fund` in the new release directory.
+
+Observed:
+
+- SSH timed out during banner exchange.
+- Public HTTP to `http://47.121.182.144/` timed out.
+- The SSH session running `npm ci` ended with `Connection reset by peer`.
+
+Important boundary:
+
+- The PM2 production cutover was not reached.
+- `/opt/shuanglu` was not intentionally replaced.
+- Nginx was not reloaded.
+
+### Open Follow-Up
+
+- Recover or reboot the Aliyun instance from the provider console if SSH remains unavailable.
+- After SSH returns, stop any leftover install process and complete deployment using the lightweight path documented in `docs/DEPLOYMENT.md`.
+
+### Recovery And Deployment Completion
+
+After the user rebooted the Aliyun instance, SSH recovered and the server showed low load.
+
+Completed the deployment with the lightweight path:
+
+- Confirmed the release directory still existed.
+- Found the interrupted dependency install had left an incomplete `node_modules`.
+- Moved the incomplete dependency directory out of the release root.
+- Copied the known-good `/opt/shuanglu/node_modules` into the new release.
+- Ran `npm run build` successfully on the server.
+- Backed up the previous production directory to:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_3d_scale_20260505_2005
+```
+
+- Moved the new release into `/opt/shuanglu`.
+- Restarted PM2 process `shuanglu`.
+- Saved PM2 process state.
+- Verified Nginx config and reloaded Nginx.
+
+Verification:
+
+```txt
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/3d returned HTTP 200.
+POST /api/rooms created room 89E372.
+PM2 process shuanglu is online with cwd /opt/shuanglu.
+The deployed 3D chunk contains 博物复原桌面 and scale:o?.4:.35.
+```

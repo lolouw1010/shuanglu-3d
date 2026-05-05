@@ -404,3 +404,156 @@ Operational notes:
 
 - `camera-controls@3.1.0`, pulled by the 3D dependency stack, warns that it prefers Node >=20.11.0. The server currently runs Node 18.19.1. The production build passed, but runtime QA on `/3d` is still required.
 - The stable online play flow remains available on `/`; `/3d` is experimental.
+
+## 2026-05-05 3D Horse Scale Deployment
+
+Status: deployed after Aliyun instance reboot and recovery.
+
+Purpose:
+
+- Publish the `/3d` horse-to-board scale correction.
+- Stop local development services so the user's laptop does not keep running the WebGL dev server.
+
+Local actions completed:
+
+- Stopped local project listeners on `127.0.0.1:3001` and `127.0.0.1:3004`.
+- Verified no local listener remained on ports `3001` or `3004`.
+- Ran local production build successfully:
+
+```bash
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+Routes include / and /3d.
+```
+
+Deployment package:
+
+```txt
+/tmp/shuanglu-3d-scale-20260505_1458.tgz
+```
+
+Server upload target:
+
+```txt
+/tmp/shuanglu-3d-scale-20260505_1458.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_3d_scale_20260505_1458
+```
+
+Server actions completed before blockage:
+
+```bash
+scp /tmp/shuanglu-3d-scale-20260505_1458.tgz root@47.121.182.144:/tmp/shuanglu-3d-scale-20260505_1458.tgz
+mkdir -p /opt/shuanglu_release_3d_scale_20260505_1458 /opt/shuanglu_backups
+tar -xzf /tmp/shuanglu-3d-scale-20260505_1458.tgz -C /opt/shuanglu_release_3d_scale_20260505_1458
+cd /opt/shuanglu_release_3d_scale_20260505_1458
+npm ci --no-audit --no-fund
+```
+
+Initial blockage:
+
+- `npm ci --no-audit --no-fund` emitted Node engine warnings already known from prior deployments, then stopped producing output.
+- SSH later failed with `Connection timed out during banner exchange`.
+- Public HTTP verification also timed out.
+- The SSH session running `npm ci` ended with `Connection reset by peer`.
+
+Important state boundary:
+
+- Production PM2 cutover was not executed.
+- `/opt/shuanglu` was not intentionally replaced during this attempt.
+- No `pm2 restart shuanglu` or `systemctl reload nginx` command was reached.
+
+Required recovery:
+
+1. Reboot or recover the Aliyun instance from the provider console if SSH remains unavailable.
+2. After SSH returns, inspect and stop any leftover `npm ci` process.
+3. Prefer a lightweight release path because this version did not add dependencies:
+   - copy `/opt/shuanglu/node_modules` into `/opt/shuanglu_release_3d_scale_20260505_1458`, or
+   - run `npm ci` only after confirming the server has enough free memory and I/O headroom.
+4. Build the release, then cut over PM2 only after `npm run build` succeeds.
+
+Recovery completed:
+
+- User rebooted the Aliyun instance from the provider side.
+- SSH and public TCP connectivity recovered.
+- Server uptime after recovery showed low load.
+- The partial `node_modules` left by the interrupted install was incomplete and failed `next build` with `next: not found`.
+- The partial dependency directory was moved out of the release root to:
+
+```txt
+/opt/shuanglu_backups/partial_node_modules/node_modules.partial_20260505_2000
+```
+
+- Copied the known-good dependency directory from current production:
+
+```bash
+cp -a /opt/shuanglu/node_modules /opt/shuanglu_release_3d_scale_20260505_1458/node_modules
+```
+
+- Rebuilt the release successfully:
+
+```bash
+cd /opt/shuanglu_release_3d_scale_20260505_1458
+npm run build
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+Routes include / and /3d.
+```
+
+Production cutover completed:
+
+```bash
+pm2 stop shuanglu
+mv /opt/shuanglu /opt/shuanglu_backups/shuanglu_before_3d_scale_20260505_2005
+mv /opt/shuanglu_release_3d_scale_20260505_1458 /opt/shuanglu
+cd /opt/shuanglu
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+```
+
+Verification:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -I --max-time 20 http://47.121.182.144/3d
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-deploy-test"}'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+Public /3d path returned HTTP 200.
+POST /api/rooms created room 89E372 and seated creator as white.
+PM2 process shuanglu is online with cwd /opt/shuanglu.
+Nginx configuration test passed.
+```
+
+Build artifact check:
+
+```txt
+.next/static/chunks/289.18259aa6c1daf79d.js contains 博物复原桌面.
+.next/static/chunks/289.18259aa6c1daf79d.js contains scale:o?.4:.35.
+```
+
+Operational notes:
+
+- Historical `shuanglu-error.log` still contains old `next: not found`, `Bus error`, and stale Server Action lines from earlier deployments. The current restart output shows `next start` ready on `127.0.0.1:3002`.
+- The partial dependency directory must remain outside `/opt/shuanglu`; keeping broken dependency backups in a project root can make Next.js scan them during build.
