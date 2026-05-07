@@ -2499,3 +2499,74 @@ POST /api/rooms created room 89E372.
 PM2 process shuanglu is online with cwd /opt/shuanglu.
 The deployed 3D chunk contains 博物复原桌面 and scale:o?.4:.35.
 ```
+
+## 2026-05-07 07:48 CST
+
+### Objective
+
+Restart work from the user's MiniMac, avoid local service runtime, and begin taking ownership of the Aliyun GD cloud assets.
+
+### Local Discovery
+
+MiniMac repository path:
+
+```txt
+/Users/lizhe/Library/Mobile Documents/iCloud~md~obsidian/Documents/shuanglu/shuanglu
+```
+
+Local repository state:
+
+```txt
+HEAD: 8b41eb1 Deploy 3D horse scale correction
+Working tree: clean before documentation updates
+```
+
+Local service policy confirmed by user:
+
+- Do not run the Shuanglu service locally.
+- Cloud deployment is the test target.
+
+Local ports checked:
+
+```txt
+127.0.0.1:3000 no listener
+127.0.0.1:3001 no listener
+127.0.0.1:3002 no listener
+127.0.0.1:3004 no listener
+```
+
+Local verification notes:
+
+- `npm test` executed all 27 rule tests successfully.
+- Vitest then failed while writing `node_modules/.vite/vitest/results.json` because of local iCloud/sandbox write permissions.
+- `npm run build` passed when allowed to write `.next`.
+- A brief attempt to start `next start` without elevated permissions failed with `EPERM`; no local service remained running.
+
+### Cloud Asset Takeover
+
+Created `docs/CLOUD_ASSETS.md` to record:
+
+- MiniMac repository path.
+- MiniMac SSH key path for Aliyun.
+- Cloud URLs.
+- PM2 process ownership.
+- Nginx route map.
+- `/opt/shuanglu` production path.
+- `/opt/shuanglu_backups` backup inventory.
+- Cloud-only verification workflow.
+
+Aliyun verification:
+
+```txt
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/3d returned HTTP 200.
+POST /api/rooms created room 3B24A7.
+PM2 shuanglu is online, cwd /opt/shuanglu, internal port 3002.
+Nginx config test passed.
+```
+
+### Open Follow-Up
+
+- Future testing should default to cloud URLs unless the user explicitly asks for a local service.
+- Consider moving the working repository out of iCloud if local cache writes continue to interfere with test/build tooling.
+

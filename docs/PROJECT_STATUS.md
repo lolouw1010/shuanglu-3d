@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-05 23:31 CST
+Last updated: 2026-05-07 07:48 CST
 
 ## Current Target
 
@@ -103,6 +103,8 @@ Implemented:
   - Lowered the overflow marker to match the smaller pieces.
 - Deployed the `/3d` horse-scale correction to Aliyun GD at `http://47.121.182.144/3d`.
 - Stopped local development listeners on `127.0.0.1:3001` and `127.0.0.1:3004` during the cloud handoff.
+- MiniMac operating policy is now cloud-only runtime testing: do not run the Shuanglu web service locally unless explicitly requested.
+- Added `docs/CLOUD_ASSETS.md` as the current cloud asset inventory and handoff document.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
@@ -137,6 +139,27 @@ Result:
 ```txt
 8 test files passed, 27 tests passed.
 TypeScript no-emit check passed.
+```
+
+
+Last verified on Aliyun GD on 2026-05-07 07:48 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -I --max-time 20 http://47.121.182.144/3d
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-cloud-only-test"}'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+Public /3d path returned HTTP 200.
+POST /api/rooms created room 3B24A7.
+PM2 process shuanglu is online with cwd /opt/shuanglu.
+Local service ports 3000, 3001, 3002, and 3004 have no listeners.
 ```
 
 Last verified on Aliyun GD on 2026-05-05 23:31 CST:
