@@ -12,6 +12,8 @@ type BoardPointProps = {
   isLastTo: boolean;
   isHitDestination: boolean;
   canSelect: boolean;
+  sourceSteps?: number[];
+  targetSteps?: number[];
   onSelectSource: () => void;
   onSelectTarget: () => void;
 };
@@ -71,6 +73,8 @@ export function BoardPoint({
   isLastTo,
   isHitDestination,
   canSelect,
+  sourceSteps = [],
+  targetSteps = [],
   onSelectSource,
   onSelectTarget,
 }: BoardPointProps) {
@@ -89,21 +93,32 @@ export function BoardPoint({
   const owner = point.owner;
   const visibleCount = Math.min(point.count, 5);
   const stackPosition = row === "top" ? "top-8" : "bottom-8";
+  const sourceStepLabel = Array.from(new Set(sourceSteps)).join("/");
+  const targetStepLabel = Array.from(new Set(targetSteps)).join("/");
+  const stateLabel = isTarget
+    ? `可落马${targetStepLabel ? `，骰步 ${targetStepLabel}` : ""}`
+    : canSelect
+      ? `可点取${sourceStepLabel ? `，可用骰步 ${sourceStepLabel}` : ""}`
+      : isSource
+        ? "已选中"
+        : "不可操作";
+  const ownerLabel = owner ? `${pieceAlt(owner)} ${point.count} 枚` : "空点";
 
   return (
     <button
       type="button"
+      aria-label={`${index} 点，${ownerLabel}，${stateLabel}`}
       className={`point-surface point-${row} relative min-h-40 overflow-hidden border transition ${
         isTarget
-          ? "target-pulse border-emerald-200 bg-emerald-300/12"
+          ? "point-target target-pulse border-emerald-200 bg-emerald-300/12"
           : isSource
-            ? "border-amber-100 bg-amber-100/14 shadow-[inset_0_0_0_2px_rgba(251,191,36,.32)]"
+            ? "point-selected border-amber-100 bg-amber-100/14 shadow-[inset_0_0_0_2px_rgba(251,191,36,.32)]"
             : isLastTo
-              ? "last-move-glow border-sky-200/80 bg-sky-200/10"
+              ? "point-last-to last-move-glow border-sky-200/80 bg-sky-200/10"
               : isLastFrom
-                ? "border-amber-200/45 bg-amber-100/8"
+                ? "point-last-from border-amber-200/45 bg-amber-100/8"
             : canSelect
-              ? "source-pulse border-amber-100/65 bg-amber-100/8"
+              ? "point-source source-pulse border-amber-100/65 bg-amber-100/8"
               : "border-amber-100/8 bg-black/14"
       } ${canSelect || isTarget ? "point-interactive cursor-pointer hover:border-amber-100" : "cursor-default"}`}
       onClick={handleClick}
@@ -111,6 +126,8 @@ export function BoardPoint({
       <span
         className={`point-lane absolute inset-x-1 h-[78%] ${tone} ${pointShape}`}
       />
+      {isTarget ? <span className="point-target-beacon" /> : null}
+      {canSelect ? <span className="point-source-beacon" /> : null}
       {isLastTo ? <span className="arrival-ripple" /> : null}
       <span
         className={`absolute left-2 z-10 text-[11px] text-amber-100/62 ${
@@ -174,19 +191,21 @@ export function BoardPoint({
       ) : null}
       {isTarget ? (
         <span
-          className={`absolute left-1/2 z-20 -translate-x-1/2 rounded-full border border-emerald-200/50 bg-emerald-300/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-100 ${
+          className={`point-action-chip point-action-chip-target absolute left-1/2 z-30 -translate-x-1/2 ${
             row === "top" ? "bottom-2" : "top-2"
           }`}
         >
-          可落
+          <span>落马</span>
+          {targetStepLabel ? <span className="point-step-chip">{targetStepLabel}</span> : null}
         </span>
       ) : canSelect ? (
         <span
-          className={`absolute left-1/2 z-20 -translate-x-1/2 rounded-full border border-amber-200/45 bg-amber-100/18 px-2 py-0.5 text-[11px] font-semibold text-amber-100 ${
+          className={`point-action-chip point-action-chip-source absolute left-1/2 z-30 -translate-x-1/2 ${
             row === "top" ? "bottom-2" : "top-2"
           }`}
         >
-          选
+          <span>点取</span>
+          {sourceStepLabel ? <span className="point-step-chip">{sourceStepLabel}</span> : null}
         </span>
       ) : null}
     </button>

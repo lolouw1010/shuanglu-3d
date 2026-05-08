@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-07 07:48 CST
+Last updated: 2026-05-08 22:06 CST
 
 ## Current Target
 
@@ -111,6 +111,12 @@ Implemented:
 - Production runtime is PM2 process `shuanglu` behind Nginx, bound internally to `127.0.0.1:3002`.
 - Deployed the first 3D-like board visual pass to Aliyun GD from working-tree archive `/tmp/shuanglu-visual-20260502-2349.tgz`.
 - Deployed the online room MVP to Aliyun GD from source commit `0108b27`.
+- Improved the stable 2D board interaction layer after the bottle-piece update:
+  - Board-level action guide explains whether to roll, point-pick, re-enter from bar, or land.
+  - Legal source points now show gold `点取` chips and dice-step labels.
+  - Legal target points now show green `落马` chips and dice-step labels.
+  - Source/target triangular lanes and beacons now provide stronger visual affordance than the piece artwork alone.
+  - Board points now expose accessibility labels with point number, owner/count, and legal action state.
 
 ## Verified Commands
 
@@ -141,6 +147,42 @@ Result:
 TypeScript no-emit check passed.
 ```
 
+
+
+
+Last verified on Aliyun GD on 2026-05-08 23:26 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -I --max-time 20 http://47.121.182.144/3d
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-2d-usability-test"}'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+Public /3d path returned HTTP 200.
+POST /api/rooms created room D8F1F1.
+PM2 process shuanglu is online after restart.
+Cloud build artifacts contain 点取, 落马, and board-action-guide.
+```
+
+Last verified locally on 2026-05-08 22:06 CST without starting a local service:
+
+```bash
+npm run build
+npm test
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+8 test files passed, 27 tests passed.
+```
 
 Last verified on Aliyun GD on 2026-05-07 07:48 CST:
 
@@ -415,18 +457,15 @@ Result:
 Next.js production build passed.
 ```
 
-## Running Local Server
+## Runtime Policy
 
-The local development server was started successfully on:
+The current MiniMac operating policy is cloud-only runtime testing. Do not start the Shuanglu web service locally unless the user explicitly asks for it.
+
+Current public test targets:
 
 ```txt
-http://localhost:3000
-```
-
-If the server is no longer reachable, restart it with:
-
-```bash
-npm run dev
+http://47.121.182.144/
+http://47.121.182.144/3d
 ```
 
 ## Known Risks

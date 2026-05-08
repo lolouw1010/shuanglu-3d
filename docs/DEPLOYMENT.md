@@ -557,3 +557,58 @@ Operational notes:
 
 - Historical `shuanglu-error.log` still contains old `next: not found`, `Bus error`, and stale Server Action lines from earlier deployments. The current restart output shows `next start` ready on `127.0.0.1:3002`.
 - The partial dependency directory must remain outside `/opt/shuanglu`; keeping broken dependency backups in a project root can make Next.js scan them during build.
+
+
+## 2026-05-08 2D Usability Deployment
+
+Purpose:
+
+- Deploy the 2D board usability pass that restores clearer source selection and legal landing feedback after the bottle-shaped piece update.
+- Preserve the MiniMac cloud-only runtime policy: no local Next.js service was started.
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-2d-usability-20260508-2206.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_2d_usability_20260508_2206
+```
+
+Server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_2d_usability_20260508_2206
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory to avoid another heavy dependency install.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/3d returned HTTP 200.
+POST /api/rooms created room D8F1F1 and seated creator as white.
+Cloud build artifacts contain 点取, 落马, and board-action-guide.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```

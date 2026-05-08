@@ -13,6 +13,14 @@ type BoardProps = {
 const topRow = Array.from({ length: 12 }, (_, index) => index + 12);
 const bottomRow = Array.from({ length: 12 }, (_, index) => 11 - index);
 
+function uniqueSteps(moves: Move[]): number[] {
+  return Array.from(new Set(moves.map((move) => move.step))).sort((a, b) => a - b);
+}
+
+function playerName(player: BoardState["currentPlayer"]): string {
+  return player === "white" ? "白方" : "黑方";
+}
+
 export function Board({
   state,
   availableMoves,
@@ -33,8 +41,27 @@ export function Board({
       .map((move) => move.to),
   );
   const canBearOff = targetMoves.some((move) => move.to === "off");
+  const selectedPointLabel = typeof selectedSource === "number" ? `${selectedSource} 点` : "马栏";
+  const sourceCount = selectableSources.size - (selectableSources.has("bar") ? 1 : 0);
+  const targetCount = targetPoints.size + (canBearOff ? 1 : 0);
+  const boardHint = (() => {
+    if (state.turnPhase === "awaiting_roll") return "先掷骰；掷出后金色点位表示可点取的棋马。";
+    if (state.turnPhase === "game_over") return "本局已结束，可在右侧重新开局。";
+    if (mustEnterFromBar) {
+      if (selectedSource === "bar") return "已选马栏；绿色点位是本回合可复马入口，数字为使用的骰步。";
+      if (canSelectBar) return "尚有马在栏：先点中间马栏，再点绿色入口复马。";
+      return "尚有马在栏，但当前骰面没有可复马入口。";
+    }
+    if (selectedSource !== null) return `已选${selectedPointLabel}；绿色“落马”点位可走，标签数字是消耗的骰步。`;
+    if (availableMoves.length > 0) return `${playerName(state.currentPlayer)}行动：先点金色“点取”棋马，再点绿色“落马”位置。`;
+    return "当前骰面没有合法走法，系统会交给下一方。";
+  })();
 
-  const renderPoint = (index: number, row: "top" | "bottom") => (
+  const renderPoint = (index: number, row: "top" | "bottom") => {
+    const sourceMoves = availableMoves.filter((move) => move.from === index);
+    const pointTargetMoves = targetMoves.filter((move) => move.to === index);
+
+    return (
     <BoardPoint
       key={index}
       index={index}
@@ -49,10 +76,13 @@ export function Board({
         state.turnPhase === "awaiting_move" &&
         selectableSources.has(index)
       }
+      sourceSteps={uniqueSteps(sourceMoves)}
+      targetSteps={uniqueSteps(pointTargetMoves)}
       onSelectSource={() => onSelectSource(index)}
       onSelectTarget={() => onSelectTarget(index)}
     />
   );
+  };
 
   return (
     <section className="board-scene">
@@ -64,6 +94,12 @@ export function Board({
               黑方 0 -&gt; 23；白方 23 -&gt; 0
             </span>
             <span>内盘与出马区</span>
+          </div>
+
+          <div className="board-action-guide mb-3">
+            <span className="board-action-guide-main">{boardHint}</span>
+            <span className="board-action-guide-stat">点取 {sourceCount}</span>
+            <span className="board-action-guide-stat board-action-guide-stat-target">落马 {targetCount}</span>
           </div>
 
           <div className="board-perspective">

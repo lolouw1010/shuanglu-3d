@@ -2570,3 +2570,45 @@ Nginx config test passed.
 - Future testing should default to cloud URLs unless the user explicitly asks for a local service.
 - Consider moving the working repository out of iCloud if local cache writes continue to interfere with test/build tooling.
 
+
+
+## 2026-05-08 22:06 CST
+
+### Objective
+
+Improve the stable 2D board first, because the new bottle-shaped pieces made the old source/target interaction harder to read. Keep local runtime disabled and use cloud deployment for interactive verification.
+
+### Changes
+
+- Added a board action guide above the 2D board that states the current click sequence in player language.
+- Added visible legal source and legal target counters to the board action guide.
+- Passed legal move dice steps into each board point so the point itself can display which dice step is consumed.
+- Replaced small `选` / `可落` labels with stronger `点取` / `落马` action chips.
+- Highlighted the triangular point lanes directly: gold for selectable source points and green for legal landing points.
+- Added pulsing source/target beacons under the pieces so empty legal targets remain visible.
+- Added accessible board point labels that include point number, owner/count, and legal action state.
+
+### Verification
+
+Local service policy was preserved: no local Next.js service was started.
+
+```txt
+npm run build passed.
+npm test passed: 8 test files, 27 tests.
+```
+
+### Cloud Deployment
+
+Deployed this 2D usability pass to Aliyun GD.
+
+```txt
+Release: /opt/shuanglu_release_2d_usability_20260508_2206
+Backup: /opt/shuanglu_backups/shuanglu_before_2d_usability_20260508_2206
+Server npm run build passed.
+PM2 shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/3d returned HTTP 200.
+POST /api/rooms created room D8F1F1.
+Cloud build artifacts contain 点取, 落马, and board-action-guide.
+```
