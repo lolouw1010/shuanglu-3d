@@ -612,3 +612,58 @@ Non-Shuanglu services observed but not changed:
 gaokao-sprint-coach online
 school-application online
 ```
+
+
+## 2026-05-09 One-Window 2D Layout Deployment
+
+Purpose:
+
+- Deploy the 2D layout pass that reduces top HUD height, removes the fixed-width board scroll, and makes the stable 2D board playable with less viewport dragging.
+- Preserve the MiniMac cloud-only runtime policy: no local Next.js service was started.
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-one-window-2d-20260509-1929.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_one_window_2d_20260509_1929
+```
+
+Server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_one_window_2d_20260509_1929
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/3d returned HTTP 200.
+POST /api/rooms created room C5E553 and seated creator as white.
+Cloud build artifacts contain max-w-[1780px], game-compact-hud, and min-h-[clamp(6.7rem,13.2vh,9rem)].
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```

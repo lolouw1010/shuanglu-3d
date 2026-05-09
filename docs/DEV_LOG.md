@@ -2612,3 +2612,46 @@ http://47.121.182.144/3d returned HTTP 200.
 POST /api/rooms created room D8F1F1.
 Cloud build artifacts contain 点取, 落马, and board-action-guide.
 ```
+
+
+## 2026-05-09 19:29 CST
+
+### Objective
+
+Make the stable 2D game screen playable inside one browser window. The user reported that the top HUD was too tall, the board was too narrow, and normal play required both vertical scrolling and horizontal dragging.
+
+### Changes
+
+- Removed the 2D mode side character panels from the primary play viewport so the board can use the full content width.
+- Compressed the top title bar from a tall header into a narrow game topbar.
+- Compressed the victory tracker and dice tray into a lower-height HUD row.
+- Reduced dice face size from 48px to 40px.
+- Removed the 2D board's fixed `1080px` minimum width and horizontal scroll wrapper.
+- Reduced board shell padding, rank gaps, center well spacing, and point height.
+- Changed board point height to a viewport-aware clamp so desktop and smaller screens keep the full board more visible.
+- Kept turn coach and feedback panels below the board as secondary guidance rather than letting them compete with the playfield.
+
+### Verification
+
+Local runtime policy was preserved: no local Next.js service was started.
+
+```txt
+npm run build passed.
+npm test passed: 8 test files, 27 tests.
+```
+
+### Cloud Deployment
+
+Deployed the one-window 2D layout pass to Aliyun GD.
+
+```txt
+Release: /opt/shuanglu_release_one_window_2d_20260509_1929
+Backup: /opt/shuanglu_backups/shuanglu_before_one_window_2d_20260509_1929
+Server npm run build passed.
+PM2 shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/3d returned HTTP 200.
+POST /api/rooms created room C5E553.
+Cloud build artifacts contain max-w-[1780px], game-compact-hud, and min-h-[clamp(6.7rem,13.2vh,9rem)].
+```

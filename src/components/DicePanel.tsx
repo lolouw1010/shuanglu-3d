@@ -40,22 +40,17 @@ export function DicePanel({ state, onRoll, canRollOverride = true }: DicePanelPr
   };
 
   return (
-    <section className="dice-tray rounded border border-amber-200/20 bg-black/24 p-3">
-      <div className="mb-2 flex items-center justify-between gap-3">
+    <section className="dice-tray rounded border border-amber-200/20 bg-black/24 p-2">
+      <div className="mb-1.5 flex items-center justify-between gap-2">
         <div>
-          <p className="text-xs uppercase text-amber-200/70">
-            Dice
-          </p>
-          <h2 className="font-display text-lg text-amber-50">骰声</h2>
-          <p className="mt-1 text-xs text-stone-400">
-            骰面就是可用步数。
-          </p>
+          <p className="text-[10px] uppercase text-amber-200/70">Dice</p>
+          <h2 className="font-display text-base text-amber-50">骰声</h2>
         </div>
         <button
           type="button"
           aria-label="掷骰"
           disabled={!canRoll || isRolling}
-          className={`inline-flex items-center gap-2 rounded border border-amber-200/40 bg-amber-100 px-3 py-2 text-sm font-semibold text-stone-950 transition disabled:cursor-not-allowed disabled:opacity-45 ${
+          className={`inline-flex items-center gap-1.5 rounded border border-amber-200/40 bg-amber-100 px-2.5 py-1.5 text-sm font-semibold text-stone-950 transition disabled:cursor-not-allowed disabled:opacity-45 ${
             canRoll && !isRolling ? "roll-ready hover:bg-amber-50" : ""
           }`}
           onClick={handleRoll}
@@ -64,7 +59,7 @@ export function DicePanel({ state, onRoll, canRollOverride = true }: DicePanelPr
           {isRolling ? "听骰" : "掷骰"}
         </button>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {displayRoll.map((die, index) => (
           <div
             key={`${rollKey}-${die}-${index}-${isRolling ? "rolling" : "settled"}`}
@@ -73,8 +68,8 @@ export function DicePanel({ state, onRoll, canRollOverride = true }: DicePanelPr
             <DiceFace value={die} rolling={isRolling} />
           </div>
         ))}
-        <div className="min-w-0 text-sm text-stone-300">
-          <p>剩余步数</p>
+        <div className="min-w-0 text-xs text-stone-300">
+          <p>剩余</p>
           <p className="truncate text-amber-100">
             {state.diceSteps.length ? state.diceSteps.join(" / ") : "无"}
           </p>

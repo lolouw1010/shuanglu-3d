@@ -76,19 +76,23 @@ export function GameScreen() {
   }, [mode, syncOnlineRoom]);
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_50%_0%,rgba(214,162,80,.16),transparent_28%),linear-gradient(140deg,#120d0c,#351317_48%,#15100e)] px-4 py-4 text-stone-100">
-      <div className="mx-auto grid max-w-[1500px] gap-4 xl:grid-cols-[220px_1fr_220px]">
-        <div className="flex items-center justify-between xl:col-span-3">
-          <div>
-            <p className="text-sm text-amber-200">双陆 0.5 Prototype</p>
-            <h1 className="font-display text-3xl text-amber-50">宣和雅局</h1>
-            {boardView === "3d" ? (
-              <p className="mt-1 text-xs text-amber-100/80">
-                3D 测试局：当前使用 WebGL 棋桌，动画分阶段恢复。
-              </p>
-            ) : null}
+    <main className="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_50%_0%,rgba(214,162,80,.16),transparent_28%),linear-gradient(140deg,#120d0c,#351317_48%,#15100e)] px-2 py-2 text-stone-100 sm:px-3">
+      <div className={`mx-auto grid gap-2 ${
+        boardView === "3d"
+          ? "max-w-[1500px] xl:grid-cols-[220px_1fr_220px]"
+          : "max-w-[1780px]"
+      }`}>
+        <div className="game-topbar flex items-center justify-between gap-3 rounded border border-amber-200/15 bg-black/20 px-3 py-2 xl:col-span-3">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h1 className="font-display text-xl text-amber-50 sm:text-2xl">宣和雅局</h1>
+              <span className="text-xs text-amber-200/75">双陆 0.5</span>
+              {boardView === "3d" ? (
+                <span className="text-xs text-amber-100/80">3D 测试局</span>
+              ) : null}
+            </div>
             {mode === "online" && online ? (
-              <p className="mt-1 text-xs text-stone-300">
+              <p className="mt-0.5 truncate text-xs text-stone-300">
                 房间 {online.roomId} ·{" "}
                 {online.seat === "spectator"
                   ? "旁观"
@@ -99,7 +103,7 @@ export function GameScreen() {
               </p>
             ) : null}
           </div>
-          <div className="flex gap-2">
+          <div className="flex shrink-0 gap-2">
             <button
               type="button"
               aria-label="返回"
@@ -119,7 +123,7 @@ export function GameScreen() {
           </div>
         </div>
 
-        <div className="order-3 xl:order-none">
+        <div className={`${boardView === "3d" ? "order-3 xl:order-none" : "hidden"}`}>
           <CharacterPanel
             character={characters.white}
             active={state.currentPlayer === "white"}
@@ -128,8 +132,8 @@ export function GameScreen() {
           />
         </div>
 
-        <div className="order-2 grid gap-4 xl:order-none">
-          <div className="grid gap-3 lg:grid-cols-[1fr_360px]">
+        <div className="order-2 grid gap-2 xl:order-none">
+          <div className="game-compact-hud grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(230px,270px)]">
             <VictoryTracker state={state} />
             <DicePanel
               state={state}
@@ -138,7 +142,7 @@ export function GameScreen() {
             />
           </div>
           {mode === "online" && online ? (
-            <section className="flex flex-wrap items-center justify-between gap-3 rounded border border-amber-200/20 bg-black/24 px-3 py-2 text-sm text-stone-200">
+            <section className="flex flex-wrap items-center justify-between gap-2 rounded border border-amber-200/20 bg-black/24 px-3 py-1.5 text-xs text-stone-200">
               <span>
                 分享房间{" "}
                 <strong className="font-mono text-amber-100">
@@ -176,7 +180,7 @@ export function GameScreen() {
               onSelectTarget={selectTarget}
             />
           )}
-          <div className="grid gap-3 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,.95fr)]">
+          <div className="grid gap-2 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,.95fr)]">
             <TurnCoach
               state={state}
               availableMoves={availableMoves}
@@ -207,7 +211,7 @@ export function GameScreen() {
           ) : null}
         </div>
 
-        <div className="order-4 xl:order-none">
+        <div className={`${boardView === "3d" ? "order-4 xl:order-none" : "hidden"}`}>
           <CharacterPanel
             character={characters.black}
             active={state.currentPlayer === "black"}

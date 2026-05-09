@@ -28,23 +28,23 @@ function PlayerProgress({
 
   return (
     <div
-      className={`rounded border px-3 py-2 ${
+      className={`rounded border px-2.5 py-2 ${
         active
           ? "border-amber-200/65 bg-amber-100/12"
           : "border-stone-200/10 bg-black/20"
       }`}
     >
-      <div className="mb-1.5 flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[11px] text-stone-400">{active ? "当前行动" : "等待"}</p>
-          <h3 className="font-display text-lg text-amber-50">{playerName(player)}</h3>
+      <div className="mb-1 flex items-center justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-[10px] text-stone-400">{active ? "当前" : "等待"}</p>
+          <h3 className="font-display text-base text-amber-50">{playerName(player)}</h3>
         </div>
-        <p className="font-display text-xl text-amber-100">
+        <p className="font-display text-lg text-amber-100">
           {done}
           <span className="text-xs text-stone-400">/{total}</span>
         </p>
       </div>
-      <div className="h-2 overflow-hidden rounded bg-black/45">
+      <div className="h-1.5 overflow-hidden rounded bg-black/45">
         <div
           className={`h-full rounded ${
             player === "white" ? "bg-stone-100" : "bg-amber-500"
@@ -52,9 +52,9 @@ function PlayerProgress({
           style={{ width: progressWidth(done, total) }}
         />
       </div>
-      <p className="mt-1.5 text-xs text-stone-300">
-        还差 <span className="text-amber-100">{remaining}</span> 枚出马取胜
-        {state.bar[player] > 0 ? `；栏中 ${state.bar[player]} 枚须先复马` : ""}
+      <p className="mt-1 truncate text-[11px] text-stone-300">
+        还差 <span className="text-amber-100">{remaining}</span> 枚
+        {state.bar[player] > 0 ? `；栏中 ${state.bar[player]} 枚` : ""}
       </p>
     </div>
   );
@@ -62,28 +62,28 @@ function PlayerProgress({
 
 export function VictoryTracker({ state }: VictoryTrackerProps) {
   return (
-    <section className="rounded border border-amber-200/25 bg-[#1b1110]/92 p-3 shadow-[0_18px_60px_rgba(0,0,0,.22)]">
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span className="grid size-9 place-items-center rounded border border-amber-200/35 bg-amber-100/10 text-amber-100">
-            <Trophy size={17} />
+    <section className="rounded border border-amber-200/25 bg-[#1b1110]/92 p-2 shadow-[0_18px_60px_rgba(0,0,0,.22)]">
+      <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="grid size-7 place-items-center rounded border border-amber-200/35 bg-amber-100/10 text-amber-100">
+            <Trophy size={14} />
           </span>
           <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-amber-200/70">
-              Win Condition
+            <p className="text-[10px] uppercase tracking-[0.14em] text-amber-200/70">
+              Win
             </p>
-            <h2 className="font-display text-xl text-amber-50">
-              先出完 15 枚马即胜
+            <h2 className="font-display text-base text-amber-50">
+              先出完 15 枚马
             </h2>
           </div>
         </div>
-        <div className="inline-flex items-center gap-2 rounded border border-amber-200/25 bg-black/18 px-2.5 py-1.5 text-xs text-stone-300">
-          <Flag size={14} className="text-amber-100" />
-          对手一枚都未出时获胜，记为双胜；MVP 没有压胜。
+        <div className="hidden items-center gap-1.5 rounded border border-amber-200/25 bg-black/18 px-2 py-1 text-[11px] text-stone-300 md:inline-flex">
+          <Flag size={12} className="text-amber-100" />
+          对手未出马则双胜
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid gap-2 md:grid-cols-2">
         <PlayerProgress
           player="white"
           active={state.currentPlayer === "white"}

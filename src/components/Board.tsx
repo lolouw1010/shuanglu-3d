@@ -86,9 +86,9 @@ export function Board({
 
   return (
     <section className="board-scene">
-      <div className="board-scroll overflow-x-auto">
-        <div className="board-stage min-w-[1080px]">
-          <div className="board-caption mb-3 flex items-center justify-between gap-3 text-xs text-amber-100/72">
+      <div className="board-scroll">
+        <div className="board-stage">
+          <div className="board-caption mb-1.5 flex items-center justify-between gap-2 text-[11px] text-amber-100/72">
             <span>外盘</span>
             <span className="board-inscription rounded-full px-3 py-1">
               黑方 0 -&gt; 23；白方 23 -&gt; 0
@@ -96,7 +96,7 @@ export function Board({
             <span>内盘与出马区</span>
           </div>
 
-          <div className="board-action-guide mb-3">
+          <div className="board-action-guide mb-1.5">
             <span className="board-action-guide-main">{boardHint}</span>
             <span className="board-action-guide-stat">点取 {sourceCount}</span>
             <span className="board-action-guide-stat board-action-guide-stat-target">落马 {targetCount}</span>
@@ -126,11 +126,11 @@ export function Board({
                       </span>
                     ) : null}
                   </span>
-                  <span className="mt-1 block font-display text-xl text-amber-50">
+                  <span className="mt-0.5 block font-display text-lg text-amber-50">
                     马栏：白 {state.bar.white} / 黑 {state.bar.black}
                   </span>
                   {mustEnterFromBar ? (
-                    <span className="mt-1 block text-xs text-emerald-100/85">
+                    <span className="mt-0.5 block text-xs text-emerald-100/85">
                       {selectedSource === "bar"
                         ? "已选马栏，去点绿色入口。"
                         : canSelectBar
@@ -153,7 +153,7 @@ export function Board({
                   onClick={() => onSelectTarget("off")}
                 >
                   <span className="block text-xs text-stone-400">进入内盘后，按骰面出马</span>
-                  <span className="font-display text-xl">
+                  <span className="font-display text-lg">
                     出马：白 {state.borneOff.white} / 黑 {state.borneOff.black}
                   </span>
                   {latestMove?.to === "off" ? (

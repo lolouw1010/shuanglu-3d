@@ -108,7 +108,7 @@ export function BoardPoint({
     <button
       type="button"
       aria-label={`${index} 点，${ownerLabel}，${stateLabel}`}
-      className={`point-surface point-${row} relative min-h-40 overflow-hidden border transition ${
+      className={`point-surface point-${row} relative min-h-[clamp(6.7rem,13.2vh,9rem)] overflow-hidden border transition ${
         isTarget
           ? "point-target target-pulse border-emerald-200 bg-emerald-300/12"
           : isSource
