@@ -2655,3 +2655,59 @@ http://47.121.182.144/3d returned HTTP 200.
 POST /api/rooms created room C5E553.
 Cloud build artifacts contain max-w-[1780px], game-compact-hud, and min-h-[clamp(6.7rem,13.2vh,9rem)].
 ```
+
+
+## 2026-05-11 21:10 CST
+
+### Objective
+
+Improve the stable 2D interface visually by adding generated character and period-background imagery without compromising board readability or one-window playability.
+
+### Asset Generation
+
+Generated one wide historical-scene background using the built-in image generation path.
+
+Workspace asset:
+
+```txt
+public/assets/backgrounds/song-study-court-bg.png
+```
+
+Prompt summary:
+
+```txt
+Song-dynasty inspired scholar/court game room, figures at the left and right edges, dark low-contrast center reserved for the 2D board, warm lantern light, lacquer and wood materials, no text, no logos, no watermark, no modern objects.
+```
+
+### Changes
+
+- Added the generated background image to the project static assets.
+- Applied the image only to the stable 2D game shell; `/3d` keeps its existing technical scene background.
+- Added dark overlay gradients and a fixed vignette layer so the board and HUD remain readable.
+- Added a restrained backdrop blur to the 2D UI panels so the generated scene reads as atmosphere rather than visual noise.
+
+### Verification
+
+Local runtime policy was preserved: no local Next.js service was started.
+
+```txt
+npm run build passed.
+npm test passed: 8 test files, 27 tests.
+```
+
+### Cloud Deployment
+
+Deployed the 2D background-art pass to Aliyun GD.
+
+```txt
+Release: /opt/shuanglu_release_2d_bg_art_20260511_2110
+Backup: /opt/shuanglu_backups/shuanglu_before_2d_bg_art_20260511_2110
+Server npm run build passed.
+PM2 shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/assets/backgrounds/song-study-court-bg.png returned HTTP 200.
+http://47.121.182.144/3d returned HTTP 200.
+POST /api/rooms created room B3568C.
+Cloud build artifacts contain song-study-court-bg and game-shell-bg.
+```

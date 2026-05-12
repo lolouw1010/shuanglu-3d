@@ -667,3 +667,66 @@ Non-Shuanglu services observed but not changed:
 gaokao-sprint-coach online
 school-application online
 ```
+
+
+## 2026-05-11 2D Background Art Deployment
+
+Purpose:
+
+- Deploy the generated Song-era study/court background image for the stable 2D interface.
+- Keep the generated scene decorative and subdued so the 2D board remains readable and playable.
+- Preserve the MiniMac cloud-only runtime policy: no local Next.js service was started.
+
+Generated workspace asset:
+
+```txt
+public/assets/backgrounds/song-study-court-bg.png
+```
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-2d-bg-art-20260511-2110.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_2d_bg_art_20260511_2110
+```
+
+Server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_2d_bg_art_20260511_2110
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/assets/backgrounds/song-study-court-bg.png returned HTTP 200, image/png, 1,805,345 bytes.
+http://47.121.182.144/3d returned HTTP 200.
+POST /api/rooms created room B3568C and seated creator as white.
+Cloud build artifacts contain song-study-court-bg and game-shell-bg.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```

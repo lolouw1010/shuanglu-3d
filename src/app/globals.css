@@ -968,6 +968,35 @@ button:focus-visible {
   }
 }
 
+
+.game-shell-bg {
+  background:
+    linear-gradient(180deg, rgba(7, 5, 4, 0.62), rgba(19, 10, 8, 0.82) 52%, rgba(8, 6, 5, 0.92)),
+    radial-gradient(circle at 50% 38%, rgba(9, 7, 6, 0.18), rgba(9, 7, 6, 0.72) 58%, rgba(9, 7, 6, 0.9)),
+    url("/assets/backgrounds/song-study-court-bg.png") center / cover fixed no-repeat,
+    linear-gradient(140deg, #120d0c, #351317 48%, #15100e);
+  position: relative;
+}
+
+.game-shell-bg::before {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.36), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.36)),
+    radial-gradient(circle at 50% 50%, transparent 0 42%, rgba(0, 0, 0, 0.28) 74%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+}
+
+.game-shell-bg .game-topbar,
+.game-shell-bg .board-scene,
+.game-shell-bg .dice-tray,
+.game-shell-bg section,
+.game-shell-bg aside {
+  backdrop-filter: blur(7px);
+}
+
 .game-topbar {
   min-height: 3.05rem;
 }
@@ -1017,5 +1046,12 @@ button:focus-visible {
   .point-step-chip {
     min-width: 1.05rem;
     padding-inline: 0.22rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .game-shell-bg {
+    background-attachment: scroll;
+    background-position: center top;
   }
 }

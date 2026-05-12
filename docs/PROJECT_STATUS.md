@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-09 19:29 CST
+Last updated: 2026-05-11 21:10 CST
 
 ## Current Target
 
@@ -111,6 +111,11 @@ Implemented:
 - Production runtime is PM2 process `shuanglu` behind Nginx, bound internally to `127.0.0.1:3002`.
 - Deployed the first 3D-like board visual pass to Aliyun GD from working-tree archive `/tmp/shuanglu-visual-20260502-2349.tgz`.
 - Deployed the online room MVP to Aliyun GD from source commit `0108b27`.
+- Added a generated Song-era study/court background image for the stable 2D interface:
+  - Project asset: `public/assets/backgrounds/song-study-court-bg.png`.
+  - The composition keeps figures at the edges and a darker center behind the board.
+  - The 2D shell adds overlay gradients and panel backdrop blur to preserve playfield readability.
+  - The `/3d` route keeps its own scene background.
 - Reworked the 2D game screen toward one-window playability:
   - 2D mode no longer spends the main viewport width on side character panels.
   - The title/header, victory tracker, and dice tray are shorter.
@@ -156,6 +161,44 @@ TypeScript no-emit check passed.
 
 
 
+
+
+
+Last verified on Aliyun GD on 2026-05-12 01:25 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -I --max-time 20 http://47.121.182.144/assets/backgrounds/song-study-court-bg.png
+curl -I --max-time 20 http://47.121.182.144/3d
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-2d-bg-art-test"}'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+Generated background image returned HTTP 200.
+Public /3d path returned HTTP 200.
+POST /api/rooms created room B3568C.
+PM2 process shuanglu is online after restart.
+Cloud build artifacts contain song-study-court-bg and game-shell-bg.
+```
+
+Last verified locally on 2026-05-11 21:10 CST without starting a local service:
+
+```bash
+npm run build
+npm test
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+8 test files passed, 27 tests passed.
+```
 
 Last verified on Aliyun GD on 2026-05-09 21:17 CST:
 

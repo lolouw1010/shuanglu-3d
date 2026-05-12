@@ -76,8 +76,14 @@ export function GameScreen() {
   }, [mode, syncOnlineRoom]);
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_50%_0%,rgba(214,162,80,.16),transparent_28%),linear-gradient(140deg,#120d0c,#351317_48%,#15100e)] px-2 py-2 text-stone-100 sm:px-3">
-      <div className={`mx-auto grid gap-2 ${
+    <main
+      className={`min-h-screen overflow-x-hidden px-2 py-2 text-stone-100 sm:px-3 ${
+        boardView === "3d"
+          ? "bg-[radial-gradient(circle_at_50%_0%,rgba(214,162,80,.16),transparent_28%),linear-gradient(140deg,#120d0c,#351317_48%,#15100e)]"
+          : "game-shell-bg"
+      }`}
+    >
+      <div className={`relative z-10 mx-auto grid gap-2 ${
         boardView === "3d"
           ? "max-w-[1500px] xl:grid-cols-[220px_1fr_220px]"
           : "max-w-[1780px]"
