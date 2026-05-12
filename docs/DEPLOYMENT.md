@@ -730,3 +730,48 @@ Non-Shuanglu services observed but not changed:
 gaokao-sprint-coach online
 school-application online
 ```
+
+
+## 2026-05-12 Background Visibility Fix Deployment
+
+Purpose:
+
+- Make the generated 2D background visibly present after user feedback that the previous deployment looked unchanged.
+- Apply the generated scene to both the main menu and stable 2D game shell while preserving board readability.
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-bg-visible-20260512-1238.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_bg_visible_20260512_1238
+```
+
+Server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_bg_visible_20260512_1238
+```
+
+Verification:
+
+```txt
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/assets/backgrounds/song-study-court-bg.png returned HTTP 200.
+POST /api/rooms created room BE4ABC and seated creator as white.
+Cloud build artifacts contain menu-shell-bg and the generated background reference.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```

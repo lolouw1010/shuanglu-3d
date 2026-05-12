@@ -969,21 +969,35 @@ button:focus-visible {
 }
 
 
-.game-shell-bg {
+.game-shell-bg,
+.menu-shell-bg {
   background:
-    linear-gradient(180deg, rgba(7, 5, 4, 0.62), rgba(19, 10, 8, 0.82) 52%, rgba(8, 6, 5, 0.92)),
-    radial-gradient(circle at 50% 38%, rgba(9, 7, 6, 0.18), rgba(9, 7, 6, 0.72) 58%, rgba(9, 7, 6, 0.9)),
+    linear-gradient(180deg, rgba(7, 5, 4, 0.2), rgba(19, 10, 8, 0.42) 48%, rgba(8, 6, 5, 0.66)),
+    radial-gradient(circle at 50% 43%, rgba(9, 7, 6, 0.06) 0 34%, rgba(9, 7, 6, 0.38) 62%, rgba(9, 7, 6, 0.58) 100%),
     url("/assets/backgrounds/song-study-court-bg.png") center / cover fixed no-repeat,
     linear-gradient(140deg, #120d0c, #351317 48%, #15100e);
   position: relative;
 }
 
-.game-shell-bg::before {
+.game-shell-bg::before,
+.menu-shell-bg::before {
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.36), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.36)),
-    radial-gradient(circle at 50% 50%, transparent 0 42%, rgba(0, 0, 0, 0.28) 74%);
+    linear-gradient(90deg, rgba(0, 0, 0, 0.12), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.12)),
+    radial-gradient(ellipse at 50% 48%, rgba(0, 0, 0, 0.08) 0 36%, rgba(0, 0, 0, 0.22) 76%);
   content: "";
   inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+}
+
+.game-shell-bg::after,
+.menu-shell-bg::after {
+  background:
+    linear-gradient(90deg, rgba(245, 186, 93, 0.09), transparent 22%, transparent 78%, rgba(245, 186, 93, 0.08));
+  content: "";
+  inset: 0;
+  mix-blend-mode: screen;
   pointer-events: none;
   position: fixed;
   z-index: 0;
@@ -993,8 +1007,19 @@ button:focus-visible {
 .game-shell-bg .board-scene,
 .game-shell-bg .dice-tray,
 .game-shell-bg section,
-.game-shell-bg aside {
-  backdrop-filter: blur(7px);
+.game-shell-bg aside,
+.menu-shell-bg section {
+  backdrop-filter: blur(5px);
+}
+
+.game-shell-bg .game-topbar {
+  background: rgba(8, 6, 5, 0.36);
+}
+
+.menu-shell-bg .menu-panel {
+  background: rgba(8, 6, 5, 0.2);
+  border-color: rgba(253, 230, 138, 0.18);
+  backdrop-filter: blur(4px);
 }
 
 .game-topbar {
@@ -1050,7 +1075,8 @@ button:focus-visible {
 }
 
 @media (max-width: 900px) {
-  .game-shell-bg {
+  .game-shell-bg,
+  .menu-shell-bg {
     background-attachment: scroll;
     background-position: center top;
   }

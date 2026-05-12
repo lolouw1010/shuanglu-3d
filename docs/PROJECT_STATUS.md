@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-11 21:10 CST
+Last updated: 2026-05-12 12:44 CST
 
 ## Current Target
 
@@ -111,6 +111,10 @@ Implemented:
 - Production runtime is PM2 process `shuanglu` behind Nginx, bound internally to `127.0.0.1:3002`.
 - Deployed the first 3D-like board visual pass to Aliyun GD from working-tree archive `/tmp/shuanglu-visual-20260502-2349.tgz`.
 - Deployed the online room MVP to Aliyun GD from source commit `0108b27`.
+- Increased generated background visibility after user feedback:
+  - Reduced the dark overlay over the 2D background.
+  - Added the same generated background to the main menu through `menu-shell-bg`.
+  - Kept central darkening to preserve board readability.
 - Added a generated Song-era study/court background image for the stable 2D interface:
   - Project asset: `public/assets/backgrounds/song-study-court-bg.png`.
   - The composition keeps figures at the edges and a darker center behind the board.
@@ -163,6 +167,41 @@ TypeScript no-emit check passed.
 
 
 
+
+
+Last verified locally on 2026-05-12 12:38 CST without starting a local service:
+
+```bash
+npm run build
+npm test
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+8 test files passed, 27 tests passed.
+```
+
+Last verified on Aliyun GD on 2026-05-12 12:49 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -I --max-time 20 http://47.121.182.144/assets/backgrounds/song-study-court-bg.png
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-bg-visible-test"}'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+Generated background image returned HTTP 200.
+POST /api/rooms created room BE4ABC.
+PM2 process shuanglu is online after restart.
+Cloud build artifacts contain menu-shell-bg and the generated background reference.
+```
 
 Last verified on Aliyun GD on 2026-05-12 01:25 CST:
 

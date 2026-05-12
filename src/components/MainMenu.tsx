@@ -23,8 +23,8 @@ export function MainMenu() {
   }, [joinOnlineRoom]);
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_50%_16%,rgba(209,168,87,.25),transparent_30%),linear-gradient(145deg,#1a1110,#4d171b_48%,#11100f)] px-4 py-8 text-stone-100">
-      <section className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-6xl flex-col justify-between">
+    <main className="menu-shell-bg min-h-screen px-4 py-8 text-stone-100">
+      <section className="menu-panel relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] max-w-6xl flex-col justify-between rounded border px-5 py-6 sm:px-8">
         <div className="pt-8">
           <p className="text-sm text-amber-200">Tang-Song Double Sixes Reconstruction</p>
           <h1 className="mt-3 font-display text-6xl text-amber-50 sm:text-7xl">

@@ -2711,3 +2711,46 @@ http://47.121.182.144/3d returned HTTP 200.
 POST /api/rooms created room B3568C.
 Cloud build artifacts contain song-study-court-bg and game-shell-bg.
 ```
+
+
+## 2026-05-12 12:44 CST
+
+### Objective
+
+Fix the generated 2D background visibility after user feedback that the deployed interface showed no obvious background atmosphere.
+
+### Problem
+
+The generated image was deployed and reachable, but the UI used very dark overlay gradients and dense panels. The result was technically present but visually too subtle to notice during normal play.
+
+### Changes
+
+- Reduced the 2D background overlay opacity so the Song-era room and edge figures are visibly present.
+- Added the same generated background to the main menu via `menu-shell-bg`, so the visual direction is visible before entering a match.
+- Added a lightly translucent `menu-panel` instead of the previous fully synthetic menu background.
+- Kept central darkening and panel blur so the board, dice, and action labels remain readable.
+
+### Verification
+
+Local runtime policy was preserved: no local Next.js service was started.
+
+```txt
+npm run build passed.
+npm test passed: 8 test files, 27 tests.
+```
+
+### Cloud Deployment
+
+Deployed the background visibility fix to Aliyun GD.
+
+```txt
+Release: /opt/shuanglu_release_bg_visible_20260512_1238
+Backup: /opt/shuanglu_backups/shuanglu_before_bg_visible_20260512_1238
+Server npm run build passed.
+PM2 shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/assets/backgrounds/song-study-court-bg.png returned HTTP 200.
+POST /api/rooms created room BE4ABC.
+Cloud build artifacts contain menu-shell-bg and the generated background reference.
+```
