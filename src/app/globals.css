@@ -972,9 +972,8 @@ button:focus-visible {
 .game-shell-bg,
 .menu-shell-bg {
   background:
-    linear-gradient(180deg, rgba(7, 5, 4, 0.2), rgba(19, 10, 8, 0.42) 48%, rgba(8, 6, 5, 0.66)),
-    radial-gradient(circle at 50% 43%, rgba(9, 7, 6, 0.06) 0 34%, rgba(9, 7, 6, 0.38) 62%, rgba(9, 7, 6, 0.58) 100%),
-    url("/assets/backgrounds/song-study-court-bg.png") center / cover fixed no-repeat,
+    radial-gradient(circle at 50% 28%, rgba(111, 48, 29, 0.34), transparent 34%),
+    radial-gradient(ellipse at 50% 72%, rgba(6, 5, 4, 0.72), transparent 56%),
     linear-gradient(140deg, #120d0c, #351317 48%, #15100e);
   position: relative;
 }
@@ -982,25 +981,47 @@ button:focus-visible {
 .game-shell-bg::before,
 .menu-shell-bg::before {
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.12), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.12)),
-    radial-gradient(ellipse at 50% 48%, rgba(0, 0, 0, 0.08) 0 36%, rgba(0, 0, 0, 0.22) 76%);
+    linear-gradient(90deg, rgba(8, 6, 5, 0.1), rgba(8, 6, 5, 0.02) 58%, transparent),
+    url("/assets/decor/song-left-observers.png") left bottom / contain no-repeat;
+  bottom: 0;
   content: "";
-  inset: 0;
+  left: 0;
+  opacity: 0.72;
   pointer-events: none;
   position: fixed;
+  top: 0;
+  width: min(38vw, 640px);
   z-index: 0;
 }
 
 .game-shell-bg::after,
 .menu-shell-bg::after {
   background:
-    linear-gradient(90deg, rgba(245, 186, 93, 0.09), transparent 22%, transparent 78%, rgba(245, 186, 93, 0.08));
+    linear-gradient(270deg, rgba(8, 6, 5, 0.1), rgba(8, 6, 5, 0.02) 58%, transparent),
+    url("/assets/decor/song-right-observer.png") right bottom / contain no-repeat;
+  bottom: 0;
   content: "";
-  inset: 0;
-  mix-blend-mode: screen;
+  opacity: 0.68;
   pointer-events: none;
   position: fixed;
+  right: 0;
+  top: 0;
+  width: min(34vw, 560px);
   z-index: 0;
+}
+
+@media (max-width: 900px) {
+  .game-shell-bg::before,
+  .menu-shell-bg::before {
+    opacity: 0.26;
+    width: 52vw;
+  }
+
+  .game-shell-bg::after,
+  .menu-shell-bg::after {
+    opacity: 0.2;
+    width: 48vw;
+  }
 }
 
 .game-shell-bg .game-topbar,
@@ -1074,10 +1095,3 @@ button:focus-visible {
   }
 }
 
-@media (max-width: 900px) {
-  .game-shell-bg,
-  .menu-shell-bg {
-    background-attachment: scroll;
-    background-position: center top;
-  }
-}

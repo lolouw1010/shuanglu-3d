@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-12 12:44 CST
+Last updated: 2026-05-13 01:25 CST
 
 ## Current Target
 
@@ -131,6 +131,12 @@ Implemented:
   - Legal target points now show green `落马` chips and dice-step labels.
   - Source/target triangular lanes and beacons now provide stronger visual affordance than the piece artwork alone.
   - Board points now expose accessibility labels with point number, owner/count, and legal action state.
+- Reworked the generated 2D atmosphere treatment into side character decoration:
+  - Added `public/assets/decor/song-left-observers.png`.
+  - Added `public/assets/decor/song-right-observer.png`.
+  - Removed the full-page generated image from the active 2D/menu shell backgrounds.
+  - Kept the center playfield on dark lacquer/study gradients for board readability.
+  - Reduced side-decoration opacity on smaller screens.
 
 ## Verified Commands
 
@@ -201,6 +207,41 @@ Generated background image returned HTTP 200.
 POST /api/rooms created room BE4ABC.
 PM2 process shuanglu is online after restart.
 Cloud build artifacts contain menu-shell-bg and the generated background reference.
+```
+
+Last verified locally on 2026-05-13 01:14 CST without starting a local service:
+
+```bash
+npm run build
+npm test
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+8 test files passed, 27 tests passed.
+```
+
+Last verified on Aliyun GD on 2026-05-13 01:25 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -I --max-time 20 http://47.121.182.144/assets/decor/song-left-observers.png
+curl -I --max-time 20 http://47.121.182.144/assets/decor/song-right-observer.png
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-side-decor-test"}'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+Left side character decoration returned HTTP 200.
+Right side character decoration returned HTTP 200.
+POST /api/rooms created room 0A1EC4.
+PM2 process shuanglu is online after restart.
 ```
 
 Last verified on Aliyun GD on 2026-05-12 01:25 CST:

@@ -2754,3 +2754,51 @@ http://47.121.182.144/assets/backgrounds/song-study-court-bg.png returned HTTP 2
 POST /api/rooms created room BE4ABC.
 Cloud build artifacts contain menu-shell-bg and the generated background reference.
 ```
+
+## 2026-05-13 01:25 CST
+
+### Objective
+
+Rework the generated 2D atmosphere image from a full-page background into side character decoration. The user wanted the historical figures to read as left/right ornamental layers instead of covering the whole page.
+
+### Changes
+
+- Kept the previously generated Song-era study/court source image as the visual source asset.
+- Added cropped decorative figure layers:
+  - `public/assets/decor/song-left-observers.png`
+  - `public/assets/decor/song-right-observer.png`
+- Removed the full-page `song-study-court-bg.png` image from the active 2D and menu shell backgrounds.
+- Rebuilt `game-shell-bg` and `menu-shell-bg` around dark lacquer/study gradients so the board center remains readable.
+- Added fixed left/right pseudo-element decoration layers with reduced opacity on small screens.
+- Removed the stale mobile background-attachment rule that only applied to full-page background imagery.
+
+### Verification
+
+Local runtime policy was preserved: no local Next.js service was started.
+
+```txt
+npm run build passed.
+npm test passed: 8 test files, 27 tests.
+```
+
+### Cloud Deployment
+
+Deployed the side-decoration pass to Aliyun GD.
+
+```txt
+Artifact: /tmp/shuanglu-side-decor-20260513-0114.tgz
+Release: /opt/shuanglu_release_side_decor_20260513_0114
+Backup: /opt/shuanglu_backups/shuanglu_before_side_decor_20260513_0114
+Server npm run build passed.
+PM2 shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/assets/decor/song-left-observers.png returned HTTP 200.
+http://47.121.182.144/assets/decor/song-right-observer.png returned HTTP 200.
+POST /api/rooms created room 0A1EC4.
+```
+
+### Notes
+
+The center of the screen is intentionally image-free now. The characters should frame the game rather than compete with the board, dice, or legal move chips.
+

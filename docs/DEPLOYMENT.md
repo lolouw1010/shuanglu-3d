@@ -775,3 +775,66 @@ Non-Shuanglu services observed but not changed:
 gaokao-sprint-coach online
 school-application online
 ```
+
+## 2026-05-13 Side Character Decoration Deployment
+
+Purpose:
+
+- Replace the full-page generated 2D background treatment with left/right decorative character layers.
+- Keep the center playfield dark, readable, and focused on board interaction.
+- Preserve the MiniMac cloud-only runtime policy: no local Next.js service was started.
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-side-decor-20260513-0114.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_side_decor_20260513_0114
+```
+
+Server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_side_decor_20260513_0114
+```
+
+New public assets:
+
+```txt
+public/assets/decor/song-left-observers.png
+public/assets/decor/song-right-observer.png
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+http://47.121.182.144/assets/decor/song-left-observers.png returned HTTP 200, image/png, 836,987 bytes.
+http://47.121.182.144/assets/decor/song-right-observer.png returned HTTP 200, image/png, 814,863 bytes.
+POST /api/rooms created room 0A1EC4 and seated creator as white.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```
+
