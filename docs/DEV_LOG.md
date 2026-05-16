@@ -2802,3 +2802,48 @@ POST /api/rooms created room 0A1EC4.
 
 The center of the screen is intentionally image-free now. The characters should frame the game rather than compete with the board, dice, or legal move chips.
 
+## 2026-05-16 11:36 CST
+
+### Objective
+
+Improve the stable 2D board horse readability. The user reported that the current 2D horse pieces still looked ugly, were too large, and did not need to be visually stacked; each horse should read as a small, clear individual piece.
+
+### Changes
+
+- Removed the per-count staggered/overlapping horse layout from `BoardPoint`.
+- Replaced the old `piece-stack` model with a `piece-rack` grid layout.
+- Each occupied point now shows up to six small horses in a clean 3-column arrangement instead of offset stacking.
+- Counts above the visible display still use a compact `xN` marker on the last visible horse.
+- Reduced the CSS fallback horse size so the pieces no longer dominate the board point.
+- Retuned the CSS fallback horse shape to a smaller glossy bottle-like piece while preserving white/black material contrast.
+- Kept legal source/target chips and board point interaction labels unchanged.
+
+### Verification
+
+Local runtime policy was preserved: no local Next.js service was started.
+
+```txt
+npm run build passed.
+npm test passed: 8 test files, 27 tests.
+```
+
+### Cloud Deployment
+
+Deployed the 2D horse rack layout pass to Aliyun GD.
+
+```txt
+Artifact: /tmp/shuanglu-2d-piece-rack-20260516-1116.tgz
+Release: /opt/shuanglu_release_2d_piece_rack_20260516_1116
+Backup: /opt/shuanglu_backups/shuanglu_before_2d_piece_rack_20260516_1116
+Server npm run build passed.
+PM2 shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+POST /api/rooms created room 6E9FAF.
+Cloud build artifacts contain `piece-rack`.
+```
+
+### Notes
+
+This is a usability-first 2D correction. The final museum-grade horse asset can still replace the CSS fallback later, but the board should now be readable even before final raster assets are committed.
+

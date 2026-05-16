@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import type { Point, Player } from "@/game";
 import { pieceAssets } from "@/data/assets";
 
@@ -20,47 +19,6 @@ type BoardPointProps = {
 
 function pieceAlt(owner: Player): string {
   return owner === "white" ? "白马" : "黑马";
-}
-
-function piecePosition(
-  index: number,
-  visibleCount: number,
-  row: "top" | "bottom",
-): CSSProperties {
-  const layouts: Record<number, Array<[number, number, number]>> = {
-    1: [[0, 0, 1]],
-    2: [
-      [-8, 0, 1],
-      [8, 6, 1.01],
-    ],
-    3: [
-      [0, -2, 1],
-      [-9, 8, 1.01],
-      [9, 10, 1.02],
-    ],
-    4: [
-      [-8, -2, 0.98],
-      [8, 2, 0.99],
-      [-10, 13, 1.01],
-      [10, 16, 1.02],
-    ],
-    5: [
-      [0, -4, 0.96],
-      [-10, 5, 0.98],
-      [10, 8, 0.99],
-      [-11, 18, 1.01],
-      [11, 21, 1.02],
-    ],
-  };
-  const [x, y, scale] = layouts[visibleCount]?.[index] ?? [0, index * 7, 1];
-  const direction = row === "top" ? 1 : -1;
-
-  return {
-    "--piece-x": `${x}px`,
-    "--piece-y": `${y * direction}px`,
-    "--piece-scale": scale,
-    "--piece-z": index + 1,
-  } as CSSProperties;
 }
 
 export function BoardPoint({
@@ -91,8 +49,8 @@ export function BoardPoint({
       ? "point-lane-top [clip-path:polygon(0_0,100%_0,50%_100%)] top-0"
       : "point-lane-bottom [clip-path:polygon(50%_0,0_100%,100%_100%)] bottom-0";
   const owner = point.owner;
-  const visibleCount = Math.min(point.count, 5);
-  const stackPosition = row === "top" ? "top-8" : "bottom-8";
+  const visibleCount = Math.min(point.count, 6);
+  const pieceLayout = row === "top" ? "piece-rack-top top-7" : "piece-rack-bottom bottom-7";
   const sourceStepLabel = Array.from(new Set(sourceSteps)).join("/");
   const targetStepLabel = Array.from(new Set(targetSteps)).join("/");
   const stateLabel = isTarget
@@ -136,7 +94,7 @@ export function BoardPoint({
       >
         {index}
       </span>
-      <div className={`piece-stack absolute inset-x-0 z-10 ${stackPosition}`}>
+      <div className={`piece-rack absolute inset-x-0 z-10 ${pieceLayout}`}>
         {owner
           ? Array.from({ length: visibleCount }).map((_, horseIndex) => (
               <span
@@ -144,7 +102,6 @@ export function BoardPoint({
                 className={`horse-piece ${owner}-vase-piece ${
                   isLastTo && horseIndex === 0 ? "piece-arrive" : ""
                 } ${isSource ? "piece-selected" : ""}`}
-                style={piecePosition(horseIndex, visibleCount, row)}
               >
                 <img
                   src={pieceAssets[owner].idle}
@@ -155,7 +112,7 @@ export function BoardPoint({
                     event.currentTarget.style.display = "none";
                   }}
                 />
-                {horseIndex === 4 && point.count > 5 ? (
+                {horseIndex === visibleCount - 1 && point.count > visibleCount ? (
                   <span className="piece-count-sign">x{point.count}</span>
                 ) : null}
               </span>

@@ -798,66 +798,68 @@ button:focus-visible {
   padding: 0.13rem 0.28rem;
 }
 
-.piece-stack {
-  height: 5.35rem;
+.piece-rack {
+  align-content: flex-start;
+  display: grid;
+  gap: 0.1rem 0.22rem;
+  grid-auto-rows: clamp(1.85rem, 3.2vw, 2.25rem);
+  grid-template-columns: repeat(3, clamp(1.1rem, 2.05vw, 1.42rem));
+  height: 4.75rem;
+  justify-content: center;
+  padding-inline: 0.16rem;
   pointer-events: none;
 }
 
+.piece-rack-bottom {
+  align-content: flex-end;
+}
+
 .horse-piece {
-  --piece-scale: 1;
-  --piece-x: 0px;
-  --piece-y: 0px;
-  --piece-z: 1;
-  bottom: auto;
   display: block;
-  height: clamp(2.85rem, 5.6vw, 3.45rem);
-  left: 50%;
+  height: clamp(1.85rem, 3.2vw, 2.28rem);
   pointer-events: none;
-  position: absolute;
-  top: 0;
-  transform: translate(-50%, 0) translate(var(--piece-x), var(--piece-y))
-    scale(var(--piece-scale));
+  position: relative;
   transform-origin: 50% 82%;
-  width: clamp(1.9rem, 3.8vw, 2.3rem);
-  z-index: var(--piece-z);
+  width: clamp(1.1rem, 2.05vw, 1.42rem);
 }
 
 .horse-piece::before {
   background:
-    radial-gradient(ellipse at 50% 18%, rgba(255, 255, 255, 0.82), transparent 0.58rem),
-    radial-gradient(ellipse at 38% 58%, rgba(255, 255, 255, 0.34), transparent 0.8rem),
-    linear-gradient(90deg, transparent 18%, rgba(255, 255, 255, 0.22), transparent 38%),
+    radial-gradient(ellipse at 48% 16%, rgba(255, 255, 255, 0.88), transparent 0.38rem),
+    radial-gradient(ellipse at 36% 58%, rgba(255, 255, 255, 0.32), transparent 0.48rem),
+    linear-gradient(92deg, transparent 16%, rgba(255, 255, 255, 0.2), transparent 42%),
     var(--piece-body);
   border: 1px solid var(--piece-edge);
-  border-radius: 48% 48% 42% 42% / 18% 18% 58% 58%;
+  border-radius: 48% 48% 42% 42% / 16% 16% 60% 60%;
   box-shadow:
-    inset 0 0 0.55rem rgba(255, 255, 255, 0.18),
-    inset 0 -0.45rem 0.7rem rgba(0, 0, 0, 0.18),
-    0 0.42rem 0.55rem rgba(0, 0, 0, 0.4);
+    inset 0 0 0.36rem rgba(255, 255, 255, 0.16),
+    inset 0 -0.28rem 0.44rem rgba(0, 0, 0, 0.2),
+    0 0.22rem 0.24rem rgba(0, 0, 0, 0.34);
   content: "";
-  height: 1.9rem;
+  height: 1.18rem;
   left: 50%;
   position: absolute;
-  top: 1.42rem;
+  top: 0.88rem;
   transform: translateX(-50%);
-  width: 1.78rem;
+  width: 1.04rem;
 }
 
 .horse-piece::after {
   background:
+    radial-gradient(ellipse at 50% 8%, rgba(255, 255, 255, 0.28), transparent 0.24rem),
     linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent),
     var(--piece-neck);
   border-left: 1px solid var(--piece-edge);
+  border-radius: 46% 46% 34% 34% / 12% 12% 66% 66%;
   border-right: 1px solid var(--piece-edge);
-  border-radius: 44% 44% 34% 34% / 16% 16% 62% 62%;
-  box-shadow: inset 0.18rem 0 0.22rem rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0.12rem 0 0.16rem rgba(255, 255, 255, 0.08);
   content: "";
-  height: 1.78rem;
+  height: 0.95rem;
   left: 50%;
   position: absolute;
-  top: 0.34rem;
+  top: 0.15rem;
   transform: translateX(-50%);
-  width: 0.86rem;
+  width: 0.48rem;
 }
 
 .horse-piece-image {
@@ -876,17 +878,17 @@ button:focus-visible {
   background: rgba(107, 24, 18, 0.92);
   border: 1px solid rgba(253, 230, 138, 0.6);
   border-radius: 999px;
-  bottom: 0.28rem;
+  bottom: -0.03rem;
   color: rgb(254, 243, 199);
   display: flex;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 700;
   justify-content: center;
   line-height: 1;
-  min-width: 1.45rem;
+  min-width: 1.28rem;
   padding: 0.15rem 0.28rem;
   position: absolute;
-  right: -0.2rem;
+  right: -0.42rem;
   z-index: 8;
 }
 
@@ -928,8 +930,7 @@ button:focus-visible {
 }
 
 .piece-selected {
-  transform: translate(-50%, -0.2rem) translate(var(--piece-x), var(--piece-y))
-    scale(calc(var(--piece-scale) * 1.07));
+  transform: translateY(-0.12rem) scale(1.06);
 }
 
 .piece-selected .horse-piece-image,

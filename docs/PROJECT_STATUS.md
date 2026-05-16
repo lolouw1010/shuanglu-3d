@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-13 01:25 CST
+Last updated: 2026-05-16 11:36 CST
 
 ## Current Target
 
@@ -137,6 +137,12 @@ Implemented:
   - Removed the full-page generated image from the active 2D/menu shell backgrounds.
   - Kept the center playfield on dark lacquer/study gradients for board readability.
   - Reduced side-decoration opacity on smaller screens.
+- Improved 2D horse readability after user feedback:
+  - Removed staggered visual stacking from board points.
+  - Replaced `piece-stack` with a smaller `piece-rack` grid layout.
+  - Each point now displays up to six individual horses in a clear 3-column arrangement.
+  - Extra horses still show with a compact `xN` count marker.
+  - CSS fallback horse pieces are smaller and less visually dominant.
 
 ## Verified Commands
 
@@ -221,6 +227,39 @@ Result:
 ```txt
 Next.js production build passed.
 8 test files passed, 27 tests passed.
+```
+
+Last verified locally on 2026-05-16 11:15 CST without starting a local service:
+
+```bash
+npm run build
+npm test
+```
+
+Result:
+
+```txt
+Next.js production build passed.
+8 test files passed, 27 tests passed.
+```
+
+Last verified on Aliyun GD on 2026-05-16 11:36 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-piece-rack-test"}'
+ssh root@47.121.182.144 'grep -R "piece-rack" -n /opt/shuanglu/.next/static | head'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+POST /api/rooms created room 6E9FAF.
+PM2 process shuanglu is online after restart.
+Cloud static CSS contains `piece-rack`.
 ```
 
 Last verified on Aliyun GD on 2026-05-13 01:25 CST:
