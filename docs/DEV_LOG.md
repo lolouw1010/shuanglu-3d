@@ -2847,3 +2847,41 @@ Cloud build artifacts contain `piece-rack`.
 
 This is a usability-first 2D correction. The final museum-grade horse asset can still replace the CSS fallback later, but the board should now be readable even before final raster assets are committed.
 
+## 2026-05-17 22:29 CST
+
+### Objective
+
+Upgrade Human vs AI into a directly playable opponent while keeping the current 2D interface unchanged. The requested AI behavior is rules-aware, flexible in tactics, and defensively stable.
+
+### Changes
+
+- Replaced the old one-move heuristic scorer in `src/game/ai.ts` with full-turn plan search.
+- The AI now enumerates legal move sequences for the current dice steps, including doubles as up to four-step turns.
+- Added deterministic board evaluation instead of random tie-breaking.
+- Evaluation now considers:
+  - Winning and bearing off.
+  - Bar pressure and mandatory re-entry.
+  - Pip count / race progress.
+  - Hitting exposed opposing horses.
+  - Making protected points.
+  - Home-board structure.
+  - Own exposed blots and vulnerable blots.
+  - Avoiding unnecessary stack concentration.
+  - Mobility from the resulting position.
+- Added move-level tactical scoring for hitting, bearing off, entering from bar, making points, and avoiding source/target exposure.
+- Switched the default black Human vs AI opponent profile from `aesthetic` to `expert`.
+- Expanded AI regression tests from one bear-off smoke test to five behavior tests.
+
+### Verification
+
+Local runtime policy was preserved: no local Next.js service was started.
+
+```txt
+npm test passed: 8 test files, 31 tests.
+npm run build passed.
+```
+
+### Notes
+
+The AI is now deterministic and should make fewer obvious tactical mistakes. It is still not a deep match engine: it evaluates the current full turn and resulting position, but it does not yet do multi-turn opponent search or rollout simulation. Full-match human playtesting is still required to tune the weights.
+

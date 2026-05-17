@@ -892,3 +892,58 @@ gaokao-sprint-coach online
 school-application online
 ```
 
+## 2026-05-17 Expert AI Deployment
+
+Purpose:
+
+- Deploy the Human vs AI upgrade with full-turn move planning and deterministic tactical evaluation.
+- Keep the current 2D interface unchanged while improving the black AI opponent.
+- Preserve the MiniMac cloud-only runtime policy: no local Next.js service was started.
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-expert-ai-20260517-2229.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_expert_ai_20260517_2229
+```
+
+Server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_expert_ai_20260517_2229
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+POST /api/rooms created room 67DF0C and seated creator as white.
+Cloud static JavaScript contains `enterFromBar` AI weighting.
+Cloud static JavaScript contains `aiProfile:"expert"` for the black AI opponent.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```
+

@@ -26,7 +26,7 @@ export const characters: Record<Player, Character> = {
     name: "宋徽宗",
     title: "宣和雅局",
     era: "北宋",
-    aiProfile: "aesthetic",
+    aiProfile: "expert",
     quote: "此局若成，当题作《双陆图》。",
   },
 };

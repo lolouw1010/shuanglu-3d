@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-16 11:36 CST
+Last updated: 2026-05-17 22:29 CST
 
 ## Current Target
 
@@ -22,7 +22,12 @@ Implemented:
 - Vitest test setup.
 - Pure TypeScript rules engine under `src/game`.
 - Basic local Human vs Human mode.
-- Basic Human vs AI mode.
+- Human vs AI mode.
+- Upgraded Human vs AI opponent:
+  - Full-turn legal move sequence search for current dice steps.
+  - Deterministic tactical and positional evaluation.
+  - Evaluates bearing off, bar pressure, pip count, hits, made points, home-board structure, blot exposure, stack concentration, and mobility.
+  - Default black opponent now uses the `expert` AI profile.
 - Basic Song Huizong themed opponent presentation.
 - Rule/help modal.
 - Main menu and game board screen.
@@ -229,6 +234,20 @@ Next.js production build passed.
 8 test files passed, 27 tests passed.
 ```
 
+Last verified locally on 2026-05-17 22:29 CST without starting a local service:
+
+```bash
+npm test
+npm run build
+```
+
+Result:
+
+```txt
+8 test files passed, 31 tests passed.
+Next.js production build passed.
+```
+
 Last verified locally on 2026-05-16 11:15 CST without starting a local service:
 
 ```bash
@@ -241,6 +260,26 @@ Result:
 ```txt
 Next.js production build passed.
 8 test files passed, 27 tests passed.
+```
+
+Last verified on Aliyun GD on 2026-05-17 22:40 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-expert-ai-test"}'
+ssh root@47.121.182.144 'grep -R "enterFromBar" -n /opt/shuanglu/.next/static | head'
+ssh root@47.121.182.144 'grep -R '"'"'aiProfile:"expert"'"'"' -n /opt/shuanglu/.next/static | head'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+POST /api/rooms created room 67DF0C.
+PM2 process shuanglu is online after restart.
+Cloud static JavaScript contains the expert AI scoring and profile markers.
 ```
 
 Last verified on Aliyun GD on 2026-05-16 11:36 CST:
@@ -694,7 +733,7 @@ http://47.121.182.144/3d
 - `npm install` reported 7 moderate severity vulnerabilities. Do not run `npm audit fix --force` without reviewing the dependency changes.
 - UI has had browser screenshot QA for the revised victory tracker, triangular board, gameplay feedback layer, and dice/board animation pass, but not for the latest 3D-like board shell pass or a full mobile pass.
 - The first-turn guidance is clearer, but a fresh user still needs a full five-minute comprehension test.
-- Human vs AI has basic heuristics only; it is not tuned for strong or historically flavored play.
+- Human vs AI now uses full-turn deterministic heuristics, but still needs full-match human playtesting and weight tuning before it can be called strong.
 - Full-match manual testing is still required. Automated tests cover core rules but not a complete end-to-end game.
 - The board UI is no longer a pure debug grid and now includes basic gameplay motion and a first 3D-like lacquer-table pass, but still needs final art direction, real piece assets, audio, and mobile polish before launch.
 
@@ -710,8 +749,8 @@ http://47.121.182.144/3d
 8. Consider a controlled Node 20 LTS upgrade on Aliyun for the 3D dependency stack.
 9. Add 3D horse move-path animation and clearer stack layout only after the static tabletop passes QA.
 10. Manual playtest a complete Human vs Human online match.
-11. Manual playtest a complete Human vs AI match.
-12. Add explicit reason feedback when clicking non-highlighted or blocked points.
-13. Run mobile viewport QA for the online menu, compact HUD, and 3D scene fallback behavior.
-14. Add regression tests for full-turn sequences.
-15. Tune AI heuristics for fewer obvious tactical mistakes.
+11. Manual playtest a complete Human vs AI match against the expert profile.
+12. Tune AI weights from full-match playtest notes, especially blot risk versus tempo.
+13. Add explicit reason feedback when clicking non-highlighted or blocked points.
+14. Run mobile viewport QA for the online menu, compact HUD, and 3D scene fallback behavior.
+15. Add regression tests for full-turn edge sequences that use all four doubles steps.
