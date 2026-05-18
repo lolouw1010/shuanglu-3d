@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-17 22:29 CST
+Last updated: 2026-05-18 10:10 CST
 
 ## Current Target
 
@@ -28,6 +28,11 @@ Implemented:
   - Deterministic tactical and positional evaluation.
   - Evaluates bearing off, bar pressure, pip count, hits, made points, home-board structure, blot exposure, stack concentration, and mobility.
   - Default black opponent now uses the `expert` AI profile.
+- Added Human vs AI black move trace UI:
+  - Feedback panel lists every black move in the latest completed AI turn.
+  - 2D board marks black move order with `黑1起`, `黑1落`, and `黑1打` chips.
+  - Bar re-entry and bearing-off by black are also marked in the central wells.
+  - Latest black-turn extraction is covered by regression tests.
 - Basic Song Huizong themed opponent presentation.
 - Rule/help modal.
 - Main menu and game board screen.
@@ -234,6 +239,20 @@ Next.js production build passed.
 8 test files passed, 27 tests passed.
 ```
 
+Last verified locally on 2026-05-18 10:31 CST without starting a local service:
+
+```bash
+npm test
+npm run build
+```
+
+Result:
+
+```txt
+9 test files passed, 33 tests passed.
+Next.js production build passed.
+```
+
 Last verified locally on 2026-05-17 22:29 CST without starting a local service:
 
 ```bash
@@ -260,6 +279,26 @@ Result:
 ```txt
 Next.js production build passed.
 8 test files passed, 27 tests passed.
+```
+
+Last verified on Aliyun GD on 2026-05-18 10:10 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-black-trace-test"}'
+ssh root@47.121.182.144 'grep -R "黑方刚走" -n /opt/shuanglu/.next/static | head'
+ssh root@47.121.182.144 'grep -R "ai-trail-chip" -n /opt/shuanglu/.next/static | head'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+POST /api/rooms created room 5180FC.
+PM2 process shuanglu is online after restart.
+Cloud static build artifacts contain the black-move list and board trace markers.
 ```
 
 Last verified on Aliyun GD on 2026-05-17 22:40 CST:

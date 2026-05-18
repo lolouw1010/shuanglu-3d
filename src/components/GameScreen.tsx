@@ -10,6 +10,7 @@ import { Board } from "./Board";
 import { CharacterPanel } from "./CharacterPanel";
 import { DicePanel } from "./DicePanel";
 import { PlayFeedback } from "./PlayFeedback";
+import { latestContiguousMovesForPlayer } from "./moveDisplay";
 import { TurnCoach } from "./TurnCoach";
 import { VictoryTracker } from "./VictoryTracker";
 
@@ -58,6 +59,8 @@ export function GameScreen() {
     mode !== "online" ||
     (online?.seat !== "spectator" && online?.seat === state.currentPlayer);
   const availableMoves = canAct ? generateLegalMoves(state) : [];
+  const highlightedBlackMoves =
+    mode === "ai" ? latestContiguousMovesForPlayer(state, "black") : [];
 
   useEffect(() => {
     if (mode === "ai" && state.currentPlayer === "black") {
@@ -184,6 +187,7 @@ export function GameScreen() {
               targetMoves={targetMoves}
               onSelectSource={selectSource}
               onSelectTarget={selectTarget}
+              highlightedMoves={highlightedBlackMoves}
             />
           )}
           <div className="grid gap-2 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,.95fr)]">

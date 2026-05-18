@@ -947,3 +947,58 @@ gaokao-sprint-coach online
 school-application online
 ```
 
+## 2026-05-18 Black Move Trace Deployment
+
+Purpose:
+
+- Deploy UI that explicitly lists every black AI move after an AI turn.
+- Highlight the same black move path on the 2D board using numbered source/target chips.
+- Preserve the MiniMac cloud-only runtime policy: no local Next.js service was started.
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-black-move-trace-20260518-1005.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_black_move_trace_20260518_1005
+```
+
+Server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_black_move_trace_20260518_1005
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+POST /api/rooms created room 5180FC and seated creator as white.
+Cloud static JavaScript contains `黑方刚走`.
+Cloud static CSS/JavaScript contains `ai-trail-chip`.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```
+

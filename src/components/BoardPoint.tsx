@@ -10,6 +10,9 @@ type BoardPointProps = {
   isLastFrom: boolean;
   isLastTo: boolean;
   isHitDestination: boolean;
+  aiTrailFromOrders?: number[];
+  aiTrailToOrders?: number[];
+  aiTrailHitOrders?: number[];
   canSelect: boolean;
   sourceSteps?: number[];
   targetSteps?: number[];
@@ -30,6 +33,9 @@ export function BoardPoint({
   isLastFrom,
   isLastTo,
   isHitDestination,
+  aiTrailFromOrders = [],
+  aiTrailToOrders = [],
+  aiTrailHitOrders = [],
   canSelect,
   sourceSteps = [],
   targetSteps = [],
@@ -61,6 +67,9 @@ export function BoardPoint({
         ? "已选中"
         : "不可操作";
   const ownerLabel = owner ? `${pieceAlt(owner)} ${point.count} 枚` : "空点";
+  const hasAiTrailFrom = aiTrailFromOrders.length > 0;
+  const hasAiTrailTo = aiTrailToOrders.length > 0;
+  const hasAiTrail = hasAiTrailFrom || hasAiTrailTo;
 
   return (
     <button
@@ -75,10 +84,14 @@ export function BoardPoint({
               ? "point-last-to last-move-glow border-sky-200/80 bg-sky-200/10"
               : isLastFrom
                 ? "point-last-from border-amber-200/45 bg-amber-100/8"
+            : hasAiTrailTo
+              ? "point-ai-trail-to border-sky-200/55 bg-sky-300/10"
+            : hasAiTrailFrom
+              ? "point-ai-trail-from border-sky-200/35 bg-sky-200/10"
             : canSelect
               ? "point-source source-pulse border-amber-100/65 bg-amber-100/8"
               : "border-amber-100/8 bg-black/14"
-      } ${canSelect || isTarget ? "point-interactive cursor-pointer hover:border-amber-100" : "cursor-default"}`}
+      } ${hasAiTrail ? "point-ai-trail" : ""} ${canSelect || isTarget ? "point-interactive cursor-pointer hover:border-amber-100" : "cursor-default"}`}
       onClick={handleClick}
     >
       <span
@@ -119,6 +132,27 @@ export function BoardPoint({
             ))
           : null}
       </div>
+      {hasAiTrail ? (
+        <span
+          className={`ai-trail-chip-group ${row === "top" ? "top-1.5" : "bottom-1.5"}`}
+        >
+          {aiTrailFromOrders.map((order) => (
+            <span key={`from-${order}`} className="ai-trail-chip ai-trail-chip-from">
+              黑{order}起
+            </span>
+          ))}
+          {aiTrailToOrders.map((order) => (
+            <span
+              key={`to-${order}`}
+              className={`ai-trail-chip ${
+                aiTrailHitOrders.includes(order) ? "ai-trail-chip-hit" : "ai-trail-chip-to"
+              }`}
+            >
+              黑{order}{aiTrailHitOrders.includes(order) ? "打" : "落"}
+            </span>
+          ))}
+        </span>
+      ) : null}
       {isLastFrom ? (
         <span
           className={`absolute right-1.5 z-20 rounded-full border border-amber-200/25 bg-black/35 px-1.5 py-0.5 text-[10px] text-amber-100/80 ${

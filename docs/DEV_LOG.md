@@ -2885,3 +2885,49 @@ npm run build passed.
 
 The AI is now deterministic and should make fewer obvious tactical mistakes. It is still not a deep match engine: it evaluates the current full turn and resulting position, but it does not yet do multi-turn opponent search or rollout simulation. Full-match human playtesting is still required to tune the weights.
 
+## 2026-05-18 10:10 CST
+
+### Objective
+
+Make every black AI move in a completed AI turn visible to the player. The user reported that after the AI moves, the interface must explicitly say how black moved and the board must highlight those paths.
+
+### Changes
+
+- Added `src/components/moveDisplay.ts` for reusable move display labels and latest-contiguous-player move extraction.
+- Updated the feedback panel to show a dedicated "黑方刚走 N 步" list after black completes an AI turn.
+- Each listed black move now shows its order, source, target, dice step, and hit marker when applicable.
+- Updated the 2D board to accept highlighted move records for the latest black AI turn.
+- Board points now show path chips such as `黑1起`, `黑1落`, and `黑1打`.
+- The board also highlights black re-entry from the bar and black bearing-off in the central wells.
+- Added a compact board note explaining that the black path is marked on the board.
+- Added regression tests for extracting only the latest contiguous black move sequence.
+
+### Verification
+
+Local runtime policy was preserved: no local Next.js service was started.
+
+```txt
+npm run build passed.
+npm test passed: 9 test files, 33 tests.
+```
+
+### Cloud Deployment
+
+Deployed the black-move trace UI to Aliyun GD.
+
+```txt
+Artifact: /tmp/shuanglu-black-move-trace-20260518-1005.tgz
+Release: /opt/shuanglu_release_black_move_trace_20260518_1005
+Backup: /opt/shuanglu_backups/shuanglu_before_black_move_trace_20260518_1005
+Server npm run build passed.
+PM2 shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+POST /api/rooms created room 5180FC.
+Cloud build artifacts contain `黑方刚走` and `ai-trail-chip`.
+```
+
+### Notes
+
+The board trace is intentionally scoped to Human vs AI mode in `GameScreen`, so regular online and human-vs-human play do not gain extra black-turn path overlays unless explicitly enabled later.
+

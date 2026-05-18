@@ -1,4 +1,4 @@
-import type { BoardState, Move } from "@/game";
+import type { BoardState, Move, MoveRecord } from "@/game";
 import { BoardPoint } from "./BoardPoint";
 
 type BoardProps = {
@@ -8,6 +8,7 @@ type BoardProps = {
   targetMoves: Move[];
   onSelectSource: (source: number | "bar") => void;
   onSelectTarget: (target: number | "off") => void;
+  highlightedMoves?: MoveRecord[];
 };
 
 const topRow = Array.from({ length: 12 }, (_, index) => index + 12);
@@ -21,6 +22,27 @@ function playerName(player: BoardState["currentPlayer"]): string {
   return player === "white" ? "白方" : "黑方";
 }
 
+function pushOrder(map: Map<number, number[]>, point: number, order: number): void {
+  map.set(point, [...(map.get(point) ?? []), order]);
+}
+
+function trailMaps(moves: MoveRecord[]) {
+  const from = new Map<number, number[]>();
+  const to = new Map<number, number[]>();
+  const hit = new Map<number, number[]>();
+
+  moves.forEach((move, index) => {
+    const order = index + 1;
+    if (typeof move.from === "number") pushOrder(from, move.from, order);
+    if (typeof move.to === "number") {
+      pushOrder(to, move.to, order);
+      if (move.hitsOpponent) pushOrder(hit, move.to, order);
+    }
+  });
+
+  return { from, to, hit };
+}
+
 export function Board({
   state,
   availableMoves,
@@ -28,8 +50,16 @@ export function Board({
   targetMoves,
   onSelectSource,
   onSelectTarget,
+  highlightedMoves = [],
 }: BoardProps) {
   const latestMove = state.moveHistory.at(-1);
+  const highlightedTrail = trailMaps(highlightedMoves);
+  const highlightedBarMoves = highlightedMoves
+    .map((move, index) => ({ move, order: index + 1 }))
+    .filter(({ move }) => move.from === "bar");
+  const highlightedOffMoves = highlightedMoves
+    .map((move, index) => ({ move, order: index + 1 }))
+    .filter(({ move }) => move.to === "off");
   const selectableSources = new Set(availableMoves.map((move) => move.from));
   const barMoves = availableMoves.filter((move) => move.from === "bar");
   const mustEnterFromBar =
@@ -72,6 +102,9 @@ export function Board({
       isLastFrom={latestMove?.from === index}
       isLastTo={latestMove?.to === index}
       isHitDestination={latestMove?.to === index && latestMove.hitsOpponent}
+      aiTrailFromOrders={highlightedTrail.from.get(index)}
+      aiTrailToOrders={highlightedTrail.to.get(index)}
+      aiTrailHitOrders={highlightedTrail.hit.get(index)}
       canSelect={
         state.turnPhase === "awaiting_move" &&
         selectableSources.has(index)
@@ -102,6 +135,13 @@ export function Board({
             <span className="board-action-guide-stat board-action-guide-stat-target">落马 {targetCount}</span>
           </div>
 
+          {highlightedMoves.length > 0 ? (
+            <div className="ai-turn-board-note mb-1.5">
+              <span>黑方刚走 {highlightedMoves.length} 步</span>
+              <span>看棋盘上的黑1起、黑1落、黑1打标记复盘路径。</span>
+            </div>
+          ) : null}
+
           <div className="board-perspective">
             <div className="board-shell">
               <div className="board-rank board-rank-top">{topRow.map((point) => renderPoint(point, "top"))}</div>
@@ -114,7 +154,9 @@ export function Board({
                       ? "board-well-active"
                       : canSelectBar
                         ? "board-well-ready"
-                        : ""
+                        : highlightedBarMoves.length > 0
+                          ? "board-well-ai-trail"
+                          : ""
                   }`}
                   onClick={() => onSelectSource("bar")}
                 >
@@ -129,6 +171,15 @@ export function Board({
                   <span className="mt-0.5 block font-display text-lg text-amber-50">
                     马栏：白 {state.bar.white} / 黑 {state.bar.black}
                   </span>
+                  {highlightedBarMoves.length > 0 ? (
+                    <span className="mt-0.5 flex flex-wrap gap-1 text-xs text-sky-100/85">
+                      {highlightedBarMoves.map(({ order }) => (
+                        <span key={order} className="ai-trail-chip ai-trail-chip-from">
+                          黑{order}从栏复马
+                        </span>
+                      ))}
+                    </span>
+                  ) : null}
                   {mustEnterFromBar ? (
                     <span className="mt-0.5 block text-xs text-emerald-100/85">
                       {selectedSource === "bar"
@@ -146,9 +197,11 @@ export function Board({
                   className={`board-well board-well-off ${
                     canBearOff
                       ? "board-well-ready"
-                      : latestMove?.to === "off"
-                        ? "board-well-active"
-                        : ""
+                      : highlightedOffMoves.length > 0
+                        ? "board-well-ai-trail"
+                        : latestMove?.to === "off"
+                          ? "board-well-active"
+                          : ""
                   }`}
                   onClick={() => onSelectTarget("off")}
                 >
@@ -156,6 +209,15 @@ export function Board({
                   <span className="font-display text-lg">
                     出马：白 {state.borneOff.white} / 黑 {state.borneOff.black}
                   </span>
+                  {highlightedOffMoves.length > 0 ? (
+                    <span className="ml-2 inline-flex flex-wrap gap-1 align-middle text-xs text-sky-100/85">
+                      {highlightedOffMoves.map(({ order }) => (
+                        <span key={order} className="ai-trail-chip ai-trail-chip-to">
+                          黑{order}出马
+                        </span>
+                      ))}
+                    </span>
+                  ) : null}
                   {latestMove?.to === "off" ? (
                     <span className="ml-2 rounded-full border border-emerald-200/45 bg-emerald-300/15 px-2 py-0.5 text-xs text-emerald-100">
                       刚出马
