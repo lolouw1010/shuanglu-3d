@@ -1002,3 +1002,59 @@ gaokao-sprint-coach online
 school-application online
 ```
 
+
+## 2026-05-21 Expert AI Pressure Deployment
+
+Purpose:
+
+- Deploy a stronger Human vs AI expert profile after playtest feedback that the AI was too passive and easy to beat.
+- Add heuristic pressure for tactical hitting, bar containment, re-entry blocking, consecutive made-point runs, and more aggressive tempo while preserving the stable 2D UI.
+- Preserve the MiniMac cloud-only runtime policy: no local Next.js service was started.
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-ai-pressure-20260521-2314.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_ai_pressure_20260521_2314
+```
+
+Server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_ai_pressure_20260521_2314
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Local npm test passed: 9 test files, 35 tests.
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+POST /api/rooms created room A23741 and seated creator as white.
+Cloud static JavaScript contains `entryBlock`.
+Cloud static JavaScript contains `longestPrime`.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```

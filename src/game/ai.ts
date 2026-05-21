@@ -15,6 +15,9 @@ type ProfileWeights = {
   bearOff: number;
   enterFromBar: number;
   makePoint: number;
+  entryBlock: number;
+  longestPrime: number;
+  attackWhenBehind: number;
   ownBlot: number;
   vulnerableBlot: number;
   madePoint: number;
@@ -32,6 +35,9 @@ const profileWeights: Record<AIProfile, ProfileWeights> = {
     bearOff: 120,
     enterFromBar: 95,
     makePoint: 38,
+    entryBlock: 18,
+    longestPrime: 6,
+    attackWhenBehind: 0.5,
     ownBlot: -18,
     vulnerableBlot: -34,
     madePoint: 13,
@@ -47,6 +53,9 @@ const profileWeights: Record<AIProfile, ProfileWeights> = {
     bearOff: 118,
     enterFromBar: 90,
     makePoint: 30,
+    entryBlock: 28,
+    longestPrime: 7,
+    attackWhenBehind: 0.9,
     ownBlot: -14,
     vulnerableBlot: -25,
     madePoint: 10,
@@ -62,6 +71,9 @@ const profileWeights: Record<AIProfile, ProfileWeights> = {
     bearOff: 125,
     enterFromBar: 105,
     makePoint: 52,
+    entryBlock: 22,
+    longestPrime: 8,
+    attackWhenBehind: 0.25,
     ownBlot: -28,
     vulnerableBlot: -52,
     madePoint: 18,
@@ -77,6 +89,9 @@ const profileWeights: Record<AIProfile, ProfileWeights> = {
     bearOff: 122,
     enterFromBar: 100,
     makePoint: 54,
+    entryBlock: 20,
+    longestPrime: 9,
+    attackWhenBehind: 0.35,
     ownBlot: -23,
     vulnerableBlot: -43,
     madePoint: 17,
@@ -88,19 +103,22 @@ const profileWeights: Record<AIProfile, ProfileWeights> = {
     stackPenalty: -4,
   },
   expert: {
-    hit: 62,
-    bearOff: 130,
+    hit: 104,
+    bearOff: 128,
     enterFromBar: 110,
-    makePoint: 56,
-    ownBlot: -30,
-    vulnerableBlot: -58,
-    madePoint: 20,
-    homeMadePoint: 14,
-    pip: 2.35,
-    bar: 110,
+    makePoint: 72,
+    entryBlock: 46,
+    longestPrime: 12,
+    attackWhenBehind: 1.15,
+    ownBlot: -19,
+    vulnerableBlot: -36,
+    madePoint: 24,
+    homeMadePoint: 18,
+    pip: 2.65,
+    bar: 145,
     borneOff: 170,
-    mobility: 3.2,
-    stackPenalty: -6,
+    mobility: 4.1,
+    stackPenalty: -5,
   },
 };
 
@@ -172,6 +190,35 @@ function countHomeMadePoints(state: BoardState, player: Player): number {
   }).length;
 }
 
+function countEntryBlocks(state: BoardState, player: Player): number {
+  const enemy = opponent(player);
+  let blocks = 0;
+
+  for (let step = 1; step <= 6; step += 1) {
+    const target = getBarEntryTarget(enemy, step);
+    const point = state.points[target];
+    if (point.owner === player && point.count >= 2) blocks += 1;
+  }
+
+  return blocks;
+}
+
+function longestMadePointRun(state: BoardState, player: Player): number {
+  let longest = 0;
+  let current = 0;
+
+  for (const point of state.points) {
+    if (point.owner === player && point.count >= 2) {
+      current += 1;
+      longest = Math.max(longest, current);
+    } else {
+      current = 0;
+    }
+  }
+
+  return longest;
+}
+
 function stackPenalty(state: BoardState, player: Player): number {
   return state.points.reduce((total, point) => {
     if (point.owner !== player || point.count <= 5) return total;
@@ -213,12 +260,18 @@ function leavesSourceBlot(before: BoardState, after: BoardState, move: Move): bo
 
 function scoreMoveTactics(before: BoardState, after: BoardState, move: Move, profile: AIProfile): number {
   const weights = profileWeights[profile];
+  const enemy = opponent(move.player);
   let score = 0;
 
   if (move.type === "bear_off") score += weights.bearOff;
   if (move.type === "enter_from_bar") score += weights.enterFromBar;
-  if (move.hitsOpponent) score += weights.hit;
+  if (move.hitsOpponent) {
+    const raceDeficit = Math.max(0, pipCount(before, move.player) - pipCount(before, enemy));
+    score += weights.hit + Math.min(36, raceDeficit * weights.attackWhenBehind);
+    if (before.bar[enemy] > 0 || after.bar[enemy] > 1) score += weights.entryBlock;
+  }
   if (scoresMadePoint(before, after, move)) score += weights.makePoint;
+  score += (countEntryBlocks(after, move.player) - countEntryBlocks(before, move.player)) * weights.entryBlock;
 
   if (leavesSourceBlot(before, after, move)) {
     score += weights.ownBlot;
@@ -254,6 +307,8 @@ function evaluateBoard(state: BoardState, player: Player, profile: AIProfile): n
   score += (pipCount(state, enemy) - pipCount(state, player)) * weights.pip;
   score += (countMadePoints(state, player) - countMadePoints(state, enemy)) * weights.madePoint;
   score += (countHomeMadePoints(state, player) - countHomeMadePoints(state, enemy)) * weights.homeMadePoint;
+  score += (countEntryBlocks(state, player) - countEntryBlocks(state, enemy)) * weights.entryBlock;
+  score += (longestMadePointRun(state, player) - longestMadePointRun(state, enemy)) * weights.longestPrime;
   score += (countBlots(state, player) - countBlots(state, enemy)) * weights.ownBlot;
   score +=
     (countVulnerableBlots(state, player) - countVulnerableBlots(state, enemy)) *

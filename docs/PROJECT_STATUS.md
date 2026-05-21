@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-18 10:10 CST
+Last updated: 2026-05-21 23:14 CST
 
 ## Current Target
 
@@ -28,6 +28,7 @@ Implemented:
   - Deterministic tactical and positional evaluation.
   - Evaluates bearing off, bar pressure, pip count, hits, made points, home-board structure, blot exposure, stack concentration, and mobility.
   - Default black opponent now uses the `expert` AI profile.
+  - Expert profile now plays more aggressively after playtest feedback: higher hit pressure, lower over-conservatism around temporary blots, stronger bar pressure, re-entry blocking, and consecutive made-point pressure.
 - Added Human vs AI black move trace UI:
   - Feedback panel lists every black move in the latest completed AI turn.
   - 2D board marks black move order with `黑1起`, `黑1落`, and `黑1打` chips.
@@ -239,6 +240,19 @@ Next.js production build passed.
 8 test files passed, 27 tests passed.
 ```
 
+Last verified locally on 2026-05-21 23:14 CST without starting a local service:
+
+```bash
+npm test
+```
+
+Result:
+
+```txt
+9 test files passed, 35 tests passed.
+Local npm run build was stopped after hanging at Next.js production build startup; cloud deployment must run server-side production build before release swap.
+```
+
 Last verified locally on 2026-05-18 10:31 CST without starting a local service:
 
 ```bash
@@ -279,6 +293,26 @@ Result:
 ```txt
 Next.js production build passed.
 8 test files passed, 27 tests passed.
+```
+
+Last verified on Aliyun GD on 2026-05-21 23:35 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-ai-pressure-test"}'
+ssh root@47.121.182.144 'grep -R "entryBlock" -n /opt/shuanglu/.next/static | head'
+ssh root@47.121.182.144 'grep -R "longestPrime" -n /opt/shuanglu/.next/static | head'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+POST /api/rooms created room A23741.
+PM2 process shuanglu is online after restart.
+Cloud static JavaScript contains the expert AI pressure markers `entryBlock` and `longestPrime`.
 ```
 
 Last verified on Aliyun GD on 2026-05-18 10:10 CST:
@@ -772,7 +806,7 @@ http://47.121.182.144/3d
 - `npm install` reported 7 moderate severity vulnerabilities. Do not run `npm audit fix --force` without reviewing the dependency changes.
 - UI has had browser screenshot QA for the revised victory tracker, triangular board, gameplay feedback layer, and dice/board animation pass, but not for the latest 3D-like board shell pass or a full mobile pass.
 - The first-turn guidance is clearer, but a fresh user still needs a full five-minute comprehension test.
-- Human vs AI now uses full-turn deterministic heuristics, but still needs full-match human playtesting and weight tuning before it can be called strong.
+- Human vs AI now uses full-turn deterministic heuristics with more aggressive expert pressure, but still needs full-match human playtesting and weight tuning before it can be called strong.
 - Full-match manual testing is still required. Automated tests cover core rules but not a complete end-to-end game.
 - The board UI is no longer a pure debug grid and now includes basic gameplay motion and a first 3D-like lacquer-table pass, but still needs final art direction, real piece assets, audio, and mobile polish before launch.
 

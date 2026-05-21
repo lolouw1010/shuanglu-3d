@@ -67,6 +67,42 @@ describe("AI move selection", () => {
     });
   });
 
+  it("expert accepts a risky hit to keep pressure when behind in the race", () => {
+    let points = emptyPoints();
+    points = put(points, 10, "black", 2);
+    points = put(points, 13, "white", 1);
+    points = put(points, 16, "white", 1);
+    points = put(points, 4, "black", 1);
+    const state = stateWithPoints(points, "black", [3]);
+
+    expect(chooseAIMove(state, "black", "expert")).toEqual({
+      player: "black",
+      type: "normal",
+      from: 10,
+      to: 13,
+      step: 3,
+      hitsOpponent: true,
+    });
+  });
+
+  it("expert closes a re-entry point when the opponent has horses on the bar", () => {
+    let points = emptyPoints();
+    points = put(points, 12, "black", 1);
+    points = put(points, 18, "black", 1);
+    points = put(points, 0, "black", 1);
+    const state = stateWithPoints(points, "black", [6]);
+    state.bar.white = 1;
+
+    expect(chooseAIMove(state, "black", "expert")).toEqual({
+      player: "black",
+      type: "normal",
+      from: 12,
+      to: 18,
+      step: 6,
+      hitsOpponent: false,
+    });
+  });
+
   it("uses deterministic tie-breaking instead of random scoring", () => {
     let points = emptyPoints();
     points = put(points, 3, "white", 1);

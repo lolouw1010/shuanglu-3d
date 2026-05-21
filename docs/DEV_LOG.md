@@ -2931,3 +2931,51 @@ Cloud build artifacts contain `黑方刚走` and `ai-trail-chip`.
 
 The board trace is intentionally scoped to Human vs AI mode in `GameScreen`, so regular online and human-vs-human play do not gain extra black-turn path overlays unless explicitly enabled later.
 
+
+## 2026-05-21 23:14 CST
+
+### Objective
+
+Respond to playtest feedback that the Human vs AI opponent is too weak, too passive, and too easy to beat. The scope is AI strategy only; the stable 2D UI remains unchanged.
+
+### Changes
+
+- Strengthened the `expert` AI profile in `src/game/ai.ts`.
+- Increased expert willingness to hit exposed opposing horses, especially when behind in the race.
+- Reduced expert over-penalization for temporary blot exposure so it does not decline strong attacks too often.
+- Added board evaluation for blocking opponent bar re-entry points.
+- Added board evaluation for consecutive made-point runs, giving the AI more value for pressure structures and blockade-like positions.
+- Increased expert value for bar pressure, made points, home-board points, mobility, and race tempo.
+- Added regression tests for:
+  - Expert choosing a risky tactical hit instead of a passive quiet move.
+  - Expert closing a re-entry point when the opponent has a horse on the bar.
+
+### Verification
+
+Local runtime policy was preserved: no local Next.js service was started.
+
+```txt
+npm test passed: 9 test files, 35 tests.
+Local npm run build was stopped after hanging at Next.js production build startup.
+Server npm run build passed on Aliyun GD.
+http://47.121.182.144/ returned HTTP 200.
+POST /api/rooms created room A23741.
+Cloud static JavaScript contains `entryBlock` and `longestPrime` AI pressure weights.
+```
+
+### Cloud Deployment
+
+Deployed the stronger expert AI to Aliyun GD.
+
+```txt
+Artifact: /tmp/shuanglu-ai-pressure-20260521-2314.tgz
+Release: /opt/shuanglu_release_ai_pressure_20260521_2314
+Backup: /opt/shuanglu_backups/shuanglu_before_ai_pressure_20260521_2314
+Server npm run build passed.
+PM2 shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+```
+
+### Notes
+
+This is still a heuristic full-turn AI, not a multi-turn search engine. The next meaningful strength step would be opponent-reply search or rollout simulation, but this change should make the default black opponent much more willing to hit, trap, and convert bar pressure.
