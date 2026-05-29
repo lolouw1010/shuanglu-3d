@@ -1,14 +1,14 @@
 # Project Status
 
-Last updated: 2026-05-21 23:14 CST
+Last updated: 2026-05-30 00:45 CST
 
 ## Current Target
 
 Version target: `0.5`
 
-Goal: complete and deploy a playable local web prototype of Shuanglu within one week.
+Goal: maintain a playable cloud-hosted 0.5 prototype while documenting the current system clearly enough for continued development.
 
-The current priority is a stable playable baseline, not commercial completeness.
+The current priority is a stable playable baseline and clear handoff documentation, not commercial completeness.
 
 ## Current State
 
@@ -118,6 +118,8 @@ Implemented:
 - Added `docs/CLOUD_ASSETS.md` as the current cloud asset inventory and handoff document.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
+- Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.
+- Updated `README.md` with live cloud URLs, current MVP scope, architecture, and historical claim boundary notes.
 - Deployed the current Next.js build to Aliyun GD at `http://47.121.182.144/`.
 - Production runtime is PM2 process `shuanglu` behind Nginx, bound internally to `127.0.0.1:3002`.
 - Deployed the first 3D-like board visual pass to Aliyun GD from working-tree archive `/tmp/shuanglu-visual-20260502-2349.tgz`.
@@ -240,6 +242,33 @@ Next.js production build passed.
 8 test files passed, 27 tests passed.
 ```
 
+Last verified on 2026-05-30 00:45 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+GitHub documentation sync prepared from local working tree.
+```
+
+Last verified locally on 2026-05-22 01:30 CST without starting a local service:
+
+```bash
+npx tsc --noEmit
+npm test
+```
+
+Result:
+
+```txt
+TypeScript no-emit check passed.
+10 test files passed, 38 tests passed.
+```
+
 Last verified locally on 2026-05-21 23:14 CST without starting a local service:
 
 ```bash
@@ -293,6 +322,26 @@ Result:
 ```txt
 Next.js production build passed.
 8 test files passed, 27 tests passed.
+```
+
+Last verified on Aliyun GD on 2026-05-22 01:57 CST:
+
+```bash
+curl -I --max-time 20 http://47.121.182.144/
+curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
+  -H 'Content-Type: application/json' \
+  -d '{"playerId":"codex-auto-pass-test"}'
+ssh root@47.121.182.144 'grep -R "没有可复马入口" -n /opt/shuanglu/.next/static /opt/shuanglu/.next/server | head'
+ssh root@47.121.182.144 'grep -R "剩余步数" -n /opt/shuanglu/.next/static /opt/shuanglu/.next/server | head'
+```
+
+Result:
+
+```txt
+Public root path returned HTTP 200.
+POST /api/rooms created room DDBF99.
+PM2 process shuanglu is online after restart.
+Cloud static/server artifacts contain automatic pass notice text for blocked bar re-entry and unusable remaining dice.
 ```
 
 Last verified on Aliyun GD on 2026-05-21 23:35 CST:
@@ -807,6 +856,7 @@ http://47.121.182.144/3d
 - UI has had browser screenshot QA for the revised victory tracker, triangular board, gameplay feedback layer, and dice/board animation pass, but not for the latest 3D-like board shell pass or a full mobile pass.
 - The first-turn guidance is clearer, but a fresh user still needs a full five-minute comprehension test.
 - Human vs AI now uses full-turn deterministic heuristics with more aggressive expert pressure, but still needs full-match human playtesting and weight tuning before it can be called strong.
+- Automatic turn passes now explain why the current player could not move, including blocked bar re-entry and unusable remaining dice steps.
 - Full-match manual testing is still required. Automated tests cover core rules but not a complete end-to-end game.
 - The board UI is no longer a pure debug grid and now includes basic gameplay motion and a first 3D-like lacquer-table pass, but still needs final art direction, real piece assets, audio, and mobile polish before launch.
 

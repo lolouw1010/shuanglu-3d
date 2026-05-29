@@ -90,6 +90,34 @@ function finishRollIfNoMoves(state: BoardState): BoardState {
   return state;
 }
 
+function removeOneStep(steps: number[], step: number): number[] {
+  const index = steps.indexOf(step);
+  if (index === -1) return steps;
+  return [...steps.slice(0, index), ...steps.slice(index + 1)];
+}
+
+function stepsText(steps: number[]): string {
+  return steps.length > 0 ? steps.join(" / ") : "无";
+}
+
+function blockedRollMessage(rolled: BoardState, next: BoardState): string {
+  const player = playerLabel(rolled.currentPlayer);
+  const nextPlayer = playerLabel(next.currentPlayer);
+  if (rolled.bar[rolled.currentPlayer] > 0) {
+    return `${player}掷出 ${stepsText(rolled.diceSteps)}，但栏中马没有可复马入口，回合交给${nextPlayer}。`;
+  }
+  return `${player}掷出 ${stepsText(rolled.diceSteps)}，但没有合法走法，回合交给${nextPlayer}。`;
+}
+
+function blockedRemainderMessage(before: BoardState, move: Move, next: BoardState): string | null {
+  if (next.currentPlayer === before.currentPlayer || next.turnPhase !== "awaiting_roll") return null;
+
+  const remaining = removeOneStep(before.diceSteps, move.step);
+  if (remaining.length === 0) return null;
+
+  return `${playerLabel(before.currentPlayer)}已走 ${move.step} 步；剩余步数 ${stepsText(remaining)} 没有合法走法，回合交给${playerLabel(next.currentPlayer)}。`;
+}
+
 function getClientPlayerId(): string {
   const storageKey = "shuanglu.playerId";
   const existing = window.localStorage.getItem(storageKey);
@@ -305,7 +333,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       targetMoves: [],
       message:
         next.currentPlayer !== rolled.currentPlayer
-          ? "无可行之步，回合交替。"
+          ? blockedRollMessage(rolled, next)
           : messageForState(next),
     });
   },
@@ -372,14 +400,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const canContinue =
       next.currentPlayer === state.currentPlayer &&
       next.turnPhase === "awaiting_move";
+    const blockedRemainder = blockedRemainderMessage(state, move, next);
     set({
       state: next,
       selectedSource: null,
       targetMoves: [],
       message:
-        move.hitsOpponent && canContinue
+        blockedRemainder ??
+        (move.hitsOpponent && canContinue
           ? "敌方孤马已被打入栏。继续点发光的己方马。"
-          : messageForState(next),
+          : messageForState(next)),
     });
   },
 
@@ -389,8 +419,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let state = store.state;
     if (state.currentPlayer !== "black" || state.turnPhase === "game_over") return;
 
+    let aiMessage: string | null = null;
+
     if (state.turnPhase === "awaiting_roll") {
-      state = finishRollIfNoMoves(rollIntoState(state, rollDice()));
+      const rolled = rollIntoState(state, rollDice());
+      state = finishRollIfNoMoves(rolled);
+      if (state.currentPlayer !== rolled.currentPlayer) {
+        aiMessage = blockedRollMessage(rolled, state);
+      }
     }
 
     let guard = 0;
@@ -408,7 +444,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         state = endTurn(state);
         break;
       }
+      const beforeMove = state;
       state = applyMove(state, move);
+      aiMessage = blockedRemainderMessage(beforeMove, move, state) ?? aiMessage;
       guard += 1;
     }
 
@@ -416,7 +454,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       state,
       selectedSource: null,
       targetMoves: [],
-      message: messageForState(state),
+      message: aiMessage ?? messageForState(state),
     });
   },
 }));

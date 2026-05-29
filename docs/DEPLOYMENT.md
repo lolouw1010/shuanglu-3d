@@ -1058,3 +1058,76 @@ Non-Shuanglu services observed but not changed:
 gaokao-sprint-coach online
 school-application online
 ```
+
+## 2026-05-22 Automatic Pass Notice Deployment
+
+Purpose:
+
+- Deploy clearer turn-pass messaging after playtest confusion about white turns ending before re-entry or before all dice appeared to be used.
+- Preserve rule behavior: a turn still ends when no legal move exists for the current dice.
+- Make blocked bar re-entry and unusable remaining dice explicit in local, AI, and online play.
+- Preserve the MiniMac cloud-only runtime policy: no local Next.js service was started.
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-auto-pass-notice-20260522-0130.tgz
+```
+
+Server release directory:
+
+```txt
+/opt/shuanglu_release_auto_pass_notice_20260522_0130
+```
+
+Server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_auto_pass_notice_20260522_0130
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Local npx tsc --noEmit passed.
+Local npm test passed: 10 test files, 38 tests.
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+POST /api/rooms created room DDBF99 and seated creator as white.
+Cloud static/server artifacts contain `没有可复马入口`.
+Cloud static/server artifacts contain `剩余步数`.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```
+
+## 2026-05-30 Documentation Sync Note
+
+Purpose:
+
+- Record that the live game endpoint remains available while the repository is being synchronized to GitHub with updated documentation.
+- No server restart or deployment was required for this documentation-only note.
+
+Verification:
+
+```txt
+http://47.121.182.144/ returned HTTP 200.
+Stable playable route: /
+3D visual spike route: /3d
+```

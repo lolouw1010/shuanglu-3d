@@ -20,6 +20,7 @@ type OnlineRoom = {
   createdAt: number;
   updatedAt: number;
   version: number;
+  notice?: string;
 };
 
 type RoomStore = Map<string, OnlineRoom>;
@@ -52,6 +53,34 @@ function finishRollIfNoMoves(state: BoardState): BoardState {
   return state;
 }
 
+function removeOneStep(steps: number[], step: number): number[] {
+  const index = steps.indexOf(step);
+  if (index === -1) return steps;
+  return [...steps.slice(0, index), ...steps.slice(index + 1)];
+}
+
+function stepsText(steps: number[]): string {
+  return steps.length > 0 ? steps.join(" / ") : "无";
+}
+
+function blockedRollMessage(rolled: BoardState, next: BoardState): string {
+  const player = playerLabel(rolled.currentPlayer);
+  const nextPlayer = playerLabel(next.currentPlayer);
+  if (rolled.bar[rolled.currentPlayer] > 0) {
+    return `${player}掷出 ${stepsText(rolled.diceSteps)}，但栏中马没有可复马入口，回合交给${nextPlayer}。`;
+  }
+  return `${player}掷出 ${stepsText(rolled.diceSteps)}，但没有合法走法，回合交给${nextPlayer}。`;
+}
+
+function blockedRemainderMessage(before: BoardState, moveStep: number, next: BoardState): string | null {
+  if (next.currentPlayer === before.currentPlayer || next.turnPhase !== "awaiting_roll") return null;
+
+  const remaining = removeOneStep(before.diceSteps, moveStep);
+  if (remaining.length === 0) return null;
+
+  return `${playerLabel(before.currentPlayer)}已走 ${moveStep} 步；剩余步数 ${stepsText(remaining)} 没有合法走法，回合交给${playerLabel(next.currentPlayer)}。`;
+}
+
 function roomCode(): string {
   let id = "";
   do {
@@ -69,7 +98,7 @@ function viewRoom(room: OnlineRoom): OnlineRoomView {
   return {
     id: room.id,
     state: room.state,
-    message: messageForState(room.state),
+    message: room.notice ?? messageForState(room.state),
     players: {
       white: Boolean(room.players.white),
       black: Boolean(room.players.black),
@@ -159,12 +188,17 @@ export function rollRoom(roomId: string, playerId: string): {
   }
 
   const roll = rollDice();
-  room.state = finishRollIfNoMoves({
+  const rolled = {
     ...room.state,
     currentRoll: roll,
     diceSteps: diceToSteps(roll, room.state.ruleConfig),
-    turnPhase: "awaiting_move",
-  });
+    turnPhase: "awaiting_move" as const,
+  };
+  room.state = finishRollIfNoMoves(rolled);
+  room.notice =
+    room.state.currentPlayer !== rolled.currentPlayer
+      ? blockedRollMessage(rolled, room.state)
+      : undefined;
   touch(room);
   return { room: viewRoom(room), seat };
 }
@@ -193,7 +227,9 @@ export function moveRoom(
     return { room: viewRoom(room), seat, error: "illegal_move" };
   }
 
+  const beforeMove = room.state;
   room.state = applyMove(room.state, move);
+  room.notice = blockedRemainderMessage(beforeMove, move.step, room.state) ?? undefined;
   touch(room);
   return { room: viewRoom(room), seat };
 }

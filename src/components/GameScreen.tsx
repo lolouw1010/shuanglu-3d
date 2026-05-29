@@ -64,11 +64,12 @@ export function GameScreen() {
 
   useEffect(() => {
     if (mode === "ai" && state.currentPlayer === "black") {
-      const timer = window.setTimeout(runAITurn, 450);
+      const justAutoPassed = message.includes("回合交给黑方");
+      const timer = window.setTimeout(runAITurn, justAutoPassed ? 1400 : 450);
       return () => window.clearTimeout(timer);
     }
     return undefined;
-  }, [mode, state.currentPlayer, state.turnPhase, runAITurn]);
+  }, [mode, state.currentPlayer, state.turnPhase, message, runAITurn]);
 
   useEffect(() => {
     if (mode !== "online") return undefined;

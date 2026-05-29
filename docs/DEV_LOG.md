@@ -2979,3 +2979,63 @@ Nginx configuration test passed and reloaded.
 ### Notes
 
 This is still a heuristic full-turn AI, not a multi-turn search engine. The next meaningful strength step would be opponent-reply search or rollout simulation, but this change should make the default black opponent much more willing to hit, trap, and convert bar pressure.
+
+## 2026-05-22 01:30 CST
+
+### Objective
+
+Investigate playtest feedback that white sometimes appears to lose the turn before re-entering from the bar or before making a move.
+
+### Findings
+
+- The rule engine already ends a turn when the current dice steps have no legal move.
+- If a player has horses on the bar and every rolled re-entry point is blocked by two or more opposing horses, the turn correctly passes.
+- If a player uses one step and the remaining dice steps cannot legally be used, the turn correctly passes.
+- The confusing behavior was mainly presentation: after an automatic pass, the UI often only showed the next player prompt, and in Human vs AI mode black could begin acting after 450ms, making the pass reason easy to miss.
+
+### Changes
+
+- Added explicit automatic-pass messages for local Human vs Human and Human vs AI play:
+  - Roll has no legal move.
+  - Bar re-entry is impossible because no rolled entry point is open.
+  - A move consumes one step but remaining dice have no legal continuation.
+- Added the same automatic-pass notice to online room responses.
+- Delayed black AI takeover from 450ms to 1400ms when white just auto-passed, so the reason remains visible before black acts.
+- Added `tests/turn.test.ts` covering:
+  - Bar entry remains available when at least one rolled entry point is open.
+  - Turn ends when all rolled bar-entry points are blocked.
+  - Turn ends after a move when remaining dice cannot be used.
+
+### Verification
+
+Local runtime policy was preserved: no local Next.js service was started.
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+```
+
+## 2026-05-30 00:45 CST
+
+### Objective
+
+Prepare the existing Shuanglu project for a documentation-first GitHub sync. The user asked where the game is and requested that the current program documentation be cleaned up and uploaded to GitHub.
+
+### Findings
+
+- The cloud game endpoint is still live at `http://47.121.182.144/` and returned HTTP 200.
+- The `/3d` route remains available as the isolated 3D visual spike.
+- The local repository still contained the May 22 automatic-pass notice fix and deployment documentation as uncommitted working-tree changes.
+
+### Changes
+
+- Rewrote `README.md` as the GitHub landing page for the current prototype.
+- Added `docs/DOCUMENTATION_INDEX.md` as a documentation map and handoff entry point.
+- Updated `docs/PROJECT_STATUS.md` with the current documentation-sync status and live cloud targets.
+- Kept the previously deployed automatic-pass explanation changes in the sync scope so GitHub matches the cloud behavior.
+
+### Verification
+
+```txt
+curl -I --max-time 20 http://47.121.182.144/ returned HTTP 200.
+```
