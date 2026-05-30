@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-30 00:45 CST
+Last updated: 2026-05-31 00:20 CST
 
 ## Current Target
 
@@ -117,6 +117,7 @@ Implemented:
 - MiniMac operating policy is now cloud-only runtime testing: do not run the Shuanglu web service locally unless explicitly requested.
 - Added `docs/CLOUD_ASSETS.md` as the current cloud asset inventory and handoff document.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
+- BigNAS Git mirror configured as local remote `bignas` at `uway-nas:/var/services/homes/louieadmin/git/shuanglu.git`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.
 - Updated `README.md` with live cloud URLs, current MVP scope, architecture, and historical claim boundary notes.

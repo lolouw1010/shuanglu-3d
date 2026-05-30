@@ -3039,3 +3039,16 @@ Prepare the existing Shuanglu project for a documentation-first GitHub sync. The
 ```txt
 curl -I --max-time 20 http://47.121.182.144/ returned HTTP 200.
 ```
+
+## 2026-05-31 00:20 CST
+
+### Objective
+
+Push the existing Shuanglu program to the BigNAS-hosted Git repository as an additional mirror beyond GitHub.
+
+### Plan
+
+- Use the existing SSH host alias `uway-nas`.
+- Create a bare repository at `/var/services/homes/louieadmin/git/shuanglu.git` if it does not already exist.
+- Add local Git remote `bignas`.
+- Push `main` to the NAS remote and verify with `git ls-remote`.

@@ -1131,3 +1131,19 @@ http://47.121.182.144/ returned HTTP 200.
 Stable playable route: /
 3D visual spike route: /3d
 ```
+
+## 2026-05-31 BigNAS Git Mirror
+
+Purpose:
+
+- Add a NAS-hosted Git mirror for the Shuanglu program in addition to GitHub.
+- Remote host alias: `uway-nas` in local SSH config.
+- NAS repository path: `/var/services/homes/louieadmin/git/shuanglu.git`.
+- Local Git remote name: `bignas`.
+
+Verification plan:
+
+```txt
+git push bignas main
+git ls-remote bignas
+```
