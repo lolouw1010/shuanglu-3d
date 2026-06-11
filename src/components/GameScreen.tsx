@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { ArrowLeft, BookOpen, ScrollText, Settings } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { characters } from "@/data/characters";
@@ -79,30 +79,27 @@ export function GameScreen() {
     return () => window.clearInterval(interval);
   }, [mode, syncOnlineRoom]);
 
+  const shellClass =
+    boardView === "3d"
+      ? "min-h-screen overflow-x-hidden px-2 py-2 text-stone-100 sm:px-3 bg-[radial-gradient(circle_at_50%_0%,rgba(214,162,80,.16),transparent_28%),linear-gradient(140deg,#120d0c,#351317_48%,#15100e)]"
+      : "parchment-game-shell min-h-screen overflow-x-hidden px-2 py-2 text-[#3b2514] sm:px-3";
+  const layoutClass =
+    boardView === "3d"
+      ? "relative z-10 mx-auto grid max-w-[1500px] gap-2 xl:grid-cols-[220px_1fr_220px]"
+      : "parchment-game-layout relative z-10 mx-auto grid max-w-[1780px] gap-2";
+
   return (
-    <main
-      className={`min-h-screen overflow-x-hidden px-2 py-2 text-stone-100 sm:px-3 ${
-        boardView === "3d"
-          ? "bg-[radial-gradient(circle_at_50%_0%,rgba(214,162,80,.16),transparent_28%),linear-gradient(140deg,#120d0c,#351317_48%,#15100e)]"
-          : "game-shell-bg"
-      }`}
-    >
-      <div className={`relative z-10 mx-auto grid gap-2 ${
-        boardView === "3d"
-          ? "max-w-[1500px] xl:grid-cols-[220px_1fr_220px]"
-          : "max-w-[1780px]"
-      }`}>
-        <div className="game-topbar flex items-center justify-between gap-3 rounded border border-amber-200/15 bg-black/20 px-3 py-2 xl:col-span-3">
-          <div className="min-w-0">
+    <main className={shellClass}>
+      <div className={layoutClass}>
+        <div className="game-topbar parchment-topbar flex items-center justify-between gap-3 rounded border px-3 py-2 xl:col-span-3">
+          <div className="brand-block min-w-0">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <h1 className="font-display text-xl text-amber-50 sm:text-2xl">宣和雅局</h1>
-              <span className="text-xs text-amber-200/75">双陆 0.5</span>
-              {boardView === "3d" ? (
-                <span className="text-xs text-amber-100/80">3D 测试局</span>
-              ) : null}
+              <h1 className="brand-title font-display text-3xl sm:text-5xl">双陆</h1>
+              <span className="brand-subtitle text-sm font-semibold">唐宋博戏</span>
+              {boardView === "3d" ? <span className="text-xs text-amber-100/80">3D 测试局</span> : null}
             </div>
             {mode === "online" && online ? (
-              <p className="mt-0.5 truncate text-xs text-stone-300">
+              <p className="mt-0.5 truncate text-xs">
                 房间 {online.roomId} ·{" "}
                 {online.seat === "spectator"
                   ? "旁观"
@@ -113,27 +110,31 @@ export function GameScreen() {
               </p>
             ) : null}
           </div>
-          <div className="flex shrink-0 gap-2">
-            <button
-              type="button"
-              aria-label="返回"
-              className="rounded border border-amber-200/25 bg-black/20 p-2 text-amber-50"
-              onClick={backToMenu}
-            >
-              <ArrowLeft size={18} />
+          <div className="chapter-heading hidden min-w-0 text-center md:block">
+            <p className="font-display text-2xl font-semibold">第一章 · 初入京城</p>
+            <p className="mt-1 text-sm">与对手对坐，一局雅弈</p>
+          </div>
+          <div className="topbar-actions flex shrink-0 gap-2">
+            <button type="button" aria-label="博戏志" className="topbar-icon-button" onClick={toggleRules}>
+              <BookOpen size={22} />
+              <span>博戏志</span>
             </button>
-            <button
-              type="button"
-              aria-label="规则"
-              className="rounded border border-amber-200/25 bg-black/20 p-2 text-amber-50"
-              onClick={toggleRules}
-            >
-              <BookOpen size={18} />
+            <button type="button" aria-label="棋局记录" className="topbar-icon-button" onClick={toggleRules}>
+              <ScrollText size={22} />
+              <span>棋局记录</span>
+            </button>
+            <button type="button" aria-label="设置" className="topbar-icon-button" onClick={toggleRules}>
+              <Settings size={22} />
+              <span>设置</span>
+            </button>
+            <button type="button" aria-label="返回" className="topbar-icon-button" onClick={backToMenu}>
+              <ArrowLeft size={22} />
+              <span>返回</span>
             </button>
           </div>
         </div>
 
-        <div className={`${boardView === "3d" ? "order-3 xl:order-none" : "hidden"}`}>
+        <div className={`${boardView === "3d" ? "order-3 xl:order-none" : "parchment-side-panel parchment-side-left order-2"}`}>
           <CharacterPanel
             character={characters.white}
             active={state.currentPlayer === "white"}
@@ -142,8 +143,8 @@ export function GameScreen() {
           />
         </div>
 
-        <div className="order-2 grid gap-2 xl:order-none">
-          <div className="game-compact-hud grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(230px,270px)]">
+        <div className="parchment-play-area order-2 grid gap-2 xl:order-none">
+          <div className="game-compact-hud parchment-status-row grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(230px,270px)]">
             <VictoryTracker state={state} />
             <DicePanel
               state={state}
@@ -222,7 +223,7 @@ export function GameScreen() {
           ) : null}
         </div>
 
-        <div className={`${boardView === "3d" ? "order-4 xl:order-none" : "hidden"}`}>
+        <div className={`${boardView === "3d" ? "order-4 xl:order-none" : "parchment-side-panel parchment-side-right order-3"}`}>
           <CharacterPanel
             character={characters.black}
             active={state.currentPlayer === "black"}

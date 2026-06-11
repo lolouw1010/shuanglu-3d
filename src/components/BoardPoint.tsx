@@ -50,10 +50,7 @@ export function BoardPoint({
     if (canSelect) onSelectSource();
   };
   const tone = index % 2 === 0 ? "point-lane-warm" : "point-lane-dark";
-  const pointShape =
-    row === "top"
-      ? "point-lane-top [clip-path:polygon(0_0,100%_0,50%_100%)] top-0"
-      : "point-lane-bottom [clip-path:polygon(50%_0,0_100%,100%_100%)] bottom-0";
+  const pointShape = row === "top" ? "point-lane-top top-0" : "point-lane-bottom bottom-0";
   const owner = point.owner;
   const visibleCount = Math.min(point.count, 6);
   const pieceLayout = row === "top" ? "piece-rack-top top-7" : "piece-rack-bottom bottom-7";

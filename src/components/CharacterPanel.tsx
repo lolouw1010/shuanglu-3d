@@ -7,6 +7,16 @@ type CharacterPanelProps = {
   borneOff: number;
 };
 
+function portraitPath(player: Character["player"]): string {
+  return player === "white"
+    ? "/assets/decor/song-left-observers.png"
+    : "/assets/decor/song-right-observer.png";
+}
+
+function sideLabel(player: Character["player"]): string {
+  return player === "white" ? "白方（你）" : "黑方（对手）";
+}
+
 export function CharacterPanel({
   character,
   active,
@@ -14,36 +24,35 @@ export function CharacterPanel({
   borneOff,
 }: CharacterPanelProps) {
   return (
-    <aside
-      className={`rounded border p-3 ${
-        active
-          ? "border-amber-200/60 bg-amber-100/10"
-          : "border-stone-200/10 bg-black/14"
-      }`}
-    >
-      <div className="flex items-start gap-3">
-        <div className="grid size-12 shrink-0 place-items-center rounded border border-amber-100/25 bg-[linear-gradient(145deg,rgba(118,31,27,.7),rgba(21,14,12,.96))] font-display text-2xl text-amber-100">
-          {character.name.slice(0, 1)}
+    <aside className={`character-scroll-panel ${active ? "character-scroll-active" : ""}`}>
+      <div className="character-scroll-heading">
+        <p>{sideLabel(character.player)}</p>
+        <h2>{character.name}</h2>
+        <span>{character.title}</span>
+      </div>
+
+      <div className={`character-portrait character-portrait-${character.player}`}>
+        <img src={portraitPath(character.player)} alt={character.name} draggable={false} />
+      </div>
+
+      <p className="character-quote">{character.quote}</p>
+
+      <div className="character-skill-box">
+        <span>技能</span>
+        <strong>{character.player === "white" ? "观局" : "雅弈"}</strong>
+        <p>{character.player === "white" ? "看清可行点，稳扎稳打。" : "偏好压栏、打马与连点。"}</p>
+      </div>
+
+      <div className="character-token-box">
+        <div>
+          <p>已出马</p>
+          <span>{borneOff}</span>
         </div>
-        <div className="min-w-0">
-          <p className="text-xs uppercase text-amber-200/70">{character.era}</p>
-          <h2 className="mt-0.5 truncate font-display text-xl text-amber-50">
-            {character.name}
-          </h2>
-          <p className="text-xs text-amber-100/75">{character.title}</p>
+        <div>
+          <p>马栏</p>
+          <span>{barCount}</span>
         </div>
       </div>
-      <p className="mt-3 text-sm leading-6 text-stone-300">{character.quote}</p>
-      <dl className="mt-4 grid grid-cols-2 gap-2 text-sm">
-        <div className="rounded border border-stone-200/8 bg-black/22 p-2">
-          <dt className="text-stone-400">马栏</dt>
-          <dd className="font-display text-xl text-amber-100">{barCount}</dd>
-        </div>
-        <div className="rounded border border-stone-200/8 bg-black/22 p-2">
-          <dt className="text-stone-400">已出</dt>
-          <dd className="font-display text-xl text-amber-100">{borneOff}</dd>
-        </div>
-      </dl>
     </aside>
   );
 }

@@ -1178,3 +1178,787 @@ button:focus-visible {
   }
 }
 
+/* Light parchment skin for the 2D board. Keep this scoped so the 3D route
+   and dark menu shell can continue to use their existing treatment. */
+.parchment-game-shell {
+  --paper: #ead4aa;
+  --paper-deep: #d2ab73;
+  --ink: #35210f;
+  --ink-soft: #6b4b28;
+  --wood: #442816;
+  --line: rgba(89, 55, 24, 0.32);
+  --gold: #b08335;
+  --jade: #1d755e;
+  --vermilion: #8d2e1e;
+  background:
+    linear-gradient(180deg, rgba(244, 224, 181, 0.9), rgba(222, 188, 126, 0.83)),
+    radial-gradient(circle at 16% 0%, rgba(148, 50, 31, 0.13), transparent 22%),
+    radial-gradient(circle at 86% 6%, rgba(90, 111, 70, 0.1), transparent 24%),
+    url("/assets/backgrounds/song-study-court-bg.png") center 8% / cover no-repeat;
+  color: var(--ink);
+  min-height: 100vh;
+  position: relative;
+}
+
+.parchment-game-shell::before {
+  background:
+    repeating-linear-gradient(90deg, rgba(68, 40, 18, 0.035) 0 1px, transparent 1px 68px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 54px),
+    radial-gradient(ellipse at 50% 18%, rgba(255, 252, 234, 0.24), transparent 44%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+}
+
+.parchment-game-shell::after {
+  background:
+    radial-gradient(ellipse at 0% 7%, rgba(130, 39, 27, 0.13), transparent 21%),
+    radial-gradient(ellipse at 100% 8%, rgba(130, 39, 27, 0.11), transparent 22%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+}
+
+.parchment-game-layout {
+  align-items: start;
+  grid-template-areas:
+    "topbar topbar topbar"
+    "left play right";
+  grid-template-columns: minmax(224px, 0.78fr) minmax(760px, 2.7fr) minmax(224px, 0.78fr);
+  position: relative;
+  z-index: 1;
+}
+
+.parchment-game-shell .parchment-topbar {
+  background:
+    linear-gradient(180deg, rgba(251, 237, 202, 0.88), rgba(226, 194, 138, 0.72)),
+    radial-gradient(ellipse at 50% 100%, rgba(95, 64, 31, 0.12), transparent 58%);
+  border-color: rgba(83, 51, 23, 0.28);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 251, 232, 0.36),
+    0 0.55rem 1.55rem rgba(72, 47, 21, 0.12);
+  color: var(--ink);
+  grid-area: topbar;
+  min-height: 5.15rem;
+  position: relative;
+}
+
+.parchment-game-shell .parchment-topbar::before,
+.parchment-game-shell .parchment-topbar::after {
+  background: linear-gradient(90deg, transparent, rgba(75, 47, 22, 0.22), transparent);
+  content: "";
+  height: 1px;
+  position: absolute;
+  top: 50%;
+  width: min(18vw, 280px);
+}
+
+.parchment-game-shell .parchment-topbar::before {
+  left: 23%;
+}
+
+.parchment-game-shell .parchment-topbar::after {
+  right: 23%;
+}
+
+.brand-title {
+  line-height: 0.92;
+  color: #fff7d6;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.brand-subtitle,
+.chapter-heading {
+  color: rgba(254, 243, 199, 0.86);
+}
+
+.chapter-heading {
+  letter-spacing: 0;
+}
+
+.topbar-actions {
+  align-items: center;
+}
+
+.topbar-icon-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: rgba(254, 243, 199, 0.82);
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  font-weight: 650;
+  gap: 0.18rem;
+  min-width: 3.15rem;
+  padding: 0.18rem 0.22rem;
+  transition:
+    color 0.16s ease,
+    transform 0.16s ease;
+}
+
+.topbar-icon-button:hover {
+  color: #fff7d6;
+  transform: translateY(-1px);
+}
+
+.parchment-game-shell .brand-title {
+  color: #211308;
+  text-shadow: 0 2px 0 rgba(255, 247, 220, 0.55);
+}
+
+.parchment-game-shell .brand-subtitle,
+.parchment-game-shell .chapter-heading {
+  color: #3a2511;
+}
+
+.parchment-game-shell .topbar-icon-button {
+  color: #4c351b;
+}
+
+.parchment-game-shell .topbar-icon-button:hover {
+  color: #15100a;
+}
+
+.parchment-side-left {
+  grid-area: left;
+}
+
+.parchment-side-right {
+  grid-area: right;
+}
+
+.parchment-play-area {
+  grid-area: play;
+  min-width: 0;
+}
+
+.parchment-status-row {
+  align-items: stretch;
+}
+
+.character-scroll-panel {
+  background:
+    linear-gradient(180deg, rgba(251, 239, 210, 0.86), rgba(225, 193, 139, 0.64)),
+    radial-gradient(ellipse at 50% 38%, rgba(255, 255, 255, 0.18), transparent 55%);
+  border: 1px solid rgba(77, 48, 22, 0.28);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 252, 235, 0.34),
+    0 0.75rem 1.8rem rgba(72, 47, 21, 0.11);
+  color: var(--ink);
+  min-height: clamp(29rem, calc(100vh - 7.2rem), 48rem);
+  overflow: hidden;
+  padding: 0.95rem;
+  position: relative;
+}
+
+.character-scroll-panel::before {
+  border: 1px solid rgba(102, 66, 31, 0.18);
+  content: "";
+  inset: 0.42rem;
+  pointer-events: none;
+  position: absolute;
+}
+
+.character-scroll-active {
+  border-color: rgba(128, 83, 35, 0.5);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 252, 235, 0.42),
+    0 0.85rem 2rem rgba(72, 47, 21, 0.14),
+    0 0 0 2px rgba(176, 131, 53, 0.12);
+}
+
+.character-scroll-heading {
+  position: relative;
+  z-index: 2;
+}
+
+.character-scroll-heading p {
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.character-scroll-heading h2 {
+  color: #2d1c0d;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 2.2vw, 2.25rem);
+  line-height: 1.1;
+  margin-top: 0.1rem;
+}
+
+.character-scroll-heading span {
+  color: #765735;
+  display: block;
+  font-size: 0.76rem;
+  margin-top: 0.2rem;
+}
+
+.character-portrait {
+  height: clamp(14rem, 31vh, 22rem);
+  margin: 0.45rem -0.95rem 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.character-portrait::after {
+  background:
+    linear-gradient(180deg, transparent 60%, rgba(232, 202, 150, 0.9)),
+    radial-gradient(ellipse at 50% 88%, rgba(82, 54, 27, 0.18), transparent 52%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.character-portrait img {
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  width: 100%;
+}
+
+.character-portrait-white img {
+  object-position: 28% 100%;
+  transform: scale(1.08);
+}
+
+.character-portrait-black img {
+  object-position: 58% 100%;
+  transform: scale(1.05);
+}
+
+.character-quote {
+  color: #5b3e20;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  margin-top: 0.5rem;
+  min-height: 2.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.character-skill-box,
+.character-token-box {
+  background: rgba(255, 247, 225, 0.42);
+  border: 1px solid rgba(84, 54, 26, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(255, 252, 236, 0.25);
+  color: var(--ink);
+  margin-top: 0.7rem;
+  position: relative;
+  z-index: 2;
+}
+
+.character-skill-box {
+  padding: 0.62rem 0.7rem;
+}
+
+.character-skill-box span {
+  border: 1px solid rgba(92, 60, 31, 0.28);
+  color: #553719;
+  display: inline-block;
+  font-size: 0.76rem;
+  padding: 0.1rem 0.5rem;
+}
+
+.character-skill-box strong {
+  color: #301c0d;
+  font-size: 0.92rem;
+  margin-left: 0.5rem;
+}
+
+.character-skill-box p {
+  color: #644523;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  margin-top: 0.5rem;
+}
+
+.character-token-box {
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.character-token-box div {
+  padding: 0.58rem 0.65rem;
+  text-align: center;
+}
+
+.character-token-box div + div {
+  border-left: 1px solid rgba(84, 54, 26, 0.18);
+}
+
+.character-token-box p {
+  color: #6d502e;
+  font-size: 0.76rem;
+}
+
+.character-token-box span {
+  color: #2b1b0d;
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1.1;
+  margin-top: 0.18rem;
+}
+
+.parchment-game-shell .board-scene,
+.parchment-game-shell .dice-tray,
+.parchment-game-shell .feedback-enter,
+.parchment-game-shell .parchment-play-area > section,
+.parchment-game-shell .parchment-play-area > div > section {
+  background:
+    linear-gradient(180deg, rgba(250, 236, 205, 0.86), rgba(222, 188, 126, 0.58)),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 252, 236, 0.32), transparent 54%);
+  border-color: rgba(84, 54, 26, 0.25);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 252, 235, 0.34),
+    0 0.65rem 1.65rem rgba(67, 43, 18, 0.1);
+  color: var(--ink);
+}
+
+.parchment-game-shell .board-scene {
+  border-radius: 0.25rem;
+  padding: 0.52rem;
+}
+
+.parchment-game-shell .board-caption {
+  color: rgba(70, 44, 19, 0.68);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.parchment-game-shell .board-inscription {
+  background: rgba(255, 248, 226, 0.55);
+  border-color: rgba(83, 51, 23, 0.2);
+  color: #533719;
+}
+
+.parchment-game-shell .board-action-guide,
+.parchment-game-shell .ai-turn-board-note {
+  background: rgba(255, 248, 226, 0.52);
+  border-color: rgba(84, 54, 26, 0.22);
+  border-radius: 0.2rem;
+  color: #3c2813;
+  min-height: 1.95rem;
+}
+
+.parchment-game-shell .board-action-guide-main,
+.parchment-game-shell .board-action-guide-stat,
+.parchment-game-shell .board-action-guide-stat-target {
+  color: #3c2813;
+}
+
+.parchment-game-shell .board-action-guide-stat {
+  background: rgba(176, 131, 53, 0.16);
+  border-color: rgba(120, 77, 31, 0.24);
+}
+
+.parchment-game-shell .board-action-guide-stat-target {
+  background: rgba(29, 117, 94, 0.14);
+  border-color: rgba(29, 117, 94, 0.28);
+}
+
+.parchment-game-shell .board-perspective {
+  perspective: none;
+}
+
+.parchment-game-shell .board-shell {
+  animation: none;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(142, 94, 36, 0.08), transparent 19%),
+    linear-gradient(90deg, transparent 49.8%, rgba(80, 49, 22, 0.25) 49.8% 50.2%, transparent 50.2%),
+    repeating-linear-gradient(90deg, rgba(80, 49, 22, 0.12) 0 1px, transparent 1px calc(100% / 12)),
+    linear-gradient(180deg, #d7b37a, #c39459);
+  border: 0.42rem solid #3d2815;
+  border-radius: 0.2rem;
+  box-shadow:
+    0 0.55rem 1.05rem rgba(58, 36, 15, 0.22),
+    inset 0 0 0 1px rgba(255, 247, 221, 0.3),
+    inset 0 0 0 0.32rem rgba(110, 69, 30, 0.16);
+  padding: 0.48rem;
+  transform: none;
+}
+
+.parchment-game-shell .board-shell::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(100, 58, 25, 0.12), transparent 10%),
+    radial-gradient(circle at 50% 50%, transparent 10%, rgba(255, 248, 226, 0.1) 10.3% 12.4%, transparent 12.7%),
+    linear-gradient(180deg, rgba(255, 253, 239, 0.18), rgba(82, 50, 20, 0.05));
+  border: 1px solid rgba(83, 51, 23, 0.22);
+  border-radius: 0.08rem;
+  inset: 0.42rem;
+  opacity: 1;
+}
+
+.parchment-game-shell .board-shell::after {
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 4.2rem, rgba(89, 55, 24, 0.12) 4.25rem, transparent 4.35rem),
+    repeating-linear-gradient(90deg, rgba(66, 41, 19, 0.1) 0 1px, transparent 1px calc(100% / 12));
+  border-radius: 0.05rem;
+  inset: 0.48rem;
+  opacity: 0.9;
+}
+
+.parchment-game-shell .board-rank {
+  gap: 0;
+}
+
+.parchment-game-shell .board-middle {
+  gap: 0.38rem;
+  grid-template-columns: minmax(0, 1fr) 8px minmax(0, 1fr);
+  margin: 0.34rem 0;
+  min-height: clamp(3.1rem, 6.8vh, 4rem);
+}
+
+.parchment-game-shell .board-well {
+  background: rgba(232, 196, 137, 0.52);
+  border-color: rgba(75, 47, 22, 0.24);
+  border-radius: 0.16rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 250, 230, 0.25);
+  color: #3a2511;
+  min-height: 3rem;
+  padding: 0.42rem 0.62rem;
+}
+
+.parchment-game-shell .board-well::after {
+  display: none;
+}
+
+.parchment-game-shell .board-well span,
+.parchment-game-shell .board-well .text-stone-400,
+.parchment-game-shell .board-well .text-amber-50,
+.parchment-game-shell .board-well .text-emerald-100\/85 {
+  color: #3a2511;
+}
+
+.parchment-game-shell .board-well-ready {
+  border-color: rgba(29, 117, 94, 0.55);
+  box-shadow:
+    inset 0 0 0 2px rgba(29, 117, 94, 0.14),
+    0 0 0.9rem rgba(29, 117, 94, 0.1);
+}
+
+.parchment-game-shell .board-well-active {
+  border-color: rgba(144, 92, 35, 0.65);
+  box-shadow:
+    inset 0 0 0 2px rgba(176, 131, 53, 0.22),
+    0 0 0.9rem rgba(176, 131, 53, 0.14);
+}
+
+.parchment-game-shell .board-spine {
+  background: rgba(72, 44, 20, 0.55);
+  box-shadow: none;
+  opacity: 0.9;
+}
+
+.parchment-game-shell .point-surface {
+  background: transparent;
+  border-color: rgba(76, 47, 21, 0.2);
+  border-radius: 0;
+  box-shadow: none;
+  min-height: clamp(4.7rem, 9.2vh, 6.35rem);
+}
+
+.parchment-game-shell .point-surface::before {
+  background: linear-gradient(90deg, rgba(67, 41, 18, 0.12), transparent 10%, transparent 90%, rgba(67, 41, 18, 0.1));
+  opacity: 0.72;
+}
+
+.parchment-game-shell .point-surface::after {
+  display: none;
+}
+
+.parchment-game-shell .point-lane {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(87, 52, 21, 0.14) 0 0.94rem, transparent 0.99rem),
+    linear-gradient(180deg, rgba(255, 247, 224, 0.18), rgba(113, 73, 34, 0.08));
+  border-left: 1px solid rgba(80, 49, 22, 0.24);
+  border-right: 1px solid rgba(80, 49, 22, 0.12);
+  box-shadow: none;
+  clip-path: none;
+  height: 100% !important;
+  inset-inline: 0 !important;
+  opacity: 0.9;
+}
+
+.parchment-game-shell .point-lane-warm,
+.parchment-game-shell .point-lane-dark {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(87, 52, 21, 0.15) 0 0.94rem, transparent 0.99rem),
+    linear-gradient(180deg, rgba(255, 247, 224, 0.18), rgba(113, 73, 34, 0.08));
+}
+
+.parchment-game-shell .point-source .point-lane,
+.parchment-game-shell .point-selected .point-lane {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(176, 131, 53, 0.45) 0 1.08rem, transparent 1.14rem),
+    linear-gradient(180deg, rgba(255, 235, 170, 0.32), rgba(176, 131, 53, 0.12));
+  box-shadow: inset 0 0 0 2px rgba(176, 131, 53, 0.28);
+}
+
+.parchment-game-shell .point-target .point-lane {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(29, 117, 94, 0.42) 0 1.08rem, transparent 1.14rem),
+    linear-gradient(180deg, rgba(203, 245, 229, 0.3), rgba(29, 117, 94, 0.14));
+  box-shadow: inset 0 0 0 2px rgba(29, 117, 94, 0.28);
+}
+
+.parchment-game-shell .point-ai-trail .point-lane {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(43, 106, 151, 0.36) 0 1.05rem, transparent 1.12rem),
+    linear-gradient(180deg, rgba(224, 242, 254, 0.28), rgba(43, 106, 151, 0.12));
+}
+
+.parchment-game-shell .point-surface > .absolute.left-2 {
+  color: rgba(49, 30, 12, 0.72);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.parchment-game-shell .piece-rack {
+  gap: 0.12rem;
+  grid-auto-rows: clamp(1.42rem, 2.15vw, 1.78rem);
+  grid-template-columns: repeat(3, clamp(1.42rem, 2.15vw, 1.78rem));
+  height: auto;
+  padding-inline: 0.08rem;
+}
+
+.parchment-game-shell .piece-rack-top {
+  top: 1.7rem;
+}
+
+.parchment-game-shell .piece-rack-bottom {
+  bottom: 1.7rem;
+}
+
+.parchment-game-shell .horse-piece {
+  height: clamp(1.42rem, 2.15vw, 1.78rem);
+  width: clamp(1.42rem, 2.15vw, 1.78rem);
+}
+
+.parchment-game-shell .horse-piece-image {
+  display: none;
+}
+
+.parchment-game-shell .horse-piece::before {
+  border-radius: 999px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  transform: none;
+  width: 100%;
+}
+
+.parchment-game-shell .horse-piece::after {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  content: "♞";
+  display: flex;
+  font-family: Georgia, serif;
+  font-size: clamp(0.9rem, 1.45vw, 1.15rem);
+  font-weight: 700;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  line-height: 1;
+  opacity: 0.9;
+  position: absolute;
+  top: 0;
+  transform: none;
+  width: 100%;
+  z-index: 5;
+}
+
+.parchment-game-shell .white-vase-piece {
+  --piece-body: radial-gradient(circle at 34% 26%, #fffdf3 0 19%, #f2dfb9 48%, #b7935b 100%);
+  --piece-edge: rgba(91, 61, 28, 0.46);
+  color: #956728;
+}
+
+.parchment-game-shell .black-vase-piece {
+  --piece-body: radial-gradient(circle at 32% 24%, #695b48 0 13%, #11100e 45%, #050403 100%);
+  --piece-edge: rgba(235, 198, 124, 0.28);
+  color: #d6b16a;
+}
+
+.parchment-game-shell .horse-piece .piece-count-sign {
+  background: rgba(119, 40, 27, 0.95);
+  border-color: rgba(255, 232, 174, 0.82);
+  color: #fff4d5;
+  right: -0.52rem;
+}
+
+.parchment-game-shell .point-action-chip {
+  border-radius: 0.18rem;
+  font-size: 0.68rem;
+  padding: 0.28rem 0.38rem;
+}
+
+.parchment-game-shell .point-action-chip-source {
+  background: rgba(255, 240, 199, 0.92);
+  border-color: rgba(150, 98, 38, 0.6);
+  color: #4d3014;
+}
+
+.parchment-game-shell .point-action-chip-target {
+  background: rgba(225, 246, 237, 0.95);
+  border-color: rgba(29, 117, 94, 0.56);
+  color: #164c3f;
+}
+
+.parchment-game-shell .point-step-chip {
+  background: rgba(61, 39, 17, 0.12);
+  border-color: rgba(61, 39, 17, 0.18);
+  color: inherit;
+}
+
+.parchment-game-shell .point-source-beacon {
+  background: radial-gradient(circle, rgba(176, 131, 53, 0.23), rgba(176, 131, 53, 0.06) 55%, transparent 72%);
+  border-color: rgba(176, 131, 53, 0.38);
+}
+
+.parchment-game-shell .point-target-beacon {
+  background: radial-gradient(circle, rgba(29, 117, 94, 0.23), rgba(29, 117, 94, 0.06) 55%, transparent 72%);
+  border-color: rgba(29, 117, 94, 0.38);
+}
+
+.parchment-game-shell .dice-tray {
+  animation: none;
+  border-radius: 0.2rem;
+}
+
+.parchment-game-shell .dice-tray h2,
+.parchment-game-shell .dice-tray p,
+.parchment-game-shell .dice-tray .text-amber-100 {
+  color: #3a2511;
+}
+
+.parchment-game-shell .die-body {
+  background:
+    radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.94), transparent 18%),
+    linear-gradient(145deg, #fbf4e5, #d9c19c 58%, #aa8455);
+  border-color: rgba(77, 47, 20, 0.38);
+  box-shadow:
+    inset 2px 2px 5px rgba(255, 255, 255, 0.68),
+    inset -3px -4px 7px rgba(83, 54, 23, 0.24),
+    0 5px 12px rgba(74, 46, 18, 0.2);
+}
+
+.parchment-game-shell .die-pip {
+  background: #17100a;
+}
+
+.parchment-game-shell .feedback-enter,
+.parchment-game-shell .parchment-play-area > div > section,
+.parchment-game-shell .parchment-play-area > section {
+  border-radius: 0.18rem;
+  color: #3a2511;
+}
+
+.parchment-game-shell .feedback-enter .text-stone-100,
+.parchment-game-shell .feedback-enter .text-stone-200,
+.parchment-game-shell .feedback-enter .text-stone-300,
+.parchment-game-shell .feedback-enter .text-amber-50,
+.parchment-game-shell .feedback-enter .text-amber-200\/75,
+.parchment-game-shell .parchment-play-area section .text-stone-100,
+.parchment-game-shell .parchment-play-area section .text-stone-200,
+.parchment-game-shell .parchment-play-area section .text-stone-300,
+.parchment-game-shell .parchment-play-area section .text-stone-400,
+.parchment-game-shell .parchment-play-area section .text-amber-50,
+.parchment-game-shell .parchment-play-area section .text-amber-100,
+.parchment-game-shell .parchment-play-area section .text-amber-200\/70,
+.parchment-game-shell .parchment-play-area section .text-amber-200\/75,
+.parchment-game-shell .parchment-play-area section .text-amber-100\/80 {
+  color: #3a2511;
+}
+
+.parchment-game-shell .parchment-play-area section .bg-black\/18,
+.parchment-game-shell .parchment-play-area section .bg-black\/20,
+.parchment-game-shell .parchment-play-area section .bg-\[\#20110f\]\/88,
+.parchment-game-shell .parchment-play-area section .bg-\[\#241210\]\/90 {
+  background-color: rgba(255, 247, 226, 0.38);
+}
+
+.parchment-game-shell .parchment-play-area section .border-stone-200\/8,
+.parchment-game-shell .parchment-play-area section .border-stone-200\/10,
+.parchment-game-shell .parchment-play-area section .border-amber-200\/20,
+.parchment-game-shell .parchment-play-area section .border-amber-200\/25 {
+  border-color: rgba(84, 54, 26, 0.2);
+}
+
+.parchment-game-shell .parchment-play-area section .bg-amber-100\/10,
+.parchment-game-shell .parchment-play-area section .bg-amber-100\/12 {
+  background-color: rgba(176, 131, 53, 0.14);
+}
+
+.parchment-game-shell .parchment-play-area section .bg-sky-300\/10,
+.parchment-game-shell .ai-turn-board-note {
+  background-color: rgba(61, 115, 145, 0.12);
+}
+
+.parchment-game-shell .ai-trail-chip-from,
+.parchment-game-shell .ai-trail-chip-to {
+  background: rgba(35, 85, 112, 0.88);
+  color: #eef8ff;
+}
+
+.parchment-game-shell .ai-trail-chip-hit {
+  background: rgba(126, 43, 29, 0.92);
+  color: #fff1e8;
+}
+
+@media (max-width: 1279px) {
+  .parchment-game-layout {
+    grid-template-areas:
+      "topbar"
+      "play"
+      "left"
+      "right";
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 1100px;
+  }
+
+  .character-scroll-panel {
+    min-height: 0;
+  }
+
+  .character-portrait {
+    height: 15rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .parchment-game-shell .parchment-topbar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .topbar-actions {
+    flex-wrap: wrap;
+  }
+
+  .topbar-icon-button {
+    min-width: 2.8rem;
+  }
+
+  .parchment-game-shell .board-scroll {
+    overflow-x: auto;
+  }
+
+  .parchment-game-shell .board-stage {
+    min-width: 760px;
+  }
+}

@@ -3079,3 +3079,40 @@ No local web service was started.
 ### Notes
 
 Future development should use `/Users/lizhe/Projects/shuanglu` as the primary workspace. The old iCloud path should no longer be treated as the program host directory.
+
+## 2026-06-11 21:49 CST
+
+### Objective
+
+Restyle the stable 2D game screen toward the approved parchment reference: lighter Tang-Song board presentation, stronger character-side composition, and clearer one-screen play readability.
+
+### Assumptions
+
+- This pass is a visual/interface skin pass only. It must not change rule logic, legal move generation, AI decision logic, online room behavior, or victory detection.
+- The 2D board should favor clarity over final 3D asset fidelity. Bottle-shaped horses remain the desired 3D/material direction, but this 2D pass uses smaller round token-style pieces because the reference image is easier to read that way.
+- Local runtime policy remains unchanged: do not start a local Next.js service unless explicitly requested.
+
+### Changes
+
+- Reworked the 2D `GameScreen` shell into a light parchment layout with:
+  - Top brand/chapter/action bar.
+  - Left and right character panels.
+  - Central board-first play area.
+  - Compact status, dice, coach, and feedback surfaces.
+- Rebuilt `CharacterPanel` as a scroll-paper style side panel using the existing Song decorative character artwork.
+- Changed 2D board point lanes from dark triangular lanes to flatter parchment board columns so the board more closely matches the reference composition.
+- Added a scoped `.parchment-game-shell` CSS skin that restyles board material, point states, dice, tokens, side panels, and bottom feedback panels without touching the 3D route.
+- In the 2D skin, piece visuals are rendered as smaller round horse tokens for clearer point occupancy and less visual clutter.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+No local web service was started.
+```
+
+### Notes
+
+This is a code-level and build-verified UI pass. It still needs cloud deployment and browser visual review against the supplied reference image before it should be treated as approved art direction.

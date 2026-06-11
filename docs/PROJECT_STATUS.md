@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-11 21:10 CST
+Last updated: 2026-06-11 21:49 CST
 
 ## Current Target
 
@@ -118,6 +118,12 @@ Implemented:
 - Added `docs/CLOUD_ASSETS.md` as the current cloud asset inventory and handoff document.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - BigNAS Git mirror configured as local remote `bignas` at `uway-nas:/var/services/homes/louieadmin/git/shuanglu.git`.
+- Restyled the stable 2D board screen toward the approved light parchment reference:
+  - Top brand/chapter/action bar.
+  - Left and right character-side panels.
+  - Central board-first play area.
+  - Light parchment board material, smaller round 2D horse tokens, restyled dice, and paper-like turn feedback panels.
+  - This is build-verified code, but still needs cloud deployment and browser visual approval.
 - Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.
