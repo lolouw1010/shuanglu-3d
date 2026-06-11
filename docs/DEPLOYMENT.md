@@ -289,6 +289,61 @@ Notes:
 - No local web service was started.
 - The deployment used a Git archive from the synced commit rather than an uncommitted working tree.
 
+## 2026-06-11 2D State Reference Deployment
+
+Status: deployed to Aliyun GD; GitHub synced; BigNAS push pending.
+
+Purpose:
+
+- Publish the refined 2D parchment state layout based on two additional state reference images.
+- Reduce the 2D top HUD to round/current action plus dice.
+- Move borne-off and bar state emphasis into side-panel circular tracks.
+
+Source:
+
+```txt
+Commit: bcf8e2f13fe77cfb9b55d92f4274cbb15a522406
+Local workspace: /Users/lizhe/Projects/shuanglu
+```
+
+Deployment package:
+
+```txt
+/tmp/shuanglu-2d-state-bcf8e2f.tgz
+```
+
+Server paths:
+
+```txt
+Release: /opt/shuanglu_release_2d_state_20260611_2330
+Backup: /opt/shuanglu_backups/shuanglu_before_2d_state_20260611_2330
+Production: /opt/shuanglu
+```
+
+Verification:
+
+```txt
+npx tsc --noEmit passed locally.
+npm test passed locally: 10 test files, 38 tests.
+npm run build passed locally.
+Server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Public / returned HTTP 200.
+Public /3d returned HTTP 200.
+Reference images returned HTTP 200 from /assets/concepts/.
+Public CSS contains parchment-round-strip, round-status-plaque, character-track-slots, and character-track-slot-filled.
+```
+
+Git mirror note:
+
+```txt
+GitHub main: bcf8e2f
+BigNAS main: f9cb3b2
+```
+
+`git push bignas main` hung twice during receive-pack. `git ls-remote bignas refs/heads/main` still responded, so the NAS remote is reachable but not currently accepting the push reliably. Retry BigNAS sync later before relying on it as current.
+
 Source commit:
 
 ```txt

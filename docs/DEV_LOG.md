@@ -3176,3 +3176,31 @@ No local web service was started.
 ### Notes
 
 The supplied reference images are UI art-direction references only. They must not be described as historical evidence or exact Tang-Song restoration.
+
+### Cloud Deployment
+
+Deployed the 2D state-reference refinement to Aliyun GD.
+
+```txt
+Commit: bcf8e2f
+Artifact: /tmp/shuanglu-2d-state-bcf8e2f.tgz
+Release: /opt/shuanglu_release_2d_state_20260611_2330
+Backup: /opt/shuanglu_backups/shuanglu_before_2d_state_20260611_2330
+Public URL: http://47.121.182.144/
+```
+
+### Cloud Verification
+
+```txt
+Server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Public / returned HTTP 200.
+Public /3d returned HTTP 200.
+Reference images returned HTTP 200 from /assets/concepts/.
+Public CSS contains parchment-round-strip, round-status-plaque, character-track-slots, and character-track-slot-filled.
+```
+
+### Git Sync Note
+
+GitHub `main` was updated to `bcf8e2f`. BigNAS `git push bignas main` hung twice during the receive-pack phase; a short `git ls-remote bignas refs/heads/main` still works but reports `f9cb3b2`. BigNAS should be retried later before treating it as current.

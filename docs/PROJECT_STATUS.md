@@ -117,7 +117,7 @@ Implemented:
 - MiniMac operating policy is now cloud-only runtime testing: do not run the Shuanglu web service locally unless explicitly requested.
 - Added `docs/CLOUD_ASSETS.md` as the current cloud asset inventory and handoff document.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
-- BigNAS Git mirror configured as local remote `bignas` at `uway-nas:/var/services/homes/louieadmin/git/shuanglu.git`.
+- BigNAS Git mirror configured as local remote `bignas` at `uway-nas:/var/services/homes/louieadmin/git/shuanglu.git`; latest push attempt for `bcf8e2f` is pending because `git push bignas main` hung during receive-pack, while `git ls-remote` still reports `f9cb3b2`.
 - Restyled the stable 2D board screen toward the approved light parchment reference:
   - Top brand/chapter/action bar.
   - Left and right character-side panels.
@@ -130,6 +130,7 @@ Implemented:
   - Reference states archived at `public/assets/concepts/2d-parchment-state-initial.png` and `public/assets/concepts/2d-parchment-state-progress.png`.
   - 2D top gameplay HUD now focuses on round/current action plus dice.
   - Side-panel `已出马` and `马栏` now use circular state tracks with counts.
+  - Deployed to Aliyun GD at `http://47.121.182.144/` from commit `bcf8e2f`.
 - Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.
