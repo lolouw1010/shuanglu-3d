@@ -3204,3 +3204,36 @@ Public CSS contains parchment-round-strip, round-status-plaque, character-track-
 ### Git Sync Note
 
 GitHub `main` was updated to `bcf8e2f`. BigNAS `git push bignas main` hung twice during the receive-pack phase; a short `git ls-remote bignas refs/heads/main` still works but reports `f9cb3b2`. BigNAS should be retried later before treating it as current.
+
+## 2026-06-12 00:27 CST
+
+### Objective
+
+Fix the 2D character panels after user review: the previous decorative character images were cropped poorly in the live game state, with heads not visible, and they did not use the higher-quality user-provided reference artwork.
+
+### Findings
+
+- The previous `song-left-observers.png` and `song-right-observer.png` assets were scene/decor images, not character panel portraits.
+- The CSS used `object-fit: cover` plus manual object positions, which could crop heads and upper body content inside the side panels.
+- The user-provided 2D reference images already contain better scroll-framed character art, so continuing to use the older decor images was the wrong asset choice.
+
+### Changes
+
+- Cropped portrait assets from the approved 2D state reference image:
+  - `public/assets/characters/white-reference-portrait.png`
+  - `public/assets/characters/black-reference-portrait.png`
+- Updated `CharacterPanel` to use those cropped user-reference portraits.
+- Changed character portrait CSS from `cover` to `contain` so heads and upper bodies remain visible.
+- Strengthened the side-panel paper/scroll framing so the panel reads less like a flat card and more like the supplied reference.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+```
+
+### Notes
+
+This correction specifically addresses visual asset choice and crop safety. The next verification step must include an actual game-state browser screenshot, not only HTTP/CSS checks.

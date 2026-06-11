@@ -9,8 +9,8 @@ type CharacterPanelProps = {
 
 function portraitPath(player: Character["player"]): string {
   return player === "white"
-    ? "/assets/decor/song-left-observers.png"
-    : "/assets/decor/song-right-observer.png";
+    ? "/assets/characters/white-reference-portrait.png"
+    : "/assets/characters/black-reference-portrait.png";
 }
 
 function sideLabel(player: Character["player"]): string {

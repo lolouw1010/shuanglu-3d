@@ -1401,25 +1401,43 @@ button:focus-visible {
 
 .character-scroll-panel {
   background:
-    linear-gradient(180deg, rgba(251, 239, 210, 0.86), rgba(225, 193, 139, 0.64)),
-    radial-gradient(ellipse at 50% 38%, rgba(255, 255, 255, 0.18), transparent 55%);
-  border: 1px solid rgba(77, 48, 22, 0.28);
+    linear-gradient(180deg, rgba(252, 243, 220, 0.94), rgba(229, 201, 151, 0.72)),
+    radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.26), transparent 58%);
+  border: 1px solid rgba(68, 42, 18, 0.34);
+  border-radius: 0.12rem;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 252, 235, 0.34),
-    0 0.75rem 1.8rem rgba(72, 47, 21, 0.11);
+    inset 0 0 0 1px rgba(255, 252, 235, 0.55),
+    inset 0 0 0 0.38rem rgba(123, 79, 34, 0.08),
+    0 0.75rem 1.8rem rgba(72, 47, 21, 0.12);
   color: var(--ink);
   min-height: clamp(29rem, calc(100vh - 7.2rem), 48rem);
   overflow: hidden;
-  padding: 0.95rem;
+  padding: 0.78rem;
   position: relative;
 }
 
 .character-scroll-panel::before {
-  border: 1px solid rgba(102, 66, 31, 0.18);
+  background:
+    linear-gradient(90deg, rgba(81, 51, 22, 0.2), transparent 11%, transparent 89%, rgba(81, 51, 22, 0.18)),
+    linear-gradient(180deg, rgba(112, 70, 29, 0.1), transparent 18%, transparent 82%, rgba(112, 70, 29, 0.1));
+  border: 1px solid rgba(102, 66, 31, 0.22);
   content: "";
-  inset: 0.42rem;
+  inset: 0.34rem;
   pointer-events: none;
   position: absolute;
+  z-index: 4;
+}
+
+.character-scroll-panel::after {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 252, 236, 0.5), transparent 52%),
+    repeating-linear-gradient(0deg, rgba(85, 55, 25, 0.035) 0 1px, transparent 1px 9px);
+  content: "";
+  inset: 0;
+  opacity: 0.68;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
 }
 
 .character-scroll-active {
@@ -1432,7 +1450,7 @@ button:focus-visible {
 
 .character-scroll-heading {
   position: relative;
-  z-index: 2;
+  z-index: 5;
 }
 
 .character-scroll-heading p {
@@ -1457,16 +1475,23 @@ button:focus-visible {
 }
 
 .character-portrait {
-  height: clamp(14rem, 31vh, 22rem);
-  margin: 0.45rem -0.95rem 0;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 232, 0.42), rgba(211, 174, 108, 0.18)),
+    radial-gradient(ellipse at 50% 100%, rgba(89, 55, 24, 0.16), transparent 54%);
+  border: 1px solid rgba(72, 45, 21, 0.24);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 251, 233, 0.42),
+    0 0.22rem 0.55rem rgba(71, 45, 18, 0.08);
+  height: clamp(17.5rem, 37vh, 25rem);
+  margin: 0.48rem 0 0;
   overflow: hidden;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .character-portrait::after {
   background:
-    linear-gradient(180deg, transparent 60%, rgba(232, 202, 150, 0.9)),
+    linear-gradient(180deg, rgba(255, 252, 236, 0.1), transparent 20%, transparent 74%, rgba(232, 202, 150, 0.38)),
     radial-gradient(ellipse at 50% 88%, rgba(82, 54, 27, 0.18), transparent 52%);
   content: "";
   inset: 0;
@@ -1476,19 +1501,20 @@ button:focus-visible {
 
 .character-portrait img {
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center top;
   pointer-events: none;
   width: 100%;
 }
 
 .character-portrait-white img {
-  object-position: 28% 100%;
-  transform: scale(1.08);
+  object-position: center top;
+  transform: scale(1);
 }
 
 .character-portrait-black img {
-  object-position: 58% 100%;
-  transform: scale(1.05);
+  object-position: center top;
+  transform: scale(1);
 }
 
 .character-quote {
