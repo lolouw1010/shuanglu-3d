@@ -146,14 +146,9 @@ The actual cloud game-state screenshot confirmed that both character heads and u
 
 ## Git Sync
 
-GitHub and BigNAS were verified after resolving the earlier BigNAS receive-pack hang:
+GitHub and BigNAS were synchronized after resolving the earlier BigNAS receive-pack hang.
 
-```txt
-origin/main: 092ace884c9ca97c315b4273f1e83933bdf5d962
-bignas/main: 092ace884c9ca97c315b4273f1e83933bdf5d962
-```
-
-The earlier BigNAS issue was not a permanent remote failure. A later push with progress/trace completed successfully.
+The earlier BigNAS issue was not a permanent remote failure. A later push with progress/trace completed successfully, and closeout verification confirmed local `HEAD`, `origin/main`, and `bignas/main` matched.
 
 ## Open Follow-Ups
 
