@@ -3113,6 +3113,30 @@ npm run build passed.
 No local web service was started.
 ```
 
+### Cloud Deployment
+
+Deployed the parchment 2D interface pass to Aliyun GD after GitHub and BigNAS sync.
+
+```txt
+Commit: 1f588f3
+Artifact: /tmp/shuanglu-parchment-1f588f3.tgz
+Release: /opt/shuanglu_release_parchment_20260611_2156
+Backup: /opt/shuanglu_backups/shuanglu_before_parchment_20260611_2156
+Public URL: http://47.121.182.144/
+```
+
+### Cloud Verification
+
+```txt
+Server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Public / returned HTTP 200.
+Public /3d returned HTTP 200.
+Internal http://127.0.0.1:3002/ returned HTTP 200.
+Public CSS contains parchment-game-shell, character-scroll-panel, topbar-icon-button, and point-action-chip.
+```
+
 ### Notes
 
-This is a code-level and build-verified UI pass. It still needs cloud deployment and browser visual review against the supplied reference image before it should be treated as approved art direction.
+This is deployed and build-verified, but it still needs human browser visual approval against the supplied reference image. No local web service was started.

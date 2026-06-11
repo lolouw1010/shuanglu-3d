@@ -239,6 +239,56 @@ Open deployment note:
 
 Status: deployed.
 
+## 2026-06-11 Parchment 2D Interface Deployment
+
+Status: deployed.
+
+Purpose:
+
+- Publish the light parchment 2D interface pass based on the approved reference composition.
+- Keep the existing rules engine, AI logic, online room model, and isolated `/3d` route unchanged.
+
+Source:
+
+```txt
+Commit: 1f588f3178bdcba40820e0d1b583a9b4a822afd4
+Local workspace: /Users/lizhe/Projects/shuanglu
+```
+
+Deployment package:
+
+```txt
+/tmp/shuanglu-parchment-1f588f3.tgz
+```
+
+Server paths:
+
+```txt
+Release: /opt/shuanglu_release_parchment_20260611_2156
+Backup: /opt/shuanglu_backups/shuanglu_before_parchment_20260611_2156
+Production: /opt/shuanglu
+```
+
+Verification:
+
+```txt
+npx tsc --noEmit passed locally.
+npm test passed locally: 10 test files, 38 tests.
+npm run build passed locally.
+Server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Public / returned HTTP 200.
+Public /3d returned HTTP 200.
+Internal http://127.0.0.1:3002/ returned HTTP 200.
+Public CSS contains parchment-game-shell, character-scroll-panel, topbar-icon-button, and point-action-chip.
+```
+
+Notes:
+
+- No local web service was started.
+- The deployment used a Git archive from the synced commit rather than an uncommitted working tree.
+
 Source commit:
 
 ```txt

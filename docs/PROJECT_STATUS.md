@@ -123,7 +123,8 @@ Implemented:
   - Left and right character-side panels.
   - Central board-first play area.
   - Light parchment board material, smaller round 2D horse tokens, restyled dice, and paper-like turn feedback panels.
-  - This is build-verified code, but still needs cloud deployment and browser visual approval.
+  - Deployed to Aliyun GD at `http://47.121.182.144/` from commit `1f588f3`.
+  - This is build-verified and cloud-verified, but still needs human browser visual approval.
 - Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.
@@ -861,7 +862,7 @@ http://47.121.182.144/3d
 - The Aliyun GD server currently runs Node `18.19.1`; `npm ci` completed, but one transitive development dependency warned that newer Node versions are preferred.
 - The deployed public endpoint is plain HTTP on the server IP. A production hostname and HTTPS certificate are still needed before a public launch.
 - The server could not reliably fetch the GitHub repository directly, so deployments currently use local Git archive upload from the synced commit.
-- The latest visual deployment was made from a local working-tree archive, then committed and pushed to GitHub as `47d6f60`.
+- The latest visual deployment was made from Git commit `1f588f3` using local Git archive upload.
 - Online rooms are currently in-memory only. A PM2 restart will clear active rooms.
 - Online room access is intentionally lightweight for testing and does not yet include accounts, passwords, or private invites.
 - Online clients use polling rather than WebSocket. This is acceptable for the first turn-based friend-play test but should be reviewed after playtesting.
