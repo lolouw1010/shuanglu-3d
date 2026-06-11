@@ -3237,3 +3237,28 @@ npm run build passed.
 ### Notes
 
 This correction specifically addresses visual asset choice and crop safety. The next verification step must include an actual game-state browser screenshot, not only HTTP/CSS checks.
+
+### Cloud Deployment
+
+Deployed the reference-portrait correction to Aliyun GD.
+
+```txt
+Commit: bc7485d
+Artifact: /tmp/shuanglu-reference-portraits-bc7485d.tgz
+Release: /opt/shuanglu_release_reference_portraits_20260612_0032
+Backup: /opt/shuanglu_backups/shuanglu_before_reference_portraits_20260612_0032
+Public URL: http://47.121.182.144/
+```
+
+### Cloud Verification
+
+```txt
+Server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Public / returned HTTP 200.
+Public character portrait assets returned HTTP 200.
+Created online room 818E6A for visual check.
+Captured actual game-state screenshot at /tmp/shuanglu-screens/game-reference-portraits.png.
+Visual check confirmed both character heads and upper bodies are visible in the live game layout.
+```

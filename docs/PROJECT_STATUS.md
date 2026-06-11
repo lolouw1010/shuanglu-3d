@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-11 23:08 CST
+Last updated: 2026-06-12 00:38 CST
 
 ## Current Target
 
@@ -131,6 +131,11 @@ Implemented:
   - 2D top gameplay HUD now focuses on round/current action plus dice.
   - Side-panel `已出马` and `马栏` now use circular state tracks with counts.
   - Deployed to Aliyun GD at `http://47.121.182.144/` from commit `bcf8e2f`.
+- Replaced the 2D character side-panel portraits with crops from the user-provided reference UI:
+  - `public/assets/characters/white-reference-portrait.png`.
+  - `public/assets/characters/black-reference-portrait.png`.
+  - Deployed to Aliyun GD from commit `bc7485d`.
+  - Actual cloud game-state screenshot check confirmed both character heads and upper bodies are visible.
 - Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.

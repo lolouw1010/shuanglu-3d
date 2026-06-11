@@ -344,6 +344,53 @@ BigNAS main: f9cb3b2
 
 `git push bignas main` hung twice during receive-pack. `git ls-remote bignas refs/heads/main` still responded, so the NAS remote is reachable but not currently accepting the push reliably. Retry BigNAS sync later before relying on it as current.
 
+## 2026-06-12 Reference Portrait Deployment
+
+Status: deployed to Aliyun GD; GitHub synced; BigNAS still pending from the previous receive-pack issue.
+
+Purpose:
+
+- Replace the 2D side-panel portraits with crops from the user-provided reference UI.
+- Fix the live game-state crop problem where character heads could be hidden.
+- Move portrait rendering from `object-fit: cover` to `object-fit: contain` so heads and upper bodies remain visible.
+
+Source:
+
+```txt
+Commit: bc7485d
+Local workspace: /Users/lizhe/Projects/shuanglu
+```
+
+Deployment package:
+
+```txt
+/tmp/shuanglu-reference-portraits-bc7485d.tgz
+```
+
+Server paths:
+
+```txt
+Release: /opt/shuanglu_release_reference_portraits_20260612_0032
+Backup: /opt/shuanglu_backups/shuanglu_before_reference_portraits_20260612_0032
+Production: /opt/shuanglu
+```
+
+Verification:
+
+```txt
+npx tsc --noEmit passed locally.
+npm test passed locally: 10 test files, 38 tests.
+npm run build passed locally.
+Server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Public / returned HTTP 200.
+Public character portrait assets returned HTTP 200.
+Created online room 818E6A for visual check.
+Captured actual game-state screenshot at /tmp/shuanglu-screens/game-reference-portraits.png.
+Visual check confirmed both character heads and upper bodies are visible in the live game layout.
+```
+
 Source commit:
 
 ```txt
