@@ -30,6 +30,16 @@ The current MVP focuses on a playable rules baseline:
 
 Story-mode character skills, Quick Mode, crushing win, and the full 3D room/table scene are future variants or experiments, not MVP requirements.
 
+## Local Workspace
+
+Recommended primary local workspace:
+
+```txt
+/Users/lizhe/Projects/shuanglu
+```
+
+Avoid using the iCloud/Obsidian directory as the main program workspace because `.git`, `.next`, and `node_modules` create many small files and cache churn.
+
 ## Commands
 
 ```bash

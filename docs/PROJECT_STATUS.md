@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-05-31 00:20 CST
+Last updated: 2026-06-11 21:10 CST
 
 ## Current Target
 
@@ -118,6 +118,7 @@ Implemented:
 - Added `docs/CLOUD_ASSETS.md` as the current cloud asset inventory and handoff document.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - BigNAS Git mirror configured as local remote `bignas` at `uway-nas:/var/services/homes/louieadmin/git/shuanglu.git`.
+- Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.
 - Updated `README.md` with live cloud URLs, current MVP scope, architecture, and historical claim boundary notes.
@@ -241,6 +242,22 @@ Result:
 ```txt
 Next.js production build passed.
 8 test files passed, 27 tests passed.
+```
+
+Last verified locally on 2026-06-11 21:10 CST from `/Users/lizhe/Projects/shuanglu`:
+
+```bash
+npm install
+npm test
+npx tsc --noEmit
+```
+
+Result:
+
+```txt
+Dependencies installed.
+10 test files passed, 38 tests passed.
+TypeScript no-emit check passed.
 ```
 
 Last verified on 2026-05-30 00:45 CST:

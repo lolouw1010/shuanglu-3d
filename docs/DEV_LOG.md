@@ -3052,3 +3052,30 @@ Push the existing Shuanglu program to the BigNAS-hosted Git repository as an add
 - Create a bare repository at `/var/services/homes/louieadmin/git/shuanglu.git` if it does not already exist.
 - Add local Git remote `bignas`.
 - Push `main` to the NAS remote and verify with `git ls-remote`.
+
+## 2026-06-11 21:10 CST
+
+### Objective
+
+Move the active Shuanglu development workspace out of the iCloud/Obsidian directory and into a normal local project directory before continuing development in a new conversation.
+
+### Changes
+
+- Created a clean local clone at `/Users/lizhe/Projects/shuanglu`.
+- Cloned from GitHub at `git@github.com:louiezhelee-uway/shuanglu.git`.
+- Added the BigNAS remote `bignas` pointing to `uway-nas:/var/services/homes/louieadmin/git/shuanglu.git`.
+- Installed dependencies in the new workspace.
+- Confirmed the new workspace is clean and at commit `ca6b356` before documenting the migration.
+
+### Verification
+
+```txt
+npm install completed.
+npm test passed: 10 test files, 38 tests.
+npx tsc --noEmit passed.
+No local web service was started.
+```
+
+### Notes
+
+Future development should use `/Users/lizhe/Projects/shuanglu` as the primary workspace. The old iCloud path should no longer be treated as the program host directory.
