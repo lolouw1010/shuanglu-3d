@@ -344,9 +344,17 @@ BigNAS main: f9cb3b2
 
 `git push bignas main` hung twice during receive-pack. `git ls-remote bignas refs/heads/main` still responded, so the NAS remote is reachable but not currently accepting the push reliably. Retry BigNAS sync later before relying on it as current.
 
+Resolution on 2026-06-12:
+
+```txt
+git push --progress bignas main succeeded.
+GitHub main: 092ace8
+BigNAS main: 092ace8
+```
+
 ## 2026-06-12 Reference Portrait Deployment
 
-Status: deployed to Aliyun GD; GitHub synced; BigNAS still pending from the previous receive-pack issue.
+Status: deployed to Aliyun GD; GitHub synced; BigNAS synced after a later retry with progress output.
 
 Purpose:
 

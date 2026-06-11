@@ -7,6 +7,7 @@ Last updated: 2026-06-11 CST
 - `PROJECT_STATUS.md` records the current product state, verified commands, known risks, and next engineering priorities.
 - `DEV_LOG.md` records chronological development work and decisions as they happened.
 - `DEPLOYMENT.md` records Aliyun GD deployment history and operational verification.
+- `WORK_SUMMARY_2026-06-12.md` records the June 12 2D interface work summary, deployment verification, and Git sync state.
 
 ## Rules And Scope
 

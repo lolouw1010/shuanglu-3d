@@ -3261,4 +3261,33 @@ Public character portrait assets returned HTTP 200.
 Created online room 818E6A for visual check.
 Captured actual game-state screenshot at /tmp/shuanglu-screens/game-reference-portraits.png.
 Visual check confirmed both character heads and upper bodies are visible in the live game layout.
+
+## 2026-06-12 00:55 CST
+
+### Objective
+
+Create a concise daily work summary and synchronize the repository to both GitHub and BigNAS.
+
+### Changes
+
+- Added `docs/WORK_SUMMARY_2026-06-12.md` covering:
+  - Parchment 2D interface work.
+  - Additional state reference image archival.
+  - `ART_DIRECTION_2D.md`.
+  - Round/current-action HUD and side-panel state tracks.
+  - Reference portrait correction.
+  - Aliyun deployment and verification.
+  - Actual game-state screenshot verification.
+  - GitHub and BigNAS sync state.
+- Updated `docs/DOCUMENTATION_INDEX.md` to include the daily summary.
+- Updated `docs/PROJECT_STATUS.md` and `docs/DEPLOYMENT.md` to show that the earlier BigNAS receive-pack hang was resolved.
+
+### Git Verification
+
+```txt
+origin/main: 092ace884c9ca97c315b4273f1e83933bdf5d962
+bignas/main: 092ace884c9ca97c315b4273f1e83933bdf5d962
+```
+
+After this log entry is committed, verify both remotes again at the resulting commit.
 ```

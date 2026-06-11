@@ -117,7 +117,7 @@ Implemented:
 - MiniMac operating policy is now cloud-only runtime testing: do not run the Shuanglu web service locally unless explicitly requested.
 - Added `docs/CLOUD_ASSETS.md` as the current cloud asset inventory and handoff document.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
-- BigNAS Git mirror configured as local remote `bignas` at `uway-nas:/var/services/homes/louieadmin/git/shuanglu.git`; latest push attempt for `bcf8e2f` is pending because `git push bignas main` hung during receive-pack, while `git ls-remote` still reports `f9cb3b2`.
+- BigNAS Git mirror configured as local remote `bignas` at `uway-nas:/var/services/homes/louieadmin/git/shuanglu.git`; the earlier receive-pack hang was resolved, and `bignas/main` was verified at `092ace8` alongside GitHub.
 - Restyled the stable 2D board screen toward the approved light parchment reference:
   - Top brand/chapter/action bar.
   - Left and right character-side panels.
