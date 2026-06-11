@@ -1342,6 +1342,63 @@ button:focus-visible {
   align-items: stretch;
 }
 
+.parchment-round-strip {
+  align-items: center;
+  display: flex;
+  gap: 1.15rem;
+  justify-content: center;
+  min-height: 4.6rem;
+}
+
+.round-status-plaque {
+  align-items: center;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 252, 236, 0.5) 9%, rgba(255, 252, 236, 0.78) 50%, rgba(255, 252, 236, 0.5) 91%, transparent),
+    linear-gradient(180deg, #f1dfb7, #d9b87e);
+  border: 1px solid rgba(82, 50, 22, 0.42);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 254, 240, 0.46),
+    0 0.32rem 0.72rem rgba(74, 48, 20, 0.12);
+  color: #2d1b0c;
+  display: inline-flex;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.55vw, 1.45rem);
+  gap: 0.85rem;
+  min-width: min(34vw, 350px);
+  padding: 0.55rem 1.4rem;
+  position: relative;
+  text-align: center;
+}
+
+.round-status-plaque::before {
+  background:
+    linear-gradient(180deg, #3b2614, #1a1008);
+  border: 1px solid rgba(205, 163, 87, 0.58);
+  box-shadow: inset 0 0 0 1px rgba(255, 227, 156, 0.16);
+  content: "";
+  inset: 0.24rem auto 0.24rem 0.24rem;
+  position: absolute;
+  width: 42%;
+  z-index: 0;
+}
+
+.round-status-plaque span,
+.round-status-plaque strong {
+  position: relative;
+  z-index: 1;
+}
+
+.round-status-plaque span {
+  color: #ffe9ad;
+  flex: 0 0 42%;
+  font-weight: 700;
+}
+
+.round-status-plaque strong {
+  flex: 1;
+  font-weight: 700;
+}
+
 .character-scroll-panel {
   background:
     linear-gradient(180deg, rgba(251, 239, 210, 0.86), rgba(225, 193, 139, 0.64)),
@@ -1445,7 +1502,8 @@ button:focus-visible {
 }
 
 .character-skill-box,
-.character-token-box {
+.character-token-box,
+.character-track {
   background: rgba(255, 247, 225, 0.42);
   border: 1px solid rgba(84, 54, 26, 0.2);
   box-shadow: inset 0 0 0 1px rgba(255, 252, 236, 0.25);
@@ -1481,32 +1539,65 @@ button:focus-visible {
 }
 
 .character-token-box {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   display: grid;
-  gap: 0;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.52rem;
+  grid-template-columns: 1fr;
 }
 
-.character-token-box div {
-  padding: 0.58rem 0.65rem;
-  text-align: center;
+.character-track {
+  padding: 0.55rem 0.62rem 0.62rem;
 }
 
-.character-token-box div + div {
-  border-left: 1px solid rgba(84, 54, 26, 0.18);
+.character-track-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
 }
 
-.character-token-box p {
+.character-track-heading span {
   color: #6d502e;
   font-size: 0.76rem;
+  font-weight: 700;
 }
 
-.character-token-box span {
+.character-track-heading strong {
   color: #2b1b0d;
-  display: block;
-  font-family: var(--font-display);
-  font-size: 1.7rem;
-  line-height: 1.1;
-  margin-top: 0.18rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.character-track-slots {
+  display: grid;
+  gap: 0.28rem;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.character-track-slots span {
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at 42% 35%, rgba(255, 255, 255, 0.32), transparent 34%),
+    linear-gradient(145deg, rgba(242, 216, 167, 0.48), rgba(158, 112, 57, 0.2));
+  border: 1px solid rgba(95, 62, 29, 0.28);
+  border-radius: 999px;
+  box-shadow:
+    inset 0 0.14rem 0.24rem rgba(90, 57, 24, 0.14),
+    0 1px 0 rgba(255, 252, 234, 0.48);
+  min-width: 0;
+}
+
+.character-track-slots .character-track-slot-filled {
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255, 245, 204, 0.42), transparent 21%),
+    linear-gradient(145deg, #1b1712, #050403 68%, #4c371d);
+  border-color: rgba(218, 177, 98, 0.5);
+  box-shadow:
+    inset 0.08rem 0.08rem 0.18rem rgba(255, 230, 156, 0.18),
+    inset -0.12rem -0.16rem 0.22rem rgba(0, 0, 0, 0.6),
+    0 0.12rem 0.18rem rgba(48, 30, 12, 0.3);
 }
 
 .parchment-game-shell .board-scene,
@@ -1837,7 +1928,12 @@ button:focus-visible {
 
 .parchment-game-shell .dice-tray {
   animation: none;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   border-radius: 0.2rem;
+  min-width: 16rem;
+  padding: 0;
 }
 
 .parchment-game-shell .dice-tray h2,

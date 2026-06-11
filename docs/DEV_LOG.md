@@ -3140,3 +3140,39 @@ Public CSS contains parchment-game-shell, character-scroll-panel, topbar-icon-bu
 ### Notes
 
 This is deployed and build-verified, but it still needs human browser visual approval against the supplied reference image. No local web service was started.
+
+## 2026-06-11 23:08 CST
+
+### Objective
+
+Incorporate two additional 2D reference states supplied by the user and tune the stable 2D layout closer to those state references.
+
+### Reference Assets
+
+Archived the temporary clipboard images into stable project paths:
+
+```txt
+public/assets/concepts/2d-parchment-state-initial.png
+public/assets/concepts/2d-parchment-state-progress.png
+```
+
+### Changes
+
+- Added `docs/ART_DIRECTION_2D.md` as the active 2D interface art-direction document.
+- Converted the 2D top gameplay HUD from a full victory-progress card into a compact round/current-action plaque plus dice, matching the reference emphasis.
+- Kept the full `VictoryTracker` for the isolated 3D view, where it remains useful during technical testing.
+- Reworked side-panel `已出马` and `马栏` display from plain numbers into circular state tracks with counts.
+- Adjusted the parchment dice tray so it reads more like a physical dice area near the round plaque.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+No local web service was started.
+```
+
+### Notes
+
+The supplied reference images are UI art-direction references only. They must not be described as historical evidence or exact Tang-Song restoration.

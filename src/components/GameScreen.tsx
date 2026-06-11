@@ -61,6 +61,13 @@ export function GameScreen() {
   const availableMoves = canAct ? generateLegalMoves(state) : [];
   const highlightedBlackMoves =
     mode === "ai" ? latestContiguousMovesForPlayer(state, "black") : [];
+  const roundLabel = Math.max(1, Math.floor(state.moveHistory.length / 2) + 1);
+  const actionLabel =
+    state.turnPhase === "game_over"
+      ? "棋局已分"
+      : state.currentPlayer === "white"
+        ? "白方行动中"
+        : "黑方行动中";
 
   useEffect(() => {
     if (mode === "ai" && state.currentPlayer === "black") {
@@ -144,14 +151,28 @@ export function GameScreen() {
         </div>
 
         <div className="parchment-play-area order-2 grid gap-2 xl:order-none">
-          <div className="game-compact-hud parchment-status-row grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(230px,270px)]">
-            <VictoryTracker state={state} />
-            <DicePanel
-              state={state}
-              onRoll={() => rollCurrentPlayer()}
-              canRollOverride={canAct}
-            />
-          </div>
+          {boardView === "3d" ? (
+            <div className="game-compact-hud grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(230px,270px)]">
+              <VictoryTracker state={state} />
+              <DicePanel
+                state={state}
+                onRoll={() => rollCurrentPlayer()}
+                canRollOverride={canAct}
+              />
+            </div>
+          ) : (
+            <div className="parchment-round-strip">
+              <div className="round-status-plaque">
+                <span>回合 {roundLabel}</span>
+                <strong>{actionLabel}</strong>
+              </div>
+              <DicePanel
+                state={state}
+                onRoll={() => rollCurrentPlayer()}
+                canRollOverride={canAct}
+              />
+            </div>
+          )}
           {mode === "online" && online ? (
             <section className="flex flex-wrap items-center justify-between gap-2 rounded border border-amber-200/20 bg-black/24 px-3 py-1.5 text-xs text-stone-200">
               <span>

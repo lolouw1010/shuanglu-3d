@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-11 21:49 CST
+Last updated: 2026-06-11 23:08 CST
 
 ## Current Target
 
@@ -125,6 +125,11 @@ Implemented:
   - Light parchment board material, smaller round 2D horse tokens, restyled dice, and paper-like turn feedback panels.
   - Deployed to Aliyun GD at `http://47.121.182.144/` from commit `1f588f3`.
   - This is build-verified and cloud-verified, but still needs human browser visual approval.
+- Added active 2D interface art direction:
+  - Documented in `docs/ART_DIRECTION_2D.md`.
+  - Reference states archived at `public/assets/concepts/2d-parchment-state-initial.png` and `public/assets/concepts/2d-parchment-state-progress.png`.
+  - 2D top gameplay HUD now focuses on round/current action plus dice.
+  - Side-panel `已出马` and `马栏` now use circular state tracks with counts.
 - Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.

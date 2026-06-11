@@ -1,6 +1,6 @@
 # Documentation Index
 
-Last updated: 2026-05-30 CST
+Last updated: 2026-06-11 CST
 
 ## Start Here
 
@@ -19,6 +19,7 @@ Last updated: 2026-05-30 CST
 
 - `GAME_DESIGN.md` captures early game design direction.
 - `TECH_SPEC.md` captures the early technical scaffold note.
+- `ART_DIRECTION_2D.md` captures the stable 2D interface reference direction and state-specific layout rules.
 - `ART_DIRECTION_3D.md` captures the 3D design process and approved visual direction constraints.
 - `CLOUD_ASSETS.md` records cloud-hosted runtime and asset handoff context.
 - `DECISIONS.md` records early architecture and product decisions.

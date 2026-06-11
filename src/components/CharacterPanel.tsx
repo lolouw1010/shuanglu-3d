@@ -17,6 +17,36 @@ function sideLabel(player: Character["player"]): string {
   return player === "white" ? "白方（你）" : "黑方（对手）";
 }
 
+function TokenTrack({
+  label,
+  count,
+  total = 15,
+}: {
+  label: string;
+  count: number;
+  total?: number;
+}) {
+  const visibleSlots = 9;
+  const filledSlots = Math.min(count, visibleSlots);
+
+  return (
+    <div className="character-track">
+      <div className="character-track-heading">
+        <span>{label}</span>
+        <strong>{count}/{total}</strong>
+      </div>
+      <div className="character-track-slots" aria-label={`${label} ${count} 枚`}>
+        {Array.from({ length: visibleSlots }).map((_, index) => (
+          <span
+            key={index}
+            className={index < filledSlots ? "character-track-slot-filled" : ""}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function CharacterPanel({
   character,
   active,
@@ -44,14 +74,8 @@ export function CharacterPanel({
       </div>
 
       <div className="character-token-box">
-        <div>
-          <p>已出马</p>
-          <span>{borneOff}</span>
-        </div>
-        <div>
-          <p>马栏</p>
-          <span>{barCount}</span>
-        </div>
+        <TokenTrack label="已出马" count={borneOff} />
+        <TokenTrack label="马栏" count={barCount} />
       </div>
     </aside>
   );
