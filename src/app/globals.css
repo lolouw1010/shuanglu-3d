@@ -1332,6 +1332,25 @@ button:focus-visible {
 .parchment-play-area {
   grid-area: play;
   min-width: 0;
+  position: relative;
+}
+
+.parchment-play-area > * {
+  position: relative;
+  z-index: 1;
+}
+
+.parchment-play-area::after {
+  background: url("/assets/ui/2d-bottom-scenery-crop.png") right bottom / auto min(15.5rem, 25vh) no-repeat;
+  bottom: 4.4rem;
+  content: "";
+  height: min(15.5rem, 25vh);
+  opacity: 0.42;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  width: min(28rem, 36vw);
+  z-index: 0;
 }
 
 .parchment-footer-nav {
@@ -2011,14 +2030,27 @@ button:focus-visible {
     inset 0 0 0 1px rgba(255, 251, 232, 0.44),
     0 0.35rem 0.85rem rgba(80, 52, 23, 0.15);
   border-radius: 0.16rem;
-  min-width: 16rem;
-  padding: 0.42rem 0.58rem;
+  min-width: 15rem;
+  padding: 0.36rem 0.52rem;
 }
 
 .parchment-game-shell .dice-tray h2,
 .parchment-game-shell .dice-tray p,
 .parchment-game-shell .dice-tray .text-amber-100 {
   color: #3a2511;
+}
+
+.parchment-game-shell .dice-tray .mb-1\.5 {
+  margin-bottom: 0.28rem;
+}
+
+.parchment-game-shell .dice-tray .uppercase {
+  display: none;
+}
+
+.parchment-game-shell .dice-tray h2 {
+  font-size: 0.92rem;
+  line-height: 1;
 }
 
 .parchment-game-shell .die-body {
@@ -2038,13 +2070,15 @@ button:focus-visible {
 
 .parchment-game-shell .dice-tray button {
   background:
-    linear-gradient(180deg, #f5e3bd, #d3aa64);
-  border-color: rgba(92, 56, 21, 0.48);
+    linear-gradient(180deg, #f4dfb7, #cf9f56);
+  border-color: rgba(92, 56, 21, 0.58);
   border-radius: 0.16rem;
   box-shadow:
     inset 0 0 0 1px rgba(255, 252, 235, 0.46),
     0 0.18rem 0.35rem rgba(85, 52, 20, 0.16);
   color: #3a2511;
+  min-height: 2rem;
+  padding: 0.38rem 0.68rem;
 }
 
 .parchment-command-panel {
