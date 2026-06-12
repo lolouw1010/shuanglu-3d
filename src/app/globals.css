@@ -1330,6 +1330,7 @@ button:focus-visible {
 }
 
 .parchment-play-area {
+  align-self: stretch;
   grid-area: play;
   min-width: 0;
   position: relative;
@@ -1341,15 +1342,15 @@ button:focus-visible {
 }
 
 .parchment-play-area::after {
-  background: url("/assets/ui/2d-bottom-scenery-crop.png") right bottom / auto min(15.5rem, 25vh) no-repeat;
-  bottom: 4.4rem;
+  background: url("/assets/ui/2d-bottom-scenery-crop.png") right bottom / auto min(17.5rem, 28vh) no-repeat;
+  bottom: 0.7rem;
   content: "";
-  height: min(15.5rem, 25vh);
-  opacity: 0.42;
+  height: min(17.5rem, 28vh);
+  opacity: 0.58;
   pointer-events: none;
   position: absolute;
   right: 0;
-  width: min(28rem, 36vw);
+  width: min(32rem, 42vw);
   z-index: 0;
 }
 
