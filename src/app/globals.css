@@ -1331,6 +1331,7 @@ button:focus-visible {
 
 .parchment-play-area {
   align-self: stretch;
+  align-content: start;
   grid-area: play;
   min-width: 0;
   position: relative;
