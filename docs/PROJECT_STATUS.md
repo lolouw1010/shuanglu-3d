@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-12 16:06 CST
+Last updated: 2026-06-12 20:42 CST
 
 ## Current Target
 
@@ -144,6 +144,16 @@ Implemented:
   - Central `马栏` / `出马` controls are compressed to reduce board interruption.
   - Deployed to Aliyun GD from commit `60488ae`.
   - Actual cloud screenshot check captured `/tmp/shuanglu-screens/game-design-alignment-edge-final.png`.
+- Reworked the 2D command area after user review:
+  - Removed the always-visible large rule explanation cards from 2D gameplay.
+  - Added a reference-style lower command panel with `剧情对话`, `可行动点`, `可行步数`, and `提示`.
+  - Kept detailed rule coaching only in the 3D technical view.
+  - Changed top-banner sizing to avoid hard two-axis stretching.
+  - Restyled round/dice controls toward the same parchment material language.
+  - Reduced 2D board horse tokens and landing-circle sizing so stacks fit more comfortably.
+  - Added a cropped bottom scenery layer that excludes the fake reference `结束回合` button.
+  - Deployed to Aliyun GD from commit `badaa8d`.
+  - Actual cloud screenshot check captured `/tmp/shuanglu-screens/game-reference-final-badaa8d.png`.
 - Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.
@@ -881,7 +891,7 @@ http://47.121.182.144/3d
 - The Aliyun GD server currently runs Node `18.19.1`; `npm ci` completed, but one transitive development dependency warned that newer Node versions are preferred.
 - The deployed public endpoint is plain HTTP on the server IP. A production hostname and HTTPS certificate are still needed before a public launch.
 - The server could not reliably fetch the GitHub repository directly, so deployments currently use local Git archive upload from the synced commit.
-- The latest visual deployment was made from Git commit `60488ae` using local archive upload.
+- The latest visual deployment was made from Git commit `badaa8d` using local archive upload.
 - Online rooms are currently in-memory only. A PM2 restart will clear active rooms.
 - Online room access is intentionally lightweight for testing and does not yet include accounts, passwords, or private invites.
 - Online clients use polling rather than WebSocket. This is acceptable for the first turn-based friend-play test but should be reviewed after playtesting.

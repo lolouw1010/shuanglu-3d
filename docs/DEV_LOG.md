@@ -3372,3 +3372,55 @@ Captured cloud screenshot at /tmp/shuanglu-screens/game-design-alignment-edge-fi
 - Confirmed both side portraits remain fully visible.
 - Confirmed the fake decorative `结束回合` button no longer appears over the board.
 - Remaining gap: this is not a pixel-perfect recreation. The central rules guidance and feedback panels still follow the current playable system rather than the exact reference mockup arrangement.
+
+## 2026-06-12 20:42 CST
+
+### Objective
+
+Respond to user review that the 2D page still felt unlike the approved design reference:
+
+- Remove unnecessary always-visible rule explanation panels.
+- Stop stretching the top reference artwork.
+- Restyle live turn/dice controls to match the parchment material language better.
+- Reduce board pieces and circular landing positions so stacks fit more naturally.
+
+### Changes
+
+- Added `ParchmentCommandPanel` as the 2D-only lower command surface.
+- Replaced the previous 2D `TurnCoach` / `PlayFeedback` rule-card block with reference-style panels:
+  - `剧情对话`
+  - `可行动点`
+  - `可行步数`
+  - `提示`
+- Kept the old detailed rule coach only for the `/3d` technical view.
+- Changed the top banner from `100% 100%` stretching to proportional `cover` sizing.
+- Restyled the round/action plaque and dice tray using darker ink, parchment, and gold-border treatment.
+- Hid the board's long action-guide strip in parchment mode; action state now appears in the lower command panel.
+- Reduced board point height, landing-circle radius, horse-token size, and horse-token grid spacing.
+- Added `public/assets/ui/2d-bottom-scenery-crop.png`, cropped from the reference scenery without the fake `结束回合` button.
+- Anchored the scenery layer in the stretched center play region without stretching functional rows.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+GitHub main pushed through badaa8d.
+BigNAS main pushed through badaa8d.
+Aliyun server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+Created cloud room DBDFF8 for final visual verification.
+Captured cloud screenshot at /tmp/shuanglu-screens/game-reference-final-badaa8d.png.
+```
+
+### Visual QA Notes
+
+- Confirmed the large rule explanation cards are no longer visible in 2D gameplay.
+- Confirmed top artwork is no longer hard-stretched across both axes.
+- Confirmed dice/round controls now use the same parchment/ink material family.
+- Confirmed pieces are smaller and five-piece stacks fit visibly inside a point.
+- Confirmed the cloud screenshot no longer contains a stretched online share row after `align-content: start`.
+- Remaining gap: the layout is closer to the reference, but the live dice panel and the exact lower-panel geometry are still not a pixel-level recreation of the mockup.

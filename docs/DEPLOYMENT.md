@@ -773,6 +773,79 @@ gaokao-sprint-coach online
 school-application online
 ```
 
+## 2026-06-12 Reference Controls Deployment
+
+Purpose:
+
+- Deploy a closer 2D parchment UI alignment after user review.
+- Remove unnecessary always-visible rule explanation panels from the active 2D screen.
+- Preserve real gameplay state, online room state, legal-move highlighting, and cloud-only testing.
+
+Source commits:
+
+```txt
+d339a6b Align 2D controls with parchment reference
+16569b6 Polish parchment reference layout
+6985f8d Anchor parchment scenery layer
+badaa8d Prevent parchment rows from stretching
+```
+
+Final deployed commit:
+
+```txt
+badaa8d
+```
+
+Final local artifact:
+
+```txt
+/tmp/shuanglu-row-stretch-badaa8d.tgz
+```
+
+Final server release directory:
+
+```txt
+/opt/shuanglu_release_row_stretch_20260612_2028
+```
+
+Final server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_row_stretch_20260612_2028
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Local npx tsc --noEmit passed.
+Local npm test passed: 10 test files, 38 tests.
+Local npm run build passed.
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+Cloud room DBDFF8 was created for visual QA.
+Cloud screenshot captured at /tmp/shuanglu-screens/game-reference-final-badaa8d.png.
+GitHub main and BigNAS main were both pushed through badaa8d.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```
+
 
 ## 2026-05-09 One-Window 2D Layout Deployment
 
