@@ -1343,15 +1343,17 @@ button:focus-visible {
 }
 
 .parchment-play-area::after {
-  background: url("/assets/ui/2d-bottom-scenery-crop.png") right bottom / auto min(17.5rem, 28vh) no-repeat;
-  bottom: 0.7rem;
+  background: url("/assets/ui/2d-bottom-scenery-crop.png") right bottom / auto min(11.5rem, 19vh) no-repeat;
+  bottom: 1rem;
   content: "";
-  height: min(17.5rem, 28vh);
-  opacity: 0.58;
+  height: min(11.5rem, 19vh);
+  opacity: 0.24;
   pointer-events: none;
   position: absolute;
   right: 0;
-  width: min(32rem, 42vw);
+  -webkit-mask-image: radial-gradient(ellipse at 100% 100%, black 0 38%, rgba(0, 0, 0, 0.62) 58%, transparent 84%);
+  mask-image: radial-gradient(ellipse at 100% 100%, black 0 38%, rgba(0, 0, 0, 0.62) 58%, transparent 84%);
+  width: min(23rem, 31vw);
   z-index: 0;
 }
 
@@ -2083,41 +2085,137 @@ button:focus-visible {
   padding: 0.38rem 0.68rem;
 }
 
-.parchment-command-panel {
+.parchment-game-shell .parchment-room-strip {
+  align-items: center;
+  background:
+    linear-gradient(90deg, rgba(246, 229, 190, 0.72), rgba(232, 199, 139, 0.56), rgba(246, 229, 190, 0.72)),
+    radial-gradient(ellipse at 50% 50%, rgba(255, 252, 235, 0.36), transparent 68%);
+  border: 0;
+  border-bottom: 1px solid rgba(94, 59, 25, 0.2);
+  border-top: 1px solid rgba(94, 59, 25, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 252, 235, 0.52),
+    inset 0 -1px 0 rgba(121, 76, 32, 0.11);
+  color: #493017;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.76rem;
+  gap: 0.28rem 0.85rem;
+  justify-content: space-between;
+  min-height: 2.05rem;
+  padding: 0.32rem 0.78rem;
+}
+
+.parchment-game-shell .parchment-room-strip strong,
+.parchment-game-shell .parchment-room-strip .text-amber-100,
+.parchment-game-shell .parchment-room-strip .text-amber-100\/75,
+.parchment-game-shell .parchment-room-strip .text-emerald-100 {
+  color: #6a2f1b;
+}
+
+.parchment-game-shell .parchment-room-strip .text-stone-400 {
+  color: rgba(73, 48, 23, 0.62);
+}
+
+.parchment-game-shell .parchment-play-area > .parchment-command-panel {
+  background:
+    linear-gradient(180deg, rgba(250, 238, 211, 0.86), rgba(225, 190, 124, 0.62)),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 252, 236, 0.38), transparent 58%),
+    url("/assets/ui/2d-board-texture.png") center / cover no-repeat;
+  border: 1px solid rgba(84, 54, 26, 0.3);
+  border-radius: 0.14rem;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 252, 235, 0.38),
+    inset 0 0.55rem 1.2rem rgba(255, 245, 216, 0.18),
+    0 0.62rem 1.45rem rgba(67, 43, 18, 0.1);
   display: grid;
-  gap: 0.52rem;
-  grid-template-columns: minmax(260px, 1.2fr) minmax(220px, 0.8fr) minmax(130px, 0.42fr) minmax(220px, 0.9fr);
+  gap: 0;
+  grid-template-columns: minmax(270px, 1.16fr) minmax(230px, 0.9fr) minmax(128px, 0.44fr) minmax(220px, 0.88fr);
+  overflow: hidden;
+  position: relative;
+}
+
+.parchment-game-shell .parchment-play-area > .parchment-command-panel::before,
+.parchment-game-shell .parchment-play-area > .parchment-command-panel::after {
+  background:
+    linear-gradient(90deg, transparent, rgba(97, 61, 27, 0.34), transparent);
+  content: "";
+  height: 1px;
+  left: 0.7rem;
+  pointer-events: none;
+  position: absolute;
+  right: 0.7rem;
+  z-index: 0;
+}
+
+.parchment-game-shell .parchment-play-area > .parchment-command-panel::before {
+  top: 0.42rem;
+}
+
+.parchment-game-shell .parchment-play-area > .parchment-command-panel::after {
+  bottom: 0.42rem;
 }
 
 .parchment-command-panel > * {
-  background:
-    linear-gradient(180deg, rgba(250, 238, 211, 0.94), rgba(225, 196, 143, 0.82)),
-    radial-gradient(ellipse at 50% 0%, rgba(255, 252, 236, 0.28), transparent 62%);
-  border: 1px solid rgba(91, 58, 25, 0.34);
-  border-radius: 0.12rem;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 252, 235, 0.46),
-    0 0.42rem 1rem rgba(72, 47, 21, 0.09);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   color: #3a2511;
-  min-height: 6.4rem;
-  padding: 0.72rem 0.88rem;
+  min-height: 5.85rem;
+  padding: 0.72rem 0.92rem 0.66rem;
+  position: relative;
+  z-index: 1;
+}
+
+.parchment-command-panel > *:first-child {
+  border-left: 0;
+}
+
+.parchment-command-panel > * + *::before {
+  background:
+    linear-gradient(180deg, transparent, rgba(91, 58, 25, 0.3) 18%, rgba(91, 58, 25, 0.18) 50%, rgba(91, 58, 25, 0.3) 82%, transparent);
+  content: "";
+  inset: 0.82rem auto 0.82rem 0;
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
 }
 
 .parchment-command-panel h2 {
-  border-bottom: 1px solid rgba(91, 58, 25, 0.22);
+  align-items: center;
+  border: 0;
+  color: #4c2d13;
+  display: flex;
+  gap: 0.5rem;
   font-family: var(--font-display);
-  font-size: clamp(1rem, 1.22vw, 1.22rem);
+  font-size: clamp(0.96rem, 1.08vw, 1.12rem);
   font-weight: 700;
-  line-height: 1;
-  margin-bottom: 0.56rem;
-  padding-bottom: 0.38rem;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0;
   text-align: center;
+}
+
+.parchment-command-panel h2::before,
+.parchment-command-panel h2::after {
+  background: linear-gradient(90deg, transparent, rgba(91, 58, 25, 0.34), transparent);
+  content: "";
+  flex: 1 1 0;
+  height: 1px;
 }
 
 .parchment-dialogue p,
 .parchment-hint-card p {
-  font-size: 0.84rem;
-  line-height: 1.68;
+  font-size: 0.82rem;
+  line-height: 1.62;
+}
+
+.parchment-hint-card p {
+  color: #4c3519;
+  margin: 0 auto;
+  max-width: 18rem;
+  text-align: left;
 }
 
 .parchment-dialogue span {
@@ -2130,9 +2228,9 @@ button:focus-visible {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.52rem;
+  gap: 0.44rem;
   justify-content: center;
-  min-height: 3rem;
+  min-height: 2.72rem;
 }
 
 .parchment-source-token {
@@ -2143,7 +2241,7 @@ button:focus-visible {
   cursor: pointer;
   display: inline-flex;
   flex-direction: column;
-  gap: 0.22rem;
+  gap: 0.18rem;
   padding: 0;
 }
 
@@ -2157,9 +2255,9 @@ button:focus-visible {
     0 0.18rem 0.32rem rgba(72, 47, 21, 0.18);
   display: inline-flex;
   font-family: Georgia, serif;
-  height: 2rem;
+  height: 1.86rem;
   justify-content: center;
-  width: 2rem;
+  width: 1.86rem;
 }
 
 .parchment-source-token .white-token {
@@ -2190,10 +2288,10 @@ button:focus-visible {
   box-shadow: inset 0 0 0 1px rgba(255, 252, 235, 0.46);
   display: inline-flex;
   font-family: var(--font-display);
-  font-size: 1.38rem;
-  height: 2.2rem;
+  font-size: 1.22rem;
+  height: 2rem;
   justify-content: center;
-  min-width: 2.2rem;
+  min-width: 2rem;
 }
 
 .parchment-empty-mark {

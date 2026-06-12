@@ -175,7 +175,7 @@ export function GameScreen() {
             </div>
           )}
           {mode === "online" && online ? (
-            <section className="flex flex-wrap items-center justify-between gap-2 rounded border border-amber-200/20 bg-black/24 px-3 py-1.5 text-xs text-stone-200">
+            <section className="parchment-room-strip">
               <span>
                 分享房间{" "}
                 <strong className="font-mono text-amber-100">
