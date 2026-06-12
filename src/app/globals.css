@@ -1238,7 +1238,7 @@ button:focus-visible {
 .parchment-game-shell .parchment-topbar {
   background:
     linear-gradient(180deg, rgba(252, 241, 216, 0.18), rgba(225, 194, 139, 0.22)),
-    url("/assets/ui/2d-top-banner.png") center center / cover no-repeat;
+    url("/assets/ui/2d-top-banner.png") center center / 100% 100% no-repeat;
   border-color: rgba(83, 51, 23, 0.28);
   box-shadow:
     inset 0 0 0 1px rgba(255, 251, 232, 0.36),
