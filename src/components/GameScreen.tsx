@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, BookOpen, ScrollText, Settings } from "lucide-react";
+import { ArrowLeft, BookOpen, CircleHelp, Home, ScrollText, Settings, UserRound } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { characters } from "@/data/characters";
@@ -252,6 +252,31 @@ export function GameScreen() {
             borneOff={state.borneOff.black}
           />
         </div>
+
+        {boardView === "3d" ? null : (
+          <nav className="parchment-footer-nav order-4" aria-label="棋局导航">
+            <button type="button" onClick={toggleRules}>
+              <ScrollText size={23} />
+              <span>棋局记录</span>
+            </button>
+            <button type="button" onClick={toggleRules}>
+              <UserRound size={23} />
+              <span>角色信息</span>
+            </button>
+            <button type="button" className="parchment-footer-active" onClick={toggleRules}>
+              <BookOpen size={26} />
+              <span>博戏志</span>
+            </button>
+            <button type="button" onClick={toggleRules}>
+              <CircleHelp size={24} />
+              <span>帮助</span>
+            </button>
+            <button type="button" onClick={backToMenu}>
+              <Home size={24} />
+              <span>返回主界面</span>
+            </button>
+          </nav>
+        )}
       </div>
     </main>
   );

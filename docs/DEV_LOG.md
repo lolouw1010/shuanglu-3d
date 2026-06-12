@@ -3290,4 +3290,39 @@ bignas/main: 092ace884c9ca97c315b4273f1e83933bdf5d962
 ```
 
 After this log entry is committed, verify both remotes again at the resulting commit.
+
+## 2026-06-12 13:48 CST
+
+### Objective
+
+Move the live 2D board closer to the supplied UI design rather than merely sharing the same parchment color palette.
+
+### Findings
+
+- The previous correction fixed character cropping, but the full game layout still differed from the design reference.
+- The largest differences were top banner density, bottom black-gold navigation, board texture/framing, central board interruption by large bar/off controls, and lack of decorative landscape anchoring.
+
+### Changes
+
+- Extracted reusable UI assets from the approved 2D reference:
+  - `public/assets/ui/2d-top-banner.png`
+  - `public/assets/ui/2d-board-texture.png`
+  - `public/assets/ui/2d-bottom-scenery.png`
+- Applied the top banner asset to the 2D game topbar.
+- Applied the board texture asset to the live board shell while keeping real game pieces and legal-move highlights dynamic.
+- Added a black-gold bottom navigation bar with `棋局记录`, `角色信息`, `博戏志`, `帮助`, and `返回主界面`.
+- Compressed the central `马栏` / `出马` controls so the board reads more like one continuous designed board.
+- Added a bottom-right scenery accent behind the board area.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+```
+
+### Notes
+
+This is still not a pixel-perfect recreation of the design image. It is a structural alignment pass that keeps the board state, legal move feedback, online play, and click targets real.
 ```

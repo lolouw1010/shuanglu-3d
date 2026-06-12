@@ -160,7 +160,7 @@ export function Board({
                   }`}
                   onClick={() => onSelectSource("bar")}
                 >
-                  <span className="flex flex-wrap items-center gap-2 text-xs text-stone-400">
+                  <span className="board-well-detail flex flex-wrap items-center gap-2 text-xs text-stone-400">
                     <span>被打入栏，须先复马</span>
                     {mustEnterFromBar ? (
                       <span className="rounded-full border border-emerald-200/45 bg-emerald-300/16 px-2 py-0.5 font-semibold text-emerald-100">
@@ -168,7 +168,7 @@ export function Board({
                       </span>
                     ) : null}
                   </span>
-                  <span className="mt-0.5 block font-display text-lg text-amber-50">
+                  <span className="board-well-count mt-0.5 block font-display text-lg text-amber-50">
                     马栏：白 {state.bar.white} / 黑 {state.bar.black}
                   </span>
                   {highlightedBarMoves.length > 0 ? (
@@ -181,7 +181,7 @@ export function Board({
                     </span>
                   ) : null}
                   {mustEnterFromBar ? (
-                    <span className="mt-0.5 block text-xs text-emerald-100/85">
+                    <span className="board-well-detail mt-0.5 block text-xs text-emerald-100/85">
                       {selectedSource === "bar"
                         ? "已选马栏，去点绿色入口。"
                         : canSelectBar
@@ -205,8 +205,8 @@ export function Board({
                   }`}
                   onClick={() => onSelectTarget("off")}
                 >
-                  <span className="block text-xs text-stone-400">进入内盘后，按骰面出马</span>
-                  <span className="font-display text-lg">
+                  <span className="board-well-detail block text-xs text-stone-400">进入内盘后，按骰面出马</span>
+                  <span className="board-well-count font-display text-lg">
                     出马：白 {state.borneOff.white} / 黑 {state.borneOff.black}
                   </span>
                   {highlightedOffMoves.length > 0 ? (
