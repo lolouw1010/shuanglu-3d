@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-12 20:42 CST
+Last updated: 2026-06-13 00:31 CST
 
 ## Current Target
 
@@ -154,6 +154,14 @@ Implemented:
   - Added a cropped bottom scenery layer that excludes the fake reference `结束回合` button.
   - Deployed to Aliyun GD from commit `badaa8d`.
   - Actual cloud screenshot check captured `/tmp/shuanglu-screens/game-reference-final-badaa8d.png`.
+- Softened the 2D lower command and hint area after follow-up visual review:
+  - Converted the online room/share notice into a thin parchment strip instead of a dark utility card.
+  - Converted the lower command area from separate rigid cards into a single continuous parchment band.
+  - Replaced hard per-card borders with short faded internal separators.
+  - Reduced source/step token sizing inside the command area to better match board pieces.
+  - Reduced and faded the bottom-right scenery layer so it no longer creates a dominant hard rectangular block below the command panel.
+  - Deployed to Aliyun GD from application code commit `bf38063`.
+  - Actual cloud screenshot check captured `/tmp/shuanglu-screens/game-command-panel-soft-v3.png`.
 - Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.

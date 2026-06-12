@@ -773,6 +773,68 @@ gaokao-sprint-coach online
 school-application online
 ```
 
+## 2026-06-13 Parchment Command Softening Deployment
+
+Purpose:
+
+- Deploy the follow-up 2D command-area visual refinement after user feedback that the small hint/command boxes still felt too rigid.
+- Keep the stable 2D board and online room flow unchanged.
+- Preserve cloud-only runtime testing on MiniMac.
+
+Application code commit:
+
+```txt
+bf38063 Soften parchment command UI
+```
+
+Final local artifact:
+
+```txt
+/tmp/shuanglu-command-panel-soft-v3-20260613002059.tgz
+```
+
+Final installed server path:
+
+```txt
+/opt/shuanglu
+```
+
+Final server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_command_panel_soft_v3_20260613_002215
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Local npx tsc --noEmit passed.
+Local npm test passed: 10 test files, 38 tests.
+Local npm run build passed.
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+Cloud room 675921 was created for visual QA.
+Cloud screenshot captured at /tmp/shuanglu-screens/game-command-panel-soft-v3.png.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```
+
 ## 2026-06-12 Reference Controls Deployment
 
 Purpose:

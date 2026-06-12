@@ -3424,3 +3424,41 @@ Captured cloud screenshot at /tmp/shuanglu-screens/game-reference-final-badaa8d.
 - Confirmed pieces are smaller and five-piece stacks fit visibly inside a point.
 - Confirmed the cloud screenshot no longer contains a stretched online share row after `align-content: start`.
 - Remaining gap: the layout is closer to the reference, but the live dice panel and the exact lower-panel geometry are still not a pixel-level recreation of the mockup.
+
+## 2026-06-13 00:31 CST
+
+### Objective
+
+Respond to follow-up visual feedback that the lower `提示` / command boxes still felt too rigid and not coordinated with the board elements.
+
+### Changes
+
+- Replaced the dark online room/share utility card with a thin parchment room strip.
+- Restyled the 2D lower command area as one continuous parchment band rather than four separate rigid cards.
+- Removed per-panel boxed backgrounds from the lower command area.
+- Replaced hard full-height borders with short faded vertical separators.
+- Added subtle top/bottom ornamental lines inside the command band.
+- Reduced the command-area source tokens and step chips to better match the smaller board horse scale.
+- Reduced and faded the bottom-right scenery decoration so it no longer reads as a large hard rectangle below the command panel.
+- Kept all game rules, legal-move logic, AI logic, and 3D technical view behavior unchanged.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Aliyun server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Created cloud room 675921 for final visual verification.
+Captured cloud screenshot at /tmp/shuanglu-screens/game-command-panel-soft-v3.png.
+Application code commit: bf38063.
+```
+
+### Visual QA Notes
+
+- Confirmed the lower command surface now reads as a continuous parchment operation band.
+- Confirmed the room/share strip no longer appears as a dark system-style card.
+- Confirmed the scenery layer is visually subordinate to the board and command band.
+- Remaining gap: the reference image still has richer bespoke ornamentation around each command group; current implementation is a pragmatic CSS approximation that keeps the live game DOM functional.
