@@ -1307,3 +1307,77 @@ Verification plan:
 git push bignas main
 git ls-remote bignas
 ```
+
+## 2026-06-12 Parchment Design Alignment Deployment
+
+Purpose:
+
+- Deploy the 2D parchment design-alignment pass based on the supplied reference UI.
+- Keep the live game dynamic and playable; do not replace the board with a static image.
+- Preserve cloud-only testing on MiniMac.
+
+Source commits:
+
+```txt
+8724c84 Align 2D game layout with design reference
+d7c0da8 Refine parchment board layout
+686e497 Show full parchment top banner
+6b26384 Crop parchment banner status artwork
+60488ae Remove banner crop edge
+```
+
+Final deployed commit:
+
+```txt
+60488ae
+```
+
+Final local artifact:
+
+```txt
+/tmp/shuanglu-banner-edge-60488ae.tgz
+```
+
+Final server release directory:
+
+```txt
+/opt/shuanglu_release_banner_edge_20260612_1550
+```
+
+Final server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_banner_edge_20260612_1550
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Local npx tsc --noEmit passed.
+Local npm test passed: 10 test files, 38 tests.
+Local npm run build passed.
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+http://47.121.182.144/ returned HTTP 200.
+Cloud room 4B2FE4 was created for visual QA.
+Cloud screenshot captured at /tmp/shuanglu-screens/game-design-alignment-edge-final.png.
+GitHub main and BigNAS main were both pushed to 60488ae.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```

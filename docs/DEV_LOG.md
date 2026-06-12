@@ -3325,4 +3325,50 @@ npm run build passed.
 ### Notes
 
 This is still not a pixel-perfect recreation of the design image. It is a structural alignment pass that keeps the board state, legal move feedback, online play, and click targets real.
+
+## 2026-06-12 16:06 CST
+
+### Objective
+
+Bring the live 2D game screen closer to the supplied parchment UI reference while preserving real, clickable game state.
+
+### Assumptions
+
+- The supplied reference is a target visual direction, not a static screenshot to paste over the game.
+- The live game must keep dynamic dice, room state, legal move highlighting, bar re-entry, bearing-off, online status, and AI trace feedback.
+- The MiniMac runtime policy remains cloud-only testing; no local Next.js service was started.
+
+### Changes
+
+- Reworked the 2D top banner so the reference art acts as the visual chapter/navigation header.
+- Hid the older live topbar text in 2D mode to prevent duplicate logo/chapter/navigation overlays.
+- Added the reference-style black-gold bottom navigation bar to the live 2D layout.
+- Applied the reference board texture to the live board shell while keeping real point buttons and horse pieces.
+- Compressed the central `马栏` / `出马` row so it interrupts the board less.
+- Changed board point display labels from internal `0-23` indices to the reference-style `1-12` and `12-1` labels; internal rule indexing remains unchanged.
+- Removed the bottom-right scenery overlay after visual QA showed it carried a fake red `结束回合` button from the reference image.
+- Re-cropped `public/assets/ui/2d-top-banner.png` so it excludes static reference dice/round artwork and does not introduce a black left edge.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+GitHub main pushed to 60488ae.
+BigNAS main pushed to 60488ae.
+Aliyun server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+Created cloud room 4B2FE4 for final visual verification.
+Captured cloud screenshot at /tmp/shuanglu-screens/game-design-alignment-edge-final.png.
 ```
+
+### Visual QA Notes
+
+- Confirmed the top banner no longer contains the static reference dice/round strip.
+- Confirmed the left banner edge artifact from the first crop was removed.
+- Confirmed both side portraits remain fully visible.
+- Confirmed the fake decorative `结束回合` button no longer appears over the board.
+- Remaining gap: this is not a pixel-perfect recreation. The central rules guidance and feedback panels still follow the current playable system rather than the exact reference mockup arrangement.

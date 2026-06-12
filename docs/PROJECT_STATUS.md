@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-12 00:38 CST
+Last updated: 2026-06-12 16:06 CST
 
 ## Current Target
 
@@ -136,6 +136,14 @@ Implemented:
   - `public/assets/characters/black-reference-portrait.png`.
   - Deployed to Aliyun GD from commit `bc7485d`.
   - Actual cloud game-state screenshot check confirmed both character heads and upper bodies are visible.
+- Advanced the stable 2D screen toward the supplied parchment UI reference:
+  - Top banner now uses a re-cropped reference-style chapter/navigation asset without static dice or round state.
+  - Bottom black-gold navigation now mirrors the reference layout.
+  - The live board uses the reference board texture while keeping real point buttons, legal-move highlights, and online state.
+  - Board labels now display as `1-12` / `12-1` in the UI while internal rules continue to use `0-23`.
+  - Central `马栏` / `出马` controls are compressed to reduce board interruption.
+  - Deployed to Aliyun GD from commit `60488ae`.
+  - Actual cloud screenshot check captured `/tmp/shuanglu-screens/game-design-alignment-edge-final.png`.
 - Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.
@@ -873,7 +881,7 @@ http://47.121.182.144/3d
 - The Aliyun GD server currently runs Node `18.19.1`; `npm ci` completed, but one transitive development dependency warned that newer Node versions are preferred.
 - The deployed public endpoint is plain HTTP on the server IP. A production hostname and HTTPS certificate are still needed before a public launch.
 - The server could not reliably fetch the GitHub repository directly, so deployments currently use local Git archive upload from the synced commit.
-- The latest visual deployment was made from Git commit `1f588f3` using local Git archive upload.
+- The latest visual deployment was made from Git commit `60488ae` using local archive upload.
 - Online rooms are currently in-memory only. A PM2 restart will clear active rooms.
 - Online room access is intentionally lightweight for testing and does not yet include accounts, passwords, or private invites.
 - Online clients use polling rather than WebSocket. This is acceptable for the first turn-based friend-play test but should be reviewed after playtesting.
