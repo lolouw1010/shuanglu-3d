@@ -9,6 +9,7 @@ import { useGameStore } from "@/store/gameStore";
 import { Board } from "./Board";
 import { CharacterPanel } from "./CharacterPanel";
 import { DicePanel } from "./DicePanel";
+import { ParchmentCommandPanel } from "./ParchmentCommandPanel";
 import { PlayFeedback } from "./PlayFeedback";
 import { latestContiguousMovesForPlayer } from "./moveDisplay";
 import { TurnCoach } from "./TurnCoach";
@@ -213,15 +214,26 @@ export function GameScreen() {
               highlightedMoves={highlightedBlackMoves}
             />
           )}
-          <div className="grid gap-2 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,.95fr)]">
-            <TurnCoach
+          {boardView === "3d" ? (
+            <div className="grid gap-2 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,.95fr)]">
+              <TurnCoach
+                state={state}
+                availableMoves={availableMoves}
+                selectedSource={selectedSource}
+                targetMoves={targetMoves}
+              />
+              <PlayFeedback state={state} message={message} />
+            </div>
+          ) : (
+            <ParchmentCommandPanel
               state={state}
               availableMoves={availableMoves}
               selectedSource={selectedSource}
               targetMoves={targetMoves}
+              message={message}
+              onSelectSource={selectSource}
             />
-            <PlayFeedback state={state} message={message} />
-          </div>
+          )}
           {winner ? (
             <section className="rounded border border-amber-200/40 bg-amber-100/12 p-5 text-center">
               <p className="text-sm text-amber-200">胜负已分</p>
