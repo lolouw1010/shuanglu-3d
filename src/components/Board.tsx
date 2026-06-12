@@ -95,6 +95,7 @@ export function Board({
     <BoardPoint
       key={index}
       index={index}
+      displayLabel={row === "top" ? String(index - 11) : String(index + 1)}
       row={row}
       point={state.points[index]}
       isSource={selectedSource === index}

@@ -3,6 +3,7 @@ import { pieceAssets } from "@/data/assets";
 
 type BoardPointProps = {
   index: number;
+  displayLabel?: string;
   row: "top" | "bottom";
   point: Point;
   isSource: boolean;
@@ -26,6 +27,7 @@ function pieceAlt(owner: Player): string {
 
 export function BoardPoint({
   index,
+  displayLabel,
   row,
   point,
   isSource,
@@ -102,7 +104,7 @@ export function BoardPoint({
           row === "top" ? "top-1.5" : "bottom-1.5"
         }`}
       >
-        {index}
+        {displayLabel ?? index}
       </span>
       <div className={`piece-rack absolute inset-x-0 z-10 ${pieceLayout}`}>
         {owner

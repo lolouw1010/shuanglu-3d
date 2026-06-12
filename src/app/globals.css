@@ -1230,6 +1230,7 @@ button:focus-visible {
     "left play right"
     "footer footer footer";
   grid-template-columns: minmax(250px, 0.82fr) minmax(820px, 2.65fr) minmax(250px, 0.82fr);
+  gap: 0.48rem;
   position: relative;
   z-index: 1;
 }
@@ -1244,26 +1245,19 @@ button:focus-visible {
     0 0.55rem 1.55rem rgba(72, 47, 21, 0.12);
   color: var(--ink);
   grid-area: topbar;
-  min-height: 6.9rem;
+  min-height: clamp(5.7rem, 10.6vh, 7rem);
+  overflow: hidden;
   position: relative;
 }
 
 .parchment-game-shell .parchment-topbar::before,
 .parchment-game-shell .parchment-topbar::after {
-  background: linear-gradient(90deg, transparent, rgba(75, 47, 22, 0.22), transparent);
-  content: "";
-  height: 1px;
-  position: absolute;
-  top: 50%;
-  width: min(18vw, 280px);
+  display: none;
 }
 
-.parchment-game-shell .parchment-topbar::before {
-  left: 23%;
-}
-
-.parchment-game-shell .parchment-topbar::after {
-  right: 23%;
+.parchment-game-shell .parchment-topbar > * {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .brand-title {
@@ -1393,9 +1387,9 @@ button:focus-visible {
 .parchment-round-strip {
   align-items: center;
   display: flex;
-  gap: 1.15rem;
+  gap: 0.8rem;
   justify-content: center;
-  min-height: 4.6rem;
+  min-height: 3.55rem;
 }
 
 .round-status-plaque {
@@ -1413,7 +1407,7 @@ button:focus-visible {
   font-size: clamp(1.05rem, 1.55vw, 1.45rem);
   gap: 0.85rem;
   min-width: min(34vw, 350px);
-  padding: 0.55rem 1.4rem;
+  padding: 0.42rem 1.16rem;
   position: relative;
   text-align: center;
 }
@@ -1691,28 +1685,18 @@ button:focus-visible {
 
 .parchment-game-shell .board-scene {
   border-radius: 0.25rem;
-  padding: 0.52rem;
+  padding: 0.4rem;
   position: relative;
 }
 
 .parchment-game-shell .board-scene::after {
-  background:
-    linear-gradient(90deg, rgba(244, 224, 184, 0.45), transparent 38%),
-    url("/assets/ui/2d-bottom-scenery.png") right bottom / min(34vw, 390px) auto no-repeat;
-  bottom: -0.35rem;
-  content: "";
-  height: 9.5rem;
-  opacity: 0.42;
-  pointer-events: none;
-  position: absolute;
-  right: -0.28rem;
-  width: min(40vw, 470px);
-  z-index: 0;
+  display: none;
 }
 
 .parchment-game-shell .board-caption {
   color: rgba(70, 44, 19, 0.68);
   letter-spacing: 0;
+  margin-bottom: 0.3rem;
   text-transform: none;
 }
 
@@ -1728,7 +1712,9 @@ button:focus-visible {
   border-color: rgba(84, 54, 26, 0.22);
   border-radius: 0.2rem;
   color: #3c2813;
-  min-height: 1.95rem;
+  margin-bottom: 0.35rem;
+  min-height: 1.55rem;
+  padding-block: 0.28rem;
 }
 
 .parchment-game-shell .board-action-guide-main,
@@ -1794,21 +1780,21 @@ button:focus-visible {
 .parchment-game-shell .board-middle {
   gap: 0.18rem;
   grid-template-columns: minmax(0, 1fr) 5px minmax(0, 1fr);
-  margin: 0.08rem 0;
-  min-height: clamp(1.85rem, 4.1vh, 2.45rem);
+  margin: -0.08rem 0;
+  min-height: clamp(1.38rem, 2.6vh, 1.75rem);
 }
 
 .parchment-game-shell .board-well {
   align-items: center;
-  background: rgba(237, 202, 144, 0.28);
-  border-color: rgba(75, 47, 22, 0.18);
+  background: rgba(237, 202, 144, 0.12);
+  border-color: rgba(75, 47, 22, 0.1);
   border-radius: 0.16rem;
-  box-shadow: inset 0 0 0 1px rgba(255, 250, 230, 0.25);
+  box-shadow: none;
   color: #3a2511;
   display: flex;
   justify-content: center;
-  min-height: 1.85rem;
-  padding: 0.18rem 0.44rem;
+  min-height: 1.38rem;
+  padding: 0.08rem 0.36rem;
   text-align: center;
 }
 
@@ -1828,7 +1814,7 @@ button:focus-visible {
 }
 
 .parchment-game-shell .board-well-count {
-  font-size: clamp(0.9rem, 1.35vw, 1.18rem);
+  font-size: clamp(0.82rem, 1.05vw, 0.98rem);
   line-height: 1;
   margin: 0;
 }
@@ -1858,7 +1844,7 @@ button:focus-visible {
   border-color: rgba(76, 47, 21, 0.2);
   border-radius: 0;
   box-shadow: none;
-  min-height: clamp(5.3rem, 10.2vh, 7rem);
+  min-height: clamp(5.75rem, 10.6vh, 7.3rem);
 }
 
 .parchment-game-shell .point-surface::before {
