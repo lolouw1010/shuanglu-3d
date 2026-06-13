@@ -1411,33 +1411,46 @@ button:focus-visible {
 .parchment-round-strip {
   align-items: center;
   display: flex;
-  gap: 0.65rem;
+  gap: 0.78rem;
   justify-content: center;
-  min-height: 4.2rem;
+  min-height: 4.05rem;
 }
 
 .round-status-plaque {
   align-items: center;
   background:
-    linear-gradient(90deg, #2c1a0e 0 42%, #f4e5c5 42% 100%);
-  border: 2px solid rgba(80, 50, 23, 0.72);
-  border-radius: 0.16rem;
+    linear-gradient(90deg, #2a180c 0 37%, #efe1c1 37% 100%),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 232, 164, 0.22), transparent 62%);
+  border: 1px solid rgba(71, 42, 17, 0.82);
+  border-radius: 0.1rem;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 235, 170, 0.34),
-    0 0.32rem 0.72rem rgba(74, 48, 20, 0.2);
+    inset 0 0 0 1px rgba(255, 235, 170, 0.28),
+    inset 0 0 0 0.22rem rgba(92, 57, 24, 0.12),
+    0 0.34rem 0.72rem rgba(74, 48, 20, 0.18);
+  clip-path: polygon(0.6rem 0, calc(100% - 0.6rem) 0, 100% 50%, calc(100% - 0.6rem) 100%, 0.6rem 100%, 0 50%);
   color: #2d1b0c;
   display: inline-flex;
   font-family: var(--font-display);
   font-size: clamp(1.08rem, 1.55vw, 1.42rem);
-  gap: 0.85rem;
-  min-width: min(34vw, 350px);
-  padding: 0.52rem 1.16rem;
+  gap: 0;
+  min-height: 3.35rem;
+  min-width: min(31vw, 360px);
+  padding: 0;
   position: relative;
   text-align: center;
 }
 
 .round-status-plaque::before {
-  display: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 233, 173, 0.38), transparent);
+  content: "";
+  display: block;
+  height: 1px;
+  left: 0.95rem;
+  position: absolute;
+  right: 0.95rem;
+  top: 0.42rem;
+  z-index: 2;
 }
 
 .round-status-plaque span,
@@ -1448,25 +1461,26 @@ button:focus-visible {
 
 .round-status-plaque span {
   color: #ffe9ad;
-  flex: 0 0 42%;
+  flex: 0 0 37%;
   font-weight: 700;
+  padding: 0.75rem 0.95rem 0.72rem 1.2rem;
 }
 
 .round-status-plaque strong {
   flex: 1;
   font-weight: 700;
+  padding: 0.75rem 1.2rem 0.72rem 1rem;
 }
 
 .character-scroll-panel {
   background:
-    linear-gradient(180deg, rgba(252, 243, 220, 0.94), rgba(229, 201, 151, 0.72)),
-    radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.26), transparent 58%);
-  border: 1px solid rgba(68, 42, 18, 0.34);
+    linear-gradient(180deg, rgba(252, 243, 220, 0.9), rgba(229, 201, 151, 0.64)),
+    radial-gradient(ellipse at 50% 36%, rgba(255, 255, 255, 0.22), transparent 58%);
+  border: 1px solid rgba(68, 42, 18, 0.28);
   border-radius: 0.12rem;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 252, 235, 0.55),
-    inset 0 0 0 0.38rem rgba(123, 79, 34, 0.08),
-    0 0.75rem 1.8rem rgba(72, 47, 21, 0.12);
+    inset 0 0 0 1px rgba(255, 252, 235, 0.42),
+    0 0.68rem 1.5rem rgba(72, 47, 21, 0.09);
   color: var(--ink);
   min-height: clamp(29rem, calc(100vh - 7.2rem), 48rem);
   overflow: hidden;
@@ -1476,11 +1490,11 @@ button:focus-visible {
 
 .character-scroll-panel::before {
   background:
-    linear-gradient(90deg, rgba(81, 51, 22, 0.2), transparent 11%, transparent 89%, rgba(81, 51, 22, 0.18)),
-    linear-gradient(180deg, rgba(112, 70, 29, 0.1), transparent 18%, transparent 82%, rgba(112, 70, 29, 0.1));
-  border: 1px solid rgba(102, 66, 31, 0.22);
+    linear-gradient(90deg, rgba(81, 51, 22, 0.14), transparent 9%, transparent 91%, rgba(81, 51, 22, 0.12)),
+    linear-gradient(180deg, rgba(112, 70, 29, 0.08), transparent 18%, transparent 84%, rgba(112, 70, 29, 0.08));
+  border: 0;
   content: "";
-  inset: 0.34rem;
+  inset: 0.42rem 0.34rem;
   pointer-events: none;
   position: absolute;
   z-index: 4;
@@ -1499,11 +1513,10 @@ button:focus-visible {
 }
 
 .character-scroll-active {
-  border-color: rgba(128, 83, 35, 0.5);
+  border-color: rgba(128, 83, 35, 0.42);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 252, 235, 0.42),
-    0 0.85rem 2rem rgba(72, 47, 21, 0.14),
-    0 0 0 2px rgba(176, 131, 53, 0.12);
+    inset 0 0 0 1px rgba(255, 252, 235, 0.32),
+    0 0.75rem 1.7rem rgba(72, 47, 21, 0.11);
 }
 
 .character-scroll-heading {
@@ -1533,15 +1546,11 @@ button:focus-visible {
 }
 
 .character-portrait {
-  background:
-    linear-gradient(180deg, rgba(255, 250, 232, 0.42), rgba(211, 174, 108, 0.18)),
-    radial-gradient(ellipse at 50% 100%, rgba(89, 55, 24, 0.16), transparent 54%);
-  border: 1px solid rgba(72, 45, 21, 0.24);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 251, 233, 0.42),
-    0 0.22rem 0.55rem rgba(71, 45, 18, 0.08);
-  height: clamp(17.5rem, 37vh, 25rem);
-  margin: 0.48rem 0 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  height: clamp(18.5rem, 40vh, 26.5rem);
+  margin: 0.2rem -0.18rem 0;
   overflow: hidden;
   position: relative;
   z-index: 2;
@@ -1549,8 +1558,8 @@ button:focus-visible {
 
 .character-portrait::after {
   background:
-    linear-gradient(180deg, rgba(255, 252, 236, 0.1), transparent 20%, transparent 74%, rgba(232, 202, 150, 0.38)),
-    radial-gradient(ellipse at 50% 88%, rgba(82, 54, 27, 0.18), transparent 52%);
+    linear-gradient(180deg, rgba(255, 252, 236, 0.04), transparent 18%, transparent 76%, rgba(232, 202, 150, 0.52)),
+    radial-gradient(ellipse at 50% 88%, rgba(82, 54, 27, 0.14), transparent 56%);
   content: "";
   inset: 0;
   pointer-events: none;
@@ -1558,21 +1567,20 @@ button:focus-visible {
 }
 
 .character-portrait img {
-  height: 100%;
-  object-fit: contain;
+  height: calc(100% + 3.4rem);
+  object-fit: cover;
   object-position: center top;
   pointer-events: none;
+  transform: translateY(-3.05rem) scale(1.08);
   width: 100%;
 }
 
 .character-portrait-white img {
   object-position: center top;
-  transform: scale(1);
 }
 
 .character-portrait-black img {
   object-position: center top;
-  transform: scale(1);
 }
 
 .character-quote {
@@ -2027,15 +2035,14 @@ button:focus-visible {
 
 .parchment-game-shell .dice-tray {
   animation: none;
-  background:
-    linear-gradient(180deg, rgba(246, 226, 184, 0.96), rgba(218, 184, 121, 0.9));
-  border: 1px solid rgba(90, 57, 24, 0.38);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 251, 232, 0.44),
-    0 0.35rem 0.85rem rgba(80, 52, 23, 0.15);
-  border-radius: 0.16rem;
-  min-width: 15rem;
-  padding: 0.36rem 0.52rem;
+  align-items: center;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  display: flex;
+  gap: 0.58rem;
+  min-width: 0;
+  padding: 0;
 }
 
 .parchment-game-shell .dice-tray h2,
@@ -2045,11 +2052,30 @@ button:focus-visible {
 }
 
 .parchment-game-shell .dice-tray .mb-1\.5 {
-  margin-bottom: 0.28rem;
+  margin-bottom: 0;
 }
 
 .parchment-game-shell .dice-tray .uppercase {
   display: none;
+}
+
+.parchment-game-shell .dice-tray-header {
+  order: 2;
+}
+
+.parchment-game-shell .dice-tray-title,
+.parchment-game-shell .dice-steps-label {
+  display: none;
+}
+
+.parchment-game-shell .dice-result-row {
+  gap: 0.5rem;
+  order: 1;
+}
+
+.parchment-game-shell .dice-stage {
+  height: 3rem;
+  width: 3rem;
 }
 
 .parchment-game-shell .dice-tray h2 {
@@ -2059,13 +2085,16 @@ button:focus-visible {
 
 .parchment-game-shell .die-body {
   background:
-    radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.94), transparent 18%),
-    linear-gradient(145deg, #fbf4e5, #d9c19c 58%, #aa8455);
-  border-color: rgba(77, 47, 20, 0.38);
+    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.96), transparent 19%),
+    linear-gradient(145deg, #fffdf5 0%, #f3ead9 48%, #d0bfa3 100%);
+  border-color: rgba(74, 54, 31, 0.34);
+  border-radius: 0.52rem;
   box-shadow:
-    inset 2px 2px 5px rgba(255, 255, 255, 0.68),
-    inset -3px -4px 7px rgba(83, 54, 23, 0.24),
-    0 5px 12px rgba(74, 46, 18, 0.2);
+    inset 2px 2px 5px rgba(255, 255, 255, 0.82),
+    inset -3px -4px 7px rgba(83, 54, 23, 0.18),
+    0 0.2rem 0.36rem rgba(74, 46, 18, 0.18);
+  height: 3rem;
+  width: 3rem;
 }
 
 .parchment-game-shell .die-pip {
@@ -2074,15 +2103,20 @@ button:focus-visible {
 
 .parchment-game-shell .dice-tray button {
   background:
-    linear-gradient(180deg, #f4dfb7, #cf9f56);
-  border-color: rgba(92, 56, 21, 0.58);
-  border-radius: 0.16rem;
+    linear-gradient(180deg, rgba(244, 223, 183, 0.72), rgba(205, 159, 86, 0.58));
+  border-color: rgba(92, 56, 21, 0.42);
+  border-radius: 0.08rem;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 252, 235, 0.46),
-    0 0.18rem 0.35rem rgba(85, 52, 20, 0.16);
+    inset 0 0 0 1px rgba(255, 252, 235, 0.38),
+    0 0.12rem 0.24rem rgba(85, 52, 20, 0.12);
   color: #3a2511;
-  min-height: 2rem;
-  padding: 0.38rem 0.68rem;
+  font-size: 0.78rem;
+  min-height: 1.85rem;
+  padding: 0.3rem 0.5rem;
+}
+
+.parchment-game-shell .dice-tray button svg {
+  display: none;
 }
 
 .parchment-game-shell .parchment-room-strip {
