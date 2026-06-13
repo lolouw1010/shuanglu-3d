@@ -773,6 +773,68 @@ gaokao-sprint-coach online
 school-application online
 ```
 
+## 2026-06-13 HUD and Portrait Alignment Deployment
+
+Purpose:
+
+- Deploy the 2D top HUD and side portrait alignment pass after user feedback that the round/dice display and double-framed character panels still did not match the supplied reference.
+- Keep gameplay logic, online room behavior, and 3D technical view behavior unchanged.
+- Preserve cloud-only runtime testing on MiniMac.
+
+Application code commit:
+
+```txt
+7a55042 Align parchment HUD and portraits
+```
+
+Final local artifact:
+
+```txt
+/tmp/shuanglu-hud-portrait-align-v2-20260613151314.tgz
+```
+
+Final installed server path:
+
+```txt
+/opt/shuanglu
+```
+
+Final server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_hud_portrait_align_v2_20260613_151429
+```
+
+Deployment method:
+
+- Uploaded the working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Replaced `/opt/shuanglu` only after the server build passed.
+- Restarted only PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Local npx tsc --noEmit passed.
+Local npm test passed: 10 test files, 38 tests.
+Local npm run build passed.
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+Cloud room 413931 was created for final visual QA.
+Cloud screenshot captured at /tmp/shuanglu-screens/game-hud-portrait-align-v2.png.
+```
+
+Non-Shuanglu services observed but not changed:
+
+```txt
+gaokao-sprint-coach online
+school-application online
+```
+
 ## 2026-06-13 Parchment Command Softening Deployment
 
 Purpose:

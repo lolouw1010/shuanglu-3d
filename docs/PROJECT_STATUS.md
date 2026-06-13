@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-13 00:31 CST
+Last updated: 2026-06-13 15:24 CST
 
 ## Current Target
 
@@ -162,6 +162,14 @@ Implemented:
   - Reduced and faded the bottom-right scenery layer so it no longer creates a dominant hard rectangular block below the command panel.
   - Deployed to Aliyun GD from application code commit `bf38063`.
   - Actual cloud screenshot check captured `/tmp/shuanglu-screens/game-command-panel-soft-v3.png`.
+- Aligned the 2D top HUD and side portraits closer to the supplied parchment reference:
+  - Reworked the round/action display into a central two-tone plaque with clipped angled ends.
+  - Removed the boxed `骰声` tray treatment in parchment mode so dice read as two independent dice beside the plaque.
+  - Reduced the roll control to a small paper button beside the dice.
+  - Reduced side-panel double-framing by removing the DOM portrait frame and softening the outer scroll frame.
+  - Cropped the existing reference portrait assets more tightly so their embedded top labels and inner borders are no longer prominent.
+  - Deployed to Aliyun GD from application code commit `7a55042`.
+  - Actual cloud screenshot check captured `/tmp/shuanglu-screens/game-hud-portrait-align-v2.png`.
 - Primary local development workspace moved out of iCloud to `/Users/lizhe/Projects/shuanglu`.
 - Added deployment tracking document at `docs/DEPLOYMENT.md`.
 - Added `docs/DOCUMENTATION_INDEX.md` as the documentation map and handoff entry point.

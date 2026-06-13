@@ -3462,3 +3462,45 @@ Application code commit: bf38063.
 - Confirmed the room/share strip no longer appears as a dark system-style card.
 - Confirmed the scenery layer is visually subordinate to the board and command band.
 - Remaining gap: the reference image still has richer bespoke ornamentation around each command group; current implementation is a pragmatic CSS approximation that keeps the live game DOM functional.
+
+## 2026-06-13 15:24 CST
+
+### Objective
+
+Respond to user feedback that the round/dice HUD still did not match the supplied reference, and that the left/right character panels still felt poorly integrated because of double framing.
+
+### Changes
+
+- Added stable class hooks inside `DicePanel` so parchment mode can style title, dice, button, and step text independently.
+- Reworked the 2D round/action plaque:
+  - Two-tone dark/light plaque treatment.
+  - Angled clipped ends.
+  - Reduced spacing and stronger reference-style central alignment.
+- Removed the parchment-mode boxed `骰声` tray treatment.
+- Displayed dice as two independent light dice beside the central plaque.
+- Reduced the roll button to a small paper control beside the dice and hid the icon in parchment mode.
+- Softened the left/right character scroll frames.
+- Removed the extra DOM border/background around the portrait area.
+- Cropped the existing reference portrait images more tightly so their embedded top labels and inner frame lines are no longer visually dominant.
+- Kept rules, move validation, online room state, AI, and 3D technical view logic unchanged.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Aliyun server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Created cloud rooms D5E547 and 413931 for visual verification.
+Captured final cloud screenshot at /tmp/shuanglu-screens/game-hud-portrait-align-v2.png.
+Application code commit: 7a55042.
+```
+
+### Visual QA Notes
+
+- Confirmed the top HUD now reads as a central plaque with independent dice rather than a separate utility card.
+- Confirmed the right-side embedded `黑方（对手）` label from the source crop is no longer visible after the second crop pass.
+- Confirmed both character heads remain visible after the tighter portrait crop.
+- Remaining gap: the current portraits are still crops from a full framed reference panel. A true no-double-frame result will require clean transparent or unframed character artwork rather than cropped screenshots.
