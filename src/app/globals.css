@@ -1006,8 +1006,8 @@ button:focus-visible {
     drop-shadow(0 0 0.06rem rgba(251, 191, 36, 0.32));
 }
 
-.horse-piece:not(:has(.horse-piece-image[style*="display: none"]))::before,
-.horse-piece:not(:has(.horse-piece-image[style*="display: none"]))::after {
+.horse-piece:has(.horse-piece-image):not(:has(.horse-piece-image[style*="display: none"]))::before,
+.horse-piece:has(.horse-piece-image):not(:has(.horse-piece-image[style*="display: none"]))::after {
   opacity: 0;
 }
 
@@ -1359,13 +1359,9 @@ button:focus-visible {
 
 .parchment-footer-nav {
   align-items: stretch;
-  background:
-    linear-gradient(180deg, rgba(45, 31, 19, 0.96), rgba(17, 13, 10, 0.98)),
-    radial-gradient(ellipse at 50% 0%, rgba(197, 145, 68, 0.22), transparent 60%);
-  border: 1px solid rgba(188, 137, 61, 0.44);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 231, 164, 0.22),
-    0 -0.18rem 0.8rem rgba(64, 40, 18, 0.16);
+  background: url("/assets/ui/footer-nav-bar-empty.png") center / 100% 100% no-repeat;
+  border: 0;
+  box-shadow: 0 -0.16rem 0.7rem rgba(64, 40, 18, 0.12);
   display: grid;
   grid-area: footer;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1399,8 +1395,7 @@ button:focus-visible {
 
 .parchment-footer-nav button:hover,
 .parchment-footer-nav .parchment-footer-active {
-  background:
-    linear-gradient(180deg, rgba(91, 62, 31, 0.72), rgba(42, 27, 16, 0.86));
+  background: rgba(91, 62, 31, 0.32);
   color: #f0d190;
 }
 
@@ -1418,39 +1413,26 @@ button:focus-visible {
 
 .round-status-plaque {
   align-items: center;
-  background:
-    linear-gradient(90deg, #2a180c 0 37%, #efe1c1 37% 100%),
-    radial-gradient(ellipse at 50% 0%, rgba(255, 232, 164, 0.22), transparent 62%);
-  border: 1px solid rgba(71, 42, 17, 0.82);
-  border-radius: 0.1rem;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 235, 170, 0.28),
-    inset 0 0 0 0.22rem rgba(92, 57, 24, 0.12),
-    0 0.34rem 0.72rem rgba(74, 48, 20, 0.18);
-  clip-path: polygon(0.6rem 0, calc(100% - 0.6rem) 0, 100% 50%, calc(100% - 0.6rem) 100%, 0.6rem 100%, 0 50%);
+  aspect-ratio: 1504 / 305;
+  background: url("/assets/ui/round-plaque-empty.png") center / 100% 100% no-repeat;
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 0.28rem 0.62rem rgba(74, 48, 20, 0.12);
+  clip-path: none;
   color: #2d1b0c;
   display: inline-flex;
   font-family: var(--font-display);
   font-size: clamp(1.08rem, 1.55vw, 1.42rem);
   gap: 0;
-  min-height: 3.35rem;
-  min-width: min(31vw, 360px);
+  min-height: 0;
+  width: clamp(20rem, 28vw, 28rem);
   padding: 0;
   position: relative;
   text-align: center;
 }
 
 .round-status-plaque::before {
-  background:
-    linear-gradient(90deg, transparent, rgba(255, 233, 173, 0.38), transparent);
-  content: "";
-  display: block;
-  height: 1px;
-  left: 0.95rem;
-  position: absolute;
-  right: 0.95rem;
-  top: 0.42rem;
-  z-index: 2;
+  display: none;
 }
 
 .round-status-plaque span,
@@ -1461,62 +1443,49 @@ button:focus-visible {
 
 .round-status-plaque span {
   color: #ffe9ad;
-  flex: 0 0 37%;
+  flex: 0 0 29%;
   font-weight: 700;
-  padding: 0.75rem 0.95rem 0.72rem 1.2rem;
+  padding: 0.72rem 0.42rem 0.7rem 1.1rem;
 }
 
 .round-status-plaque strong {
   flex: 1;
   font-weight: 700;
-  padding: 0.75rem 1.2rem 0.72rem 1rem;
+  padding: 0.72rem 1.35rem 0.7rem 0.8rem;
 }
 
 .character-scroll-panel {
-  background:
-    linear-gradient(180deg, rgba(252, 243, 220, 0.9), rgba(229, 201, 151, 0.64)),
-    radial-gradient(ellipse at 50% 36%, rgba(255, 255, 255, 0.22), transparent 58%);
-  border: 1px solid rgba(68, 42, 18, 0.28);
-  border-radius: 0.12rem;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 252, 235, 0.42),
-    0 0.68rem 1.5rem rgba(72, 47, 21, 0.09);
+  background: var(--character-scroll-bg) center / 100% 100% no-repeat;
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 0.58rem 1.25rem rgba(72, 47, 21, 0.08);
   color: var(--ink);
   min-height: clamp(29rem, calc(100vh - 7.2rem), 48rem);
   overflow: hidden;
-  padding: 0.78rem;
+  padding: 1.25rem 1.25rem 1.15rem;
   position: relative;
 }
 
+.character-scroll-white {
+  --character-scroll-bg: url("/assets/ui/side-panel-parchment-left.png");
+}
+
+.character-scroll-black {
+  --character-scroll-bg: url("/assets/ui/side-panel-parchment-right.png");
+}
+
 .character-scroll-panel::before {
-  background:
-    linear-gradient(90deg, rgba(81, 51, 22, 0.14), transparent 9%, transparent 91%, rgba(81, 51, 22, 0.12)),
-    linear-gradient(180deg, rgba(112, 70, 29, 0.08), transparent 18%, transparent 84%, rgba(112, 70, 29, 0.08));
-  border: 0;
-  content: "";
-  inset: 0.42rem 0.34rem;
-  pointer-events: none;
-  position: absolute;
-  z-index: 4;
+  display: none;
 }
 
 .character-scroll-panel::after {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(255, 252, 236, 0.5), transparent 52%),
-    repeating-linear-gradient(0deg, rgba(85, 55, 25, 0.035) 0 1px, transparent 1px 9px);
-  content: "";
-  inset: 0;
-  opacity: 0.68;
-  pointer-events: none;
-  position: absolute;
-  z-index: 0;
+  display: none;
 }
 
 .character-scroll-active {
-  border-color: rgba(128, 83, 35, 0.42);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 252, 235, 0.32),
-    0 0.75rem 1.7rem rgba(72, 47, 21, 0.11);
+    0 0.75rem 1.7rem rgba(72, 47, 21, 0.1),
+    0 0 0 1px rgba(176, 131, 53, 0.1);
 }
 
 .character-scroll-heading {
@@ -1546,14 +1515,25 @@ button:focus-visible {
 }
 
 .character-portrait {
-  background: transparent;
+  background-color: transparent;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: contain;
   border: 0;
   box-shadow: none;
-  height: clamp(18.5rem, 40vh, 26.5rem);
-  margin: 0.2rem -0.18rem 0;
+  height: clamp(18.5rem, 38vh, 26rem);
+  margin: 0.1rem -0.5rem 0;
   overflow: hidden;
   position: relative;
   z-index: 2;
+}
+
+.character-portrait-white {
+  background-image: url("/assets/characters/li-qingzhao-halfbody.png");
+}
+
+.character-portrait-black {
+  background-image: url("/assets/characters/song-emperor-halfbody.png");
 }
 
 .character-portrait::after {
@@ -1564,23 +1544,6 @@ button:focus-visible {
   inset: 0;
   pointer-events: none;
   position: absolute;
-}
-
-.character-portrait img {
-  height: calc(100% + 3.4rem);
-  object-fit: cover;
-  object-position: center top;
-  pointer-events: none;
-  transform: translateY(-3.05rem) scale(1.08);
-  width: 100%;
-}
-
-.character-portrait-white img {
-  object-position: center top;
-}
-
-.character-portrait-black img {
-  object-position: center top;
 }
 
 .character-quote {
@@ -1773,13 +1736,12 @@ button:focus-visible {
 
 .parchment-game-shell .board-shell::before {
   background:
-    radial-gradient(circle at 50% 50%, rgba(100, 58, 25, 0.12), transparent 10%),
-    radial-gradient(circle at 50% 50%, transparent 10%, rgba(255, 248, 226, 0.1) 10.3% 12.4%, transparent 12.7%),
-    linear-gradient(180deg, rgba(255, 253, 239, 0.18), rgba(82, 50, 20, 0.05));
-  border: 1px solid rgba(83, 51, 23, 0.22);
+    url("/assets/ui/board-center-medallion.png") center / min(12.5rem, 21%) auto no-repeat,
+    linear-gradient(180deg, rgba(255, 253, 239, 0.14), rgba(82, 50, 20, 0.04));
+  border: 0;
   border-radius: 0.08rem;
   inset: 0.42rem;
-  opacity: 1;
+  opacity: 0.72;
 }
 
 .parchment-game-shell .board-shell::after {
@@ -1876,7 +1838,7 @@ button:focus-visible {
 
 .parchment-game-shell .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(87, 52, 21, 0.15) 0 0.72rem, transparent 0.77rem),
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
     linear-gradient(180deg, rgba(255, 247, 224, 0.18), rgba(113, 73, 34, 0.08));
   border-left: 1px solid rgba(80, 49, 22, 0.24);
   border-right: 1px solid rgba(80, 49, 22, 0.12);
@@ -1890,28 +1852,31 @@ button:focus-visible {
 .parchment-game-shell .point-lane-warm,
 .parchment-game-shell .point-lane-dark {
   background:
-    radial-gradient(circle at 50% 50%, rgba(87, 52, 21, 0.15) 0 0.72rem, transparent 0.77rem),
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
     linear-gradient(180deg, rgba(255, 247, 224, 0.18), rgba(113, 73, 34, 0.08));
 }
 
 .parchment-game-shell .point-source .point-lane,
 .parchment-game-shell .point-selected .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(176, 131, 53, 0.45) 0 0.84rem, transparent 0.9rem),
+    radial-gradient(circle at 50% 50%, rgba(176, 131, 53, 0.38) 0 1.25rem, transparent 1.48rem),
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
     linear-gradient(180deg, rgba(255, 235, 170, 0.32), rgba(176, 131, 53, 0.12));
   box-shadow: inset 0 0 0 2px rgba(176, 131, 53, 0.28);
 }
 
 .parchment-game-shell .point-target .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(29, 117, 94, 0.42) 0 0.84rem, transparent 0.9rem),
+    radial-gradient(circle at 50% 50%, rgba(29, 117, 94, 0.35) 0 1.25rem, transparent 1.48rem),
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
     linear-gradient(180deg, rgba(203, 245, 229, 0.3), rgba(29, 117, 94, 0.14));
   box-shadow: inset 0 0 0 2px rgba(29, 117, 94, 0.28);
 }
 
 .parchment-game-shell .point-ai-trail .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(43, 106, 151, 0.36) 0 1.05rem, transparent 1.12rem),
+    radial-gradient(circle at 50% 50%, rgba(43, 106, 151, 0.3) 0 1.25rem, transparent 1.48rem),
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
     linear-gradient(180deg, rgba(224, 242, 254, 0.28), rgba(43, 106, 151, 0.12));
 }
 
@@ -2102,13 +2067,10 @@ button:focus-visible {
 }
 
 .parchment-game-shell .dice-tray button {
-  background:
-    linear-gradient(180deg, rgba(244, 223, 183, 0.72), rgba(205, 159, 86, 0.58));
-  border-color: rgba(92, 56, 21, 0.42);
-  border-radius: 0.08rem;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 252, 235, 0.38),
-    0 0.12rem 0.24rem rgba(85, 52, 20, 0.12);
+  background: url("/assets/ui/button-paper-empty.png") center / 100% 100% no-repeat;
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 0.12rem 0.24rem rgba(85, 52, 20, 0.1);
   color: #3a2511;
   font-size: 0.78rem;
   min-height: 1.85rem;
@@ -2152,16 +2114,10 @@ button:focus-visible {
 }
 
 .parchment-game-shell .parchment-play-area > .parchment-command-panel {
-  background:
-    linear-gradient(180deg, rgba(250, 238, 211, 0.86), rgba(225, 190, 124, 0.62)),
-    radial-gradient(ellipse at 50% 0%, rgba(255, 252, 236, 0.38), transparent 58%),
-    url("/assets/ui/2d-board-texture.png") center / cover no-repeat;
-  border: 1px solid rgba(84, 54, 26, 0.3);
-  border-radius: 0.14rem;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 252, 235, 0.38),
-    inset 0 0.55rem 1.2rem rgba(255, 245, 216, 0.18),
-    0 0.62rem 1.45rem rgba(67, 43, 18, 0.1);
+  background: url("/assets/ui/command-band-empty.png") center / 100% 100% no-repeat;
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 0.44rem 1rem rgba(67, 43, 18, 0.08);
   display: grid;
   gap: 0;
   grid-template-columns: minmax(270px, 1.16fr) minmax(230px, 0.9fr) minmax(128px, 0.44fr) minmax(220px, 0.88fr);
@@ -2171,15 +2127,7 @@ button:focus-visible {
 
 .parchment-game-shell .parchment-play-area > .parchment-command-panel::before,
 .parchment-game-shell .parchment-play-area > .parchment-command-panel::after {
-  background:
-    linear-gradient(90deg, transparent, rgba(97, 61, 27, 0.34), transparent);
-  content: "";
-  height: 1px;
-  left: 0.7rem;
-  pointer-events: none;
-  position: absolute;
-  right: 0.7rem;
-  z-index: 0;
+  display: none;
 }
 
 .parchment-game-shell .parchment-play-area > .parchment-command-panel::before {
@@ -2207,13 +2155,7 @@ button:focus-visible {
 }
 
 .parchment-command-panel > * + *::before {
-  background:
-    linear-gradient(180deg, transparent, rgba(91, 58, 25, 0.3) 18%, rgba(91, 58, 25, 0.18) 50%, rgba(91, 58, 25, 0.3) 82%, transparent);
-  content: "";
-  inset: 0.82rem auto 0.82rem 0;
-  pointer-events: none;
-  position: absolute;
-  width: 1px;
+  display: none;
 }
 
 .parchment-command-panel h2 {

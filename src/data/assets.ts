@@ -1,8 +1,8 @@
 export const pieceAssets = {
   white: {
-    idle: "/assets/pieces/white-horse-idle.png",
+    idle: null,
   },
   black: {
-    idle: "/assets/pieces/black-horse-idle.png",
+    idle: null,
   },
 } as const;

@@ -7,12 +7,6 @@ type CharacterPanelProps = {
   borneOff: number;
 };
 
-function portraitPath(player: Character["player"]): string {
-  return player === "white"
-    ? "/assets/characters/white-reference-portrait.png"
-    : "/assets/characters/black-reference-portrait.png";
-}
-
 function sideLabel(player: Character["player"]): string {
   return player === "white" ? "白方（你）" : "黑方（对手）";
 }
@@ -54,16 +48,22 @@ export function CharacterPanel({
   borneOff,
 }: CharacterPanelProps) {
   return (
-    <aside className={`character-scroll-panel ${active ? "character-scroll-active" : ""}`}>
+    <aside
+      className={`character-scroll-panel character-scroll-${character.player} ${
+        active ? "character-scroll-active" : ""
+      }`}
+    >
       <div className="character-scroll-heading">
         <p>{sideLabel(character.player)}</p>
         <h2>{character.name}</h2>
         <span>{character.title}</span>
       </div>
 
-      <div className={`character-portrait character-portrait-${character.player}`}>
-        <img src={portraitPath(character.player)} alt={character.name} draggable={false} />
-      </div>
+      <div
+        className={`character-portrait character-portrait-${character.player}`}
+        role="img"
+        aria-label={character.name}
+      />
 
       <p className="character-quote">{character.quote}</p>
 

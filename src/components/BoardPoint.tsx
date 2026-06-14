@@ -115,15 +115,17 @@ export function BoardPoint({
                   isLastTo && horseIndex === 0 ? "piece-arrive" : ""
                 } ${isSource ? "piece-selected" : ""}`}
               >
-                <img
-                  src={pieceAssets[owner].idle}
-                  alt={pieceAlt(owner)}
-                  className="horse-piece-image"
-                  draggable={false}
-                  onError={(event) => {
-                    event.currentTarget.style.display = "none";
-                  }}
-                />
+                {pieceAssets[owner].idle ? (
+                  <img
+                    src={pieceAssets[owner].idle}
+                    alt={pieceAlt(owner)}
+                    className="horse-piece-image"
+                    draggable={false}
+                    onError={(event) => {
+                      event.currentTarget.style.display = "none";
+                    }}
+                  />
+                ) : null}
                 {horseIndex === visibleCount - 1 && point.count > visibleCount ? (
                   <span className="piece-count-sign">x{point.count}</span>
                 ) : null}
