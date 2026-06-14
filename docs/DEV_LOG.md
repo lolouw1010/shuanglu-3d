@@ -3504,3 +3504,54 @@ Application code commit: 7a55042.
 - Confirmed the right-side embedded `黑方（对手）` label from the source crop is no longer visible after the second crop pass.
 - Confirmed both character heads remain visible after the tighter portrait crop.
 - Remaining gap: the current portraits are still crops from a full framed reference panel. A true no-double-frame result will require clean transparent or unframed character artwork rather than cropped screenshots.
+
+## 2026-06-15 03:45 CST
+
+### Objective
+
+Mount the user-generated PNG art assets into the live 2D parchment interface while leaving dice asset design for a later pass.
+
+### Changes
+
+- Added generated transparent character portraits:
+  - `public/assets/characters/li-qingzhao-halfbody.png`
+  - `public/assets/characters/song-emperor-halfbody.png`
+- Added generated parchment UI assets:
+  - `public/assets/ui/round-plaque-empty.png`
+  - `public/assets/ui/command-band-empty.png`
+  - `public/assets/ui/button-paper-empty.png`
+  - `public/assets/ui/button-red-empty.png`
+  - `public/assets/ui/footer-nav-bar-empty.png`
+  - `public/assets/ui/point-ring-empty.png`
+  - `public/assets/ui/board-center-medallion.png`
+  - `public/assets/ui/side-panel-parchment-left.png`
+  - `public/assets/ui/side-panel-parchment-right.png`
+- Converted the character portrait render from `<img>` to CSS background layers so broken image alt text cannot appear during initial load.
+- Optimized the new PNG assets for browser delivery before deployment.
+- Updated the 2D parchment HUD, command band, footer nav, side panels, board center, and point rings to use the generated assets.
+- Kept dice rendering on the existing CSS dice implementation; generated dice PNGs were not mounted in this pass.
+- Stopped requesting missing `public/assets/pieces/*horse*.png` files. Until final horse-piece PNGs exist, the board uses the existing CSS fallback pieces.
+- Fixed the fallback selector so CSS horse pieces remain visible when no image asset is configured.
+- Cleaned Aliyun `/opt/shuanglu_backups` after the server hit 100% disk usage during a failed release copy. Kept the latest three Shuanglu backups.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Aliyun server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Cloud room 1248E8 created for visual verification.
+Captured cloud screenshot at /tmp/shuanglu-screens/game-png-assets-cssfix.png.
+Aliyun root filesystem after cleanup: 28G available, 25% used.
+Latest server backup: /opt/shuanglu_backups/shuanglu_before_png_assets_cssfix_20260615_033923.
+```
+
+### Visual QA Notes
+
+- Confirmed the supplied top banner, round status plaque, parchment side panels, character portraits, command band, footer nav, point-ring assets, and board medallion all load from the cloud deployment.
+- Confirmed CSS horse pieces are visible again after removing the missing PNG requests.
+- Confirmed dice were intentionally left as CSS placeholders for the next design discussion.
+- Remaining gap: side-panel typography and portrait positioning still need a dedicated layout polish pass against the reference composition; this pass focused on mounting usable assets without changing gameplay rules.

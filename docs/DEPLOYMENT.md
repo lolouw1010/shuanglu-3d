@@ -835,6 +835,76 @@ gaokao-sprint-coach online
 school-application online
 ```
 
+## 2026-06-15 Generated PNG UI Asset Deployment
+
+Purpose:
+
+- Deploy the generated parchment UI PNG asset pass to the 2D game surface.
+- Keep the deployed runtime on Aliyun only; no local web service was started.
+- Do not mount generated dice PNGs yet.
+- Remove requests for missing horse-piece PNGs until final piece assets are available.
+
+Source scope:
+
+```txt
+src/app/globals.css
+src/components/BoardPoint.tsx
+src/components/CharacterPanel.tsx
+src/data/assets.ts
+public/assets/characters/li-qingzhao-halfbody.png
+public/assets/characters/song-emperor-halfbody.png
+public/assets/ui/board-center-medallion.png
+public/assets/ui/button-paper-empty.png
+public/assets/ui/button-red-empty.png
+public/assets/ui/command-band-empty.png
+public/assets/ui/footer-nav-bar-empty.png
+public/assets/ui/point-ring-empty.png
+public/assets/ui/round-plaque-empty.png
+public/assets/ui/side-panel-parchment-left.png
+public/assets/ui/side-panel-parchment-right.png
+```
+
+Final local artifact:
+
+```txt
+/tmp/shuanglu-png-assets-cssfix-20260615033151.tgz
+```
+
+Final server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_png_assets_cssfix_20260615_033923
+```
+
+Deployment method:
+
+- Uploaded a working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server before switching `/opt/shuanglu`.
+- Restarted PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Operational note:
+
+- An intermediate deployment failed because `/` reached 100% disk usage while copying `node_modules`.
+- Cleaned only Shuanglu-owned failed release directories, uploaded `/tmp/shuanglu-*.tgz` artifacts, and older `/opt/shuanglu_backups/shuanglu_before_*` backups.
+- Kept the latest three Shuanglu backups.
+- Post-cleanup root filesystem state: 28G available, 25% used.
+
+Verification:
+
+```txt
+Local npx tsc --noEmit passed.
+Local npm test passed: 10 test files, 38 tests.
+Local npm run build passed.
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+Cloud room 1248E8 was created for visual QA.
+Cloud screenshot captured at /tmp/shuanglu-screens/game-png-assets-cssfix.png.
+```
+
 ## 2026-06-13 Parchment Command Softening Deployment
 
 Purpose:

@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-13 15:24 CST
+Last updated: 2026-06-15 03:45 CST
 
 ## Current Target
 
@@ -118,6 +118,18 @@ Implemented:
 - Added `docs/CLOUD_ASSETS.md` as the current cloud asset inventory and handoff document.
 - Initialized local Git repository and synced the project to GitHub at `louiezhelee-uway/shuanglu`.
 - BigNAS Git mirror configured as local remote `bignas` at `uway-nas:/var/services/homes/louieadmin/git/shuanglu.git`; the earlier receive-pack hang was resolved, and `bignas/main` was verified at `092ace8` alongside GitHub.
+- Mounted the generated 2D parchment PNG asset pass:
+  - Top banner remains image-led.
+  - Round/action plaque uses generated artwork.
+  - Character side panels use generated parchment scrolls.
+  - Li Qingzhao and Song Huizong portraits use generated transparent PNGs as CSS background layers.
+  - Lower command band, footer nav, board medallion, and point rings use generated PNG assets.
+- Dice PNGs are intentionally not mounted yet; dice remain CSS-rendered until the next asset discussion.
+- Final horse-piece PNGs are still absent. The board now avoids requesting missing horse-piece PNG paths and uses the existing CSS horse fallback.
+- Latest cloud visual verification room: `1248E8`.
+- Latest cloud screenshot: `/tmp/shuanglu-screens/game-png-assets-cssfix.png`.
+- Latest Aliyun backup: `/opt/shuanglu_backups/shuanglu_before_png_assets_cssfix_20260615_033923`.
+- Aliyun disk cleanup completed after a failed release hit 100% root usage; only Shuanglu old backups and upload artifacts were cleaned, leaving 28G available.
 - Restyled the stable 2D board screen toward the approved light parchment reference:
   - Top brand/chapter/action bar.
   - Left and right character-side panels.
@@ -929,6 +941,9 @@ http://47.121.182.144/3d
 - Automatic turn passes now explain why the current player could not move, including blocked bar re-entry and unusable remaining dice steps.
 - Full-match manual testing is still required. Automated tests cover core rules but not a complete end-to-end game.
 - The board UI is no longer a pure debug grid and now includes basic gameplay motion and a first 3D-like lacquer-table pass, but still needs final art direction, real piece assets, audio, and mobile polish before launch.
+- Generated dice PNGs exist in the source asset drop but were deliberately not mounted because their style and generation plan still need review.
+- Real final horse-piece PNGs are still not present in `public/assets/pieces/`; the visible pieces are CSS fallback pieces.
+- The generated parchment assets now load on cloud, but side-panel typography and portrait composition still need a focused polish pass against the reference layout.
 
 ## Next Engineering Priorities
 
@@ -947,3 +962,6 @@ http://47.121.182.144/3d
 13. Add explicit reason feedback when clicking non-highlighted or blocked points.
 14. Run mobile viewport QA for the online menu, compact HUD, and 3D scene fallback behavior.
 15. Add regression tests for full-turn edge sequences that use all four doubles steps.
+16. Decide the final dice PNG generation direction and mount dice assets only after approval.
+17. Produce final white/black horse-piece PNGs for `public/assets/pieces/` or keep refining the CSS fallback intentionally.
+18. Polish the 2D side-panel typography, portrait scale, and lower content spacing against the approved reference layout.
