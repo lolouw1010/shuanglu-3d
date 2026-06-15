@@ -1460,9 +1460,11 @@ button:focus-visible {
   border-radius: 0;
   box-shadow: 0 0.58rem 1.25rem rgba(72, 47, 21, 0.08);
   color: var(--ink);
+  display: flex;
+  flex-direction: column;
   min-height: clamp(29rem, calc(100vh - 7.2rem), 48rem);
   overflow: hidden;
-  padding: 1.25rem 1.25rem 1.15rem;
+  padding: 1.05rem 1.18rem 1rem;
   position: relative;
 }
 
@@ -1489,40 +1491,56 @@ button:focus-visible {
 }
 
 .character-scroll-heading {
+  order: 2;
+  padding: 0 0.56rem;
   position: relative;
+  text-align: center;
   z-index: 5;
 }
 
 .character-scroll-heading p {
-  color: var(--ink-soft);
-  font-size: 0.86rem;
+  color: rgba(83, 55, 25, 0.72);
+  font-size: 0.74rem;
   font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.22rem;
 }
 
 .character-scroll-heading h2 {
-  color: #2d1c0d;
+  background:
+    linear-gradient(180deg, rgba(71, 46, 23, 0.96), rgba(35, 24, 15, 0.96)),
+    radial-gradient(ellipse at 50% 0%, rgba(231, 184, 103, 0.32), transparent 68%);
+  border: 1px solid rgba(179, 126, 55, 0.42);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 229, 156, 0.16),
+    0 0.2rem 0.48rem rgba(73, 45, 19, 0.16);
+  color: #f3dfac;
   font-family: var(--font-display);
-  font-size: clamp(1.7rem, 2.2vw, 2.25rem);
-  line-height: 1.1;
-  margin-top: 0.1rem;
+  font-size: clamp(1.44rem, 1.92vw, 1.9rem);
+  line-height: 1.05;
+  margin: 0 auto;
+  max-width: 12.2rem;
+  padding: 0.34rem 0.6rem 0.4rem;
 }
 
 .character-scroll-heading span {
-  color: #765735;
+  color: #6d4b25;
   display: block;
-  font-size: 0.76rem;
-  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  margin-top: 0.34rem;
 }
 
 .character-portrait {
   background-color: transparent;
-  background-position: center top;
+  background-position: center bottom;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 92% auto;
   border: 0;
   box-shadow: none;
-  height: clamp(18.5rem, 38vh, 26rem);
-  margin: 0.1rem -0.5rem 0;
+  height: clamp(18.4rem, 38vh, 25rem);
+  margin: 0.1rem -0.2rem -0.12rem;
+  order: 1;
   overflow: hidden;
   position: relative;
   z-index: 2;
@@ -1530,10 +1548,12 @@ button:focus-visible {
 
 .character-portrait-white {
   background-image: url("/assets/characters/li-qingzhao-halfbody.png");
+  background-size: 96% auto;
 }
 
 .character-portrait-black {
   background-image: url("/assets/characters/song-emperor-halfbody.png");
+  background-size: 91% auto;
 }
 
 .character-portrait::after {
@@ -1550,30 +1570,35 @@ button:focus-visible {
   color: #5b3e20;
   font-size: 0.82rem;
   line-height: 1.55;
-  margin-top: 0.5rem;
-  min-height: 2.5rem;
+  margin-top: 0.48rem;
+  min-height: 2.05rem;
+  order: 3;
   position: relative;
+  text-align: center;
   z-index: 2;
 }
 
 .character-skill-box,
 .character-token-box,
 .character-track {
-  background: rgba(255, 247, 225, 0.42);
-  border: 1px solid rgba(84, 54, 26, 0.2);
-  box-shadow: inset 0 0 0 1px rgba(255, 252, 236, 0.25);
+  background: rgba(255, 247, 225, 0.26);
+  border: 1px solid rgba(84, 54, 26, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 252, 236, 0.28),
+    0 1px 0 rgba(120, 76, 31, 0.06);
   color: var(--ink);
-  margin-top: 0.7rem;
+  margin-top: 0.52rem;
   position: relative;
   z-index: 2;
 }
 
 .character-skill-box {
-  padding: 0.62rem 0.7rem;
+  order: 4;
+  padding: 0.54rem 0.66rem;
 }
 
 .character-skill-box span {
-  border: 1px solid rgba(92, 60, 31, 0.28);
+  border: 1px solid rgba(92, 60, 31, 0.18);
   color: #553719;
   display: inline-block;
   font-size: 0.76rem;
@@ -1588,9 +1613,9 @@ button:focus-visible {
 
 .character-skill-box p {
   color: #644523;
-  font-size: 0.78rem;
-  line-height: 1.55;
-  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  margin-top: 0.38rem;
 }
 
 .character-token-box {
@@ -1598,19 +1623,21 @@ button:focus-visible {
   border: 0;
   box-shadow: none;
   display: grid;
-  gap: 0.52rem;
+  gap: 0.38rem;
   grid-template-columns: 1fr;
+  order: 5;
 }
 
 .character-track {
-  padding: 0.55rem 0.62rem 0.62rem;
+  background: rgba(255, 247, 225, 0.22);
+  padding: 0.42rem 0.54rem 0.48rem;
 }
 
 .character-track-heading {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.34rem;
 }
 
 .character-track-heading span {
@@ -1627,7 +1654,7 @@ button:focus-visible {
 
 .character-track-slots {
   display: grid;
-  gap: 0.28rem;
+  gap: 0.22rem;
   grid-template-columns: repeat(9, minmax(0, 1fr));
 }
 
@@ -1736,21 +1763,21 @@ button:focus-visible {
 
 .parchment-game-shell .board-shell::before {
   background:
-    url("/assets/ui/board-center-medallion.png") center / min(12.5rem, 21%) auto no-repeat,
-    linear-gradient(180deg, rgba(255, 253, 239, 0.14), rgba(82, 50, 20, 0.04));
+    url("/assets/ui/board-center-medallion.png") center / min(9.2rem, 15.5%) auto no-repeat,
+    linear-gradient(180deg, rgba(255, 253, 239, 0.1), rgba(82, 50, 20, 0.03));
   border: 0;
   border-radius: 0.08rem;
   inset: 0.42rem;
-  opacity: 0.72;
+  opacity: 0.44;
 }
 
 .parchment-game-shell .board-shell::after {
   background:
-    radial-gradient(circle at 50% 50%, transparent 0 4.2rem, rgba(89, 55, 24, 0.12) 4.25rem, transparent 4.35rem),
-    repeating-linear-gradient(90deg, rgba(66, 41, 19, 0.1) 0 1px, transparent 1px calc(100% / 12));
+    radial-gradient(circle at 50% 50%, transparent 0 3.1rem, rgba(89, 55, 24, 0.08) 3.16rem, transparent 3.25rem),
+    repeating-linear-gradient(90deg, rgba(66, 41, 19, 0.085) 0 1px, transparent 1px calc(100% / 12));
   border-radius: 0.05rem;
   inset: 0.48rem;
-  opacity: 0.9;
+  opacity: 0.72;
 }
 
 .parchment-game-shell .board-rank {
@@ -1838,7 +1865,7 @@ button:focus-visible {
 
 .parchment-game-shell .point-lane {
   background:
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.05rem, 3vw, 2.48rem) clamp(1.98rem, 2.9vw, 2.4rem) no-repeat,
     linear-gradient(180deg, rgba(255, 247, 224, 0.18), rgba(113, 73, 34, 0.08));
   border-left: 1px solid rgba(80, 49, 22, 0.24);
   border-right: 1px solid rgba(80, 49, 22, 0.12);
@@ -1846,38 +1873,41 @@ button:focus-visible {
   clip-path: none;
   height: 100% !important;
   inset-inline: 0 !important;
-  opacity: 0.9;
+  opacity: 0.66;
 }
 
 .parchment-game-shell .point-lane-warm,
 .parchment-game-shell .point-lane-dark {
   background:
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.05rem, 3vw, 2.48rem) clamp(1.98rem, 2.9vw, 2.4rem) no-repeat,
     linear-gradient(180deg, rgba(255, 247, 224, 0.18), rgba(113, 73, 34, 0.08));
 }
 
 .parchment-game-shell .point-source .point-lane,
 .parchment-game-shell .point-selected .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(176, 131, 53, 0.38) 0 1.25rem, transparent 1.48rem),
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
+    radial-gradient(circle at 50% 50%, rgba(176, 131, 53, 0.32) 0 0.95rem, transparent 1.2rem),
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.08rem, 3vw, 2.56rem) clamp(2rem, 2.9vw, 2.48rem) no-repeat,
     linear-gradient(180deg, rgba(255, 235, 170, 0.32), rgba(176, 131, 53, 0.12));
   box-shadow: inset 0 0 0 2px rgba(176, 131, 53, 0.28);
+  opacity: 0.82;
 }
 
 .parchment-game-shell .point-target .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(29, 117, 94, 0.35) 0 1.25rem, transparent 1.48rem),
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
+    radial-gradient(circle at 50% 50%, rgba(29, 117, 94, 0.3) 0 0.95rem, transparent 1.2rem),
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.08rem, 3vw, 2.56rem) clamp(2rem, 2.9vw, 2.48rem) no-repeat,
     linear-gradient(180deg, rgba(203, 245, 229, 0.3), rgba(29, 117, 94, 0.14));
   box-shadow: inset 0 0 0 2px rgba(29, 117, 94, 0.28);
+  opacity: 0.82;
 }
 
 .parchment-game-shell .point-ai-trail .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(43, 106, 151, 0.3) 0 1.25rem, transparent 1.48rem),
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.55rem, 3.9vw, 3.35rem) clamp(2.45rem, 3.75vw, 3.2rem) no-repeat,
+    radial-gradient(circle at 50% 50%, rgba(43, 106, 151, 0.26) 0 0.95rem, transparent 1.2rem),
+    url("/assets/ui/point-ring-empty.png") center / clamp(2.08rem, 3vw, 2.56rem) clamp(2rem, 2.9vw, 2.48rem) no-repeat,
     linear-gradient(180deg, rgba(224, 242, 254, 0.28), rgba(43, 106, 151, 0.12));
+  opacity: 0.82;
 }
 
 .parchment-game-shell .point-surface > .absolute.left-2 {
@@ -1890,23 +1920,23 @@ button:focus-visible {
 
 .parchment-game-shell .piece-rack {
   gap: 0.08rem 0.1rem;
-  grid-auto-rows: clamp(1.03rem, 1.35vw, 1.22rem);
-  grid-template-columns: repeat(2, clamp(1.03rem, 1.35vw, 1.22rem));
+  grid-auto-rows: clamp(1rem, 1.26vw, 1.16rem);
+  grid-template-columns: repeat(2, clamp(1rem, 1.26vw, 1.16rem));
   height: auto;
   padding-inline: 0.08rem;
 }
 
 .parchment-game-shell .piece-rack-top {
-  top: 1.5rem;
+  top: 1.58rem;
 }
 
 .parchment-game-shell .piece-rack-bottom {
-  bottom: 1.5rem;
+  bottom: 1.58rem;
 }
 
 .parchment-game-shell .horse-piece {
-  height: clamp(1.03rem, 1.35vw, 1.22rem);
-  width: clamp(1.03rem, 1.35vw, 1.22rem);
+  height: clamp(1rem, 1.26vw, 1.16rem);
+  width: clamp(1rem, 1.26vw, 1.16rem);
 }
 
 .parchment-game-shell .horse-piece-image {
@@ -2144,8 +2174,8 @@ button:focus-visible {
   border-radius: 0;
   box-shadow: none;
   color: #3a2511;
-  min-height: 5.85rem;
-  padding: 0.72rem 0.92rem 0.66rem;
+  min-height: 5.45rem;
+  padding: 0.72rem 1rem 0.56rem;
   position: relative;
   z-index: 1;
 }
@@ -2161,14 +2191,14 @@ button:focus-visible {
 .parchment-command-panel h2 {
   align-items: center;
   border: 0;
-  color: #4c2d13;
+  color: #553515;
   display: flex;
   gap: 0.5rem;
   font-family: var(--font-display);
-  font-size: clamp(0.96rem, 1.08vw, 1.12rem);
+  font-size: clamp(0.92rem, 1vw, 1.05rem);
   font-weight: 700;
   line-height: 1.1;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.38rem;
   padding-bottom: 0;
   text-align: center;
 }
@@ -2183,8 +2213,8 @@ button:focus-visible {
 
 .parchment-dialogue p,
 .parchment-hint-card p {
-  font-size: 0.82rem;
-  line-height: 1.62;
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 
 .parchment-hint-card p {
@@ -2204,9 +2234,9 @@ button:focus-visible {
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.44rem;
+  gap: 0.34rem;
   justify-content: center;
-  min-height: 2.72rem;
+  min-height: 2.44rem;
 }
 
 .parchment-source-token {

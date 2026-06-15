@@ -905,6 +905,66 @@ Cloud room 1248E8 was created for visual QA.
 Cloud screenshot captured at /tmp/shuanglu-screens/game-png-assets-cssfix.png.
 ```
 
+## 2026-06-15 2D UI Tuning Deployment
+
+Purpose:
+
+- Fine-tune the mounted parchment PNG interface before requesting additional image assets.
+- Keep dice and horse-piece asset generation out of scope for this pass.
+- Preserve cloud-only runtime testing.
+
+Source scope:
+
+```txt
+src/app/globals.css
+docs/DEV_LOG.md
+docs/DEPLOYMENT.md
+docs/PROJECT_STATUS.md
+```
+
+Final local artifact:
+
+```txt
+/tmp/shuanglu-ui-tuning-final-20260615172731.tgz
+```
+
+Final server backup directory:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_ui_tuning_final_20260615_172912
+```
+
+Deployment method:
+
+- Uploaded a working-tree archive to `/tmp/` on Aliyun GD.
+- Extracted into a fresh release directory.
+- Reused the existing production `node_modules` directory.
+- Ran `npm run build` on the server.
+- Swapped `/opt/shuanglu` only after the server build passed.
+- Restarted PM2 process `shuanglu`.
+- Ran `nginx -t` before reloading Nginx.
+
+Verification:
+
+```txt
+Local npx tsc --noEmit passed.
+Local npm test passed: 10 test files, 38 tests.
+Local npm run build passed.
+Server npm run build passed.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+Cloud room CF6EA0 was created for visual QA.
+Cloud screenshot captured at /tmp/shuanglu-screens/game-ui-tuning-final.png.
+```
+
+Cleanup:
+
+```txt
+Removed uploaded /tmp/shuanglu-*.tgz artifacts from Aliyun.
+Kept the latest three Shuanglu backups.
+Root filesystem after cleanup: 29G available, 25% used.
+```
+
 ## 2026-06-13 Parchment Command Softening Deployment
 
 Purpose:

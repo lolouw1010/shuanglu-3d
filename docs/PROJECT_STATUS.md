@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-15 03:45 CST
+Last updated: 2026-06-15 17:40 CST
 
 ## Current Target
 
@@ -130,6 +130,16 @@ Implemented:
 - Latest cloud screenshot: `/tmp/shuanglu-screens/game-png-assets-cssfix.png`.
 - Latest Aliyun backup: `/opt/shuanglu_backups/shuanglu_before_png_assets_cssfix_20260615_033923`.
 - Aliyun disk cleanup completed after a failed release hit 100% root usage; only Shuanglu old backups and upload artifacts were cleaned, leaving 28G available.
+- Completed a follow-up 2D UI tuning pass on the mounted PNG interface:
+  - Character portraits now lead the side panels.
+  - Character names now sit in dark plaque treatments below the portraits.
+  - Skill and token-track boxes were softened to blend into the scroll panels.
+  - Board point rings and center medallion were reduced so pieces read more clearly.
+  - Lower command band spacing and typography were tightened.
+- Latest cloud UI tuning verification room: `CF6EA0`.
+- Latest cloud UI tuning screenshot: `/tmp/shuanglu-screens/game-ui-tuning-final.png`.
+- Latest Aliyun UI tuning backup: `/opt/shuanglu_backups/shuanglu_before_ui_tuning_final_20260615_172912`.
+- Aliyun root filesystem after latest cleanup: 29G available, 25% used.
 - Restyled the stable 2D board screen toward the approved light parchment reference:
   - Top brand/chapter/action bar.
   - Left and right character-side panels.

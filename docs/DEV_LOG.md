@@ -3555,3 +3555,46 @@ Latest server backup: /opt/shuanglu_backups/shuanglu_before_png_assets_cssfix_20
 - Confirmed CSS horse pieces are visible again after removing the missing PNG requests.
 - Confirmed dice were intentionally left as CSS placeholders for the next design discussion.
 - Remaining gap: side-panel typography and portrait positioning still need a dedicated layout polish pass against the reference composition; this pass focused on mounting usable assets without changing gameplay rules.
+
+## 2026-06-15 17:40 CST
+
+### Objective
+
+Resolve the most visible mismatches in the mounted 2D PNG interface before requesting additional image assets.
+
+### Changes
+
+- Reworked character side-panel hierarchy:
+  - Portraits now lead the panel.
+  - Name/status text is grouped under the portrait.
+  - Character names use a dark plaque treatment closer to the supplied reference.
+  - Quotes, skill blocks, and token tracks were softened so they sit inside the parchment instead of reading as web-form boxes.
+- Reduced visual weight of the board center medallion so it no longer competes with pieces around points 6 and 7.
+- Reduced point-ring size and opacity so empty points read as board locations, not oversized buttons.
+- Slightly reduced 2D CSS horse-piece scale and tightened rack spacing.
+- Tuned the lower command band:
+  - Reduced rigid panel spacing.
+  - Lowered heading and body text size.
+  - Softened source/step list spacing.
+- Kept gameplay rules, online room state, AI behavior, dice behavior, and asset file set unchanged.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Aliyun server npm run build passed.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+Cloud room CF6EA0 created for final visual verification.
+Captured cloud screenshot at /tmp/shuanglu-screens/game-ui-tuning-final.png.
+Latest server backup: /opt/shuanglu_backups/shuanglu_before_ui_tuning_final_20260615_172912.
+Aliyun root filesystem after cleanup: 29G available, 25% used.
+```
+
+### Visual QA Notes
+
+- Confirmed side panels, portraits, name plaques, board rings, center medallion, and command band now read as one parchment UI family.
+- Confirmed dice remain the existing CSS placeholders for the next asset discussion.
+- Remaining gap: final horse-piece art and dice art are still pending user asset direction; current pieces remain CSS fallback pieces.
