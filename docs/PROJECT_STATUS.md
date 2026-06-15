@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-15 22:15 CST
+Last updated: 2026-06-16 00:20 CST
 
 ## Current Target
 
@@ -152,6 +152,15 @@ Implemented:
   - SSH timed out during banner exchange.
   - Cloud deployment status for this latest pass is not confirmed.
   - Next cloud action must first verify or recover `/opt/shuanglu`, PM2, Nginx, and disk usage.
+- Aliyun GD recovered after user reboot:
+  - Broken half-deployed `/opt/shuanglu` was moved to `/opt/shuanglu_backups/shuanglu_broken_after_reboot_20260616_001132`.
+  - Runtime was restored from `/opt/shuanglu_backups/shuanglu_before_point_layout_fix_20260615_214256`.
+  - PM2 process `shuanglu` is online.
+  - Nginx configuration test passed and was reloaded.
+  - `http://47.121.182.144/` returned HTTP 200.
+  - Recovery visual QA room: `A9D96C`.
+  - Recovery screenshot: `/tmp/shuanglu-screens/game-recovery-check-20260616001747.png`.
+  - The final local point-circle tuning commit `93c0a91` remains pushed to GitHub/BigNAS but is not currently confirmed as deployed on Aliyun.
 - Restyled the stable 2D board screen toward the approved light parchment reference:
   - Top brand/chapter/action bar.
   - Left and right character-side panels.

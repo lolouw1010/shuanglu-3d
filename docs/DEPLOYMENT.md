@@ -823,6 +823,51 @@ If /opt/shuanglu is incomplete or PM2 is unhealthy, restore from the latest good
 Do not mark this visual fix as cloud-deployed until HTTP 200, PM2 online, Nginx test, and a fresh cloud screenshot are captured.
 ```
 
+## 2026-06-16 Aliyun Reboot Recovery
+
+Trigger:
+
+- The interrupted point/layout deployment left `/opt/shuanglu` incomplete.
+- After the user rebooted the server, SSH became reachable again.
+
+Observed broken state:
+
+```txt
+/opt/shuanglu existed but had no .next directory.
+PM2 process shuanglu was online but restarting repeatedly.
+PM2 error log showed: sh: 1: next: not found.
+Nginx was active and nginx -t passed.
+Root filesystem: 40G total, 11G used, 28G available, 28% used.
+```
+
+Recovery:
+
+```txt
+pm2 stop shuanglu
+mv /opt/shuanglu /opt/shuanglu_backups/shuanglu_broken_after_reboot_20260616_001132
+cp -a /opt/shuanglu_backups/shuanglu_before_point_layout_fix_20260615_214256 /opt/shuanglu
+pm2 restart shuanglu --update-env
+pm2 save
+nginx -t
+systemctl reload nginx
+```
+
+Recovered runtime:
+
+```txt
+PM2 shuanglu online.
+127.0.0.1:3002 returned HTTP 200.
+http://47.121.182.144/ returned HTTP 200.
+Cloud room A9D96C created.
+Cloud screenshot captured at /tmp/shuanglu-screens/game-recovery-check-20260616001747.png.
+```
+
+Deployment rule update:
+
+- Do not delete or replace `/opt/shuanglu` before the new release has built successfully.
+- Future deploys should build in a separate release directory, then atomically switch or copy the verified release into place.
+- Keep the previous complete runtime until the new runtime returns HTTP 200 through Nginx.
+
 ## 2026-06-13 HUD and Portrait Alignment Deployment
 
 Purpose:

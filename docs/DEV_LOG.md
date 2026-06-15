@@ -3646,3 +3646,55 @@ Do not treat this pass as successfully deployed until Aliyun SSH and HTTP recove
 - A cloud screenshot from the earlier intermediate deploy was captured at `/tmp/shuanglu-screens/game-point-portrait-fix.png`, room `20EF18`.
 - That intermediate screenshot confirmed portrait head visibility improved, but point circles still needed another tuning pass.
 - The final point-circle tuning has passed local build/tests but has not yet been cloud-screenshot verified because Aliyun became unreachable.
+
+## 2026-06-16 00:20 CST
+
+### Objective
+
+Recover Aliyun after the interrupted 2026-06-15 point/layout deployment and the manual server reboot.
+
+### Findings
+
+- SSH recovered after reboot; initial uptime was about 2 minutes.
+- `/opt/shuanglu` was left in a half-deployed state:
+  - `.next` was missing.
+  - `next` was not available to the PM2 runtime.
+  - PM2 process `shuanglu` was repeatedly restarting and logging `sh: 1: next: not found`.
+- Nginx itself was active and its configuration tested successfully.
+- Root filesystem had enough space: 28G available, 28% used.
+
+### Recovery Actions
+
+- Stopped PM2 process `shuanglu` to end the restart loop.
+- Moved the broken half-deployed directory to:
+
+```txt
+/opt/shuanglu_backups/shuanglu_broken_after_reboot_20260616_001132
+```
+
+- Restored the latest complete backup:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_point_layout_fix_20260615_214256 -> /opt/shuanglu
+```
+
+- Restarted PM2 process `shuanglu`.
+- Saved the PM2 process list.
+- Re-tested and reloaded Nginx.
+
+### Verification
+
+```txt
+http://47.121.182.144/ returned HTTP 200.
+Local server check on 127.0.0.1:3002 returned HTTP 200.
+PM2 process shuanglu is online.
+Nginx configuration test passed.
+Cloud room A9D96C created for recovery visual QA.
+Captured cloud screenshot at /tmp/shuanglu-screens/game-recovery-check-20260616001747.png.
+```
+
+### Status Note
+
+- The cloud runtime is restored to the latest complete backup taken before the failed point/layout deployment.
+- The final local point-circle tuning commit `93c0a91` is pushed to GitHub and BigNAS but is not currently confirmed as deployed on Aliyun.
+- Do not run another direct in-place deployment with `rm -rf /opt/shuanglu` before a successful server-side build exists in a separate release directory.
