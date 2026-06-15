@@ -773,6 +773,56 @@ gaokao-sprint-coach online
 school-application online
 ```
 
+## 2026-06-15 Point/Layout Fix Deployment Attempt
+
+Purpose:
+
+- Deploy the 2D board point/horse coordination and portrait head-crop fix.
+- Preserve gameplay logic; this was a visual-only pass.
+
+Source state:
+
+```txt
+Working tree after local point/layout edits.
+```
+
+Local artifact:
+
+```txt
+/tmp/shuanglu-point-layout-fix-20260615214151.tgz
+```
+
+Local verification before deployment:
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+```
+
+Deployment result:
+
+```txt
+Incomplete / unverified.
+```
+
+Observed failure mode:
+
+- The archive upload completed and the remote deployment command started.
+- Remote output reached tar extraction and npm engine warnings.
+- The SSH session then stopped producing output.
+- A separate HTTP check to `http://47.121.182.144/` timed out after 10 seconds.
+- Repeated SSH checks timed out during banner exchange.
+- Local hung SSH sessions were terminated to avoid leaving Codex with active stalled processes.
+
+Recovery requirement:
+
+```txt
+When Aliyun SSH recovers, inspect /opt/shuanglu, pm2 status, nginx status, and disk usage.
+If /opt/shuanglu is incomplete or PM2 is unhealthy, restore from the latest good backup or rerun deployment.
+Do not mark this visual fix as cloud-deployed until HTTP 200, PM2 online, Nginx test, and a fresh cloud screenshot are captured.
+```
+
 ## 2026-06-13 HUD and Portrait Alignment Deployment
 
 Purpose:

@@ -3598,3 +3598,51 @@ Aliyun root filesystem after cleanup: 29G available, 25% used.
 - Confirmed side panels, portraits, name plaques, board rings, center medallion, and command band now read as one parchment UI family.
 - Confirmed dice remain the existing CSS placeholders for the next asset discussion.
 - Remaining gap: final horse-piece art and dice art are still pending user asset direction; current pieces remain CSS fallback pieces.
+
+## 2026-06-15 22:15 CST
+
+### Objective
+
+Fix the visible 2D parchment-board alignment issues reported after the previous tuning pass:
+
+- Point circles and horse tokens were visually competing.
+- Some board grid lines appeared misaligned against the playable cells.
+- Character portraits could clip the top of the head or hat.
+
+### Changes
+
+- Added occupied/empty point state classes in `BoardPoint` so CSS can distinguish empty board points from points that currently contain horses.
+- Removed the extra parchment-mode grid overlay on the board shell; the live 12-column board grid now provides the visible alignment structure.
+- Changed empty point circles into smaller, lighter pseudo-element markers.
+- Hid point-circle markers on occupied points so horses no longer sit on top of oversized round holes.
+- Softened occupied point lane backgrounds to keep only a subtle parchment cell texture.
+- Retuned active source/target/AI trail markers to use smaller highlight circles that fit the same scale as the horse tokens.
+- Repositioned side portraits to prioritize top/head visibility and reduced their background scale.
+- Kept gameplay rules, online room state, AI behavior, dice behavior, and asset file set unchanged.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Local cloud-target artifact created at /tmp/shuanglu-point-layout-fix-20260615214151.tgz.
+```
+
+### Cloud Deployment Status
+
+```txt
+Attempted Aliyun deployment to 47.121.182.144.
+The upload and remote extraction started, but the server became unreachable during remote install/build.
+HTTP check to http://47.121.182.144/ timed out after 10 seconds.
+SSH checks timed out during banner exchange.
+Local hung SSH sessions were terminated.
+Cloud release status is not confirmed.
+Do not treat this pass as successfully deployed until Aliyun SSH and HTTP recover and PM2/Nginx are verified.
+```
+
+### Visual QA Notes
+
+- A cloud screenshot from the earlier intermediate deploy was captured at `/tmp/shuanglu-screens/game-point-portrait-fix.png`, room `20EF18`.
+- That intermediate screenshot confirmed portrait head visibility improved, but point circles still needed another tuning pass.
+- The final point-circle tuning has passed local build/tests but has not yet been cloud-screenshot verified because Aliyun became unreachable.

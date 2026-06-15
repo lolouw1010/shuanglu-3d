@@ -1533,13 +1533,13 @@ button:focus-visible {
 
 .character-portrait {
   background-color: transparent;
-  background-position: center bottom;
+  background-position: center top;
   background-repeat: no-repeat;
-  background-size: 92% auto;
+  background-size: 86% auto;
   border: 0;
   box-shadow: none;
-  height: clamp(18.4rem, 38vh, 25rem);
-  margin: 0.1rem -0.2rem -0.12rem;
+  height: clamp(18.8rem, 38vh, 25.4rem);
+  margin: 0.24rem -0.1rem -0.04rem;
   order: 1;
   overflow: hidden;
   position: relative;
@@ -1548,12 +1548,12 @@ button:focus-visible {
 
 .character-portrait-white {
   background-image: url("/assets/characters/li-qingzhao-halfbody.png");
-  background-size: 96% auto;
+  background-size: 88% auto;
 }
 
 .character-portrait-black {
   background-image: url("/assets/characters/song-emperor-halfbody.png");
-  background-size: 91% auto;
+  background-size: 82% auto;
 }
 
 .character-portrait::after {
@@ -1773,11 +1773,10 @@ button:focus-visible {
 
 .parchment-game-shell .board-shell::after {
   background:
-    radial-gradient(circle at 50% 50%, transparent 0 3.1rem, rgba(89, 55, 24, 0.08) 3.16rem, transparent 3.25rem),
-    repeating-linear-gradient(90deg, rgba(66, 41, 19, 0.085) 0 1px, transparent 1px calc(100% / 12));
+    radial-gradient(circle at 50% 50%, transparent 0 3.1rem, rgba(89, 55, 24, 0.06) 3.16rem, transparent 3.25rem);
   border-radius: 0.05rem;
   inset: 0.48rem;
-  opacity: 0.72;
+  opacity: 0.48;
 }
 
 .parchment-game-shell .board-rank {
@@ -1865,29 +1864,51 @@ button:focus-visible {
 
 .parchment-game-shell .point-lane {
   background:
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.05rem, 3vw, 2.48rem) clamp(1.98rem, 2.9vw, 2.4rem) no-repeat,
-    linear-gradient(180deg, rgba(255, 247, 224, 0.18), rgba(113, 73, 34, 0.08));
+    linear-gradient(180deg, rgba(255, 247, 224, 0.11), rgba(113, 73, 34, 0.045));
   border-left: 1px solid rgba(80, 49, 22, 0.24);
   border-right: 1px solid rgba(80, 49, 22, 0.12);
   box-shadow: none;
   clip-path: none;
   height: 100% !important;
   inset-inline: 0 !important;
-  opacity: 0.66;
+  opacity: 0.9;
+  overflow: visible;
 }
 
 .parchment-game-shell .point-lane-warm,
 .parchment-game-shell .point-lane-dark {
   background:
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.05rem, 3vw, 2.48rem) clamp(1.98rem, 2.9vw, 2.4rem) no-repeat,
-    linear-gradient(180deg, rgba(255, 247, 224, 0.18), rgba(113, 73, 34, 0.08));
+    linear-gradient(180deg, rgba(255, 247, 224, 0.11), rgba(113, 73, 34, 0.045));
+}
+
+.parchment-game-shell .point-lane::after {
+  background: url("/assets/ui/point-ring-empty.png") center / contain no-repeat;
+  content: "";
+  height: clamp(1.42rem, 2.05vw, 1.74rem);
+  left: 50%;
+  opacity: 0.68;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(1.46rem, 2.1vw, 1.8rem);
+  z-index: 0;
+}
+
+.parchment-game-shell .point-occupied .point-lane {
+  background:
+    linear-gradient(180deg, rgba(255, 247, 224, 0.07), rgba(113, 73, 34, 0.025));
+  opacity: 0.76;
+}
+
+.parchment-game-shell .point-occupied .point-lane::after {
+  display: none;
 }
 
 .parchment-game-shell .point-source .point-lane,
 .parchment-game-shell .point-selected .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(176, 131, 53, 0.32) 0 0.95rem, transparent 1.2rem),
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.08rem, 3vw, 2.56rem) clamp(2rem, 2.9vw, 2.48rem) no-repeat,
+    radial-gradient(circle at 50% 50%, rgba(176, 131, 53, 0.24) 0 0.82rem, transparent 1.04rem),
     linear-gradient(180deg, rgba(255, 235, 170, 0.32), rgba(176, 131, 53, 0.12));
   box-shadow: inset 0 0 0 2px rgba(176, 131, 53, 0.28);
   opacity: 0.82;
@@ -1895,8 +1916,7 @@ button:focus-visible {
 
 .parchment-game-shell .point-target .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(29, 117, 94, 0.3) 0 0.95rem, transparent 1.2rem),
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.08rem, 3vw, 2.56rem) clamp(2rem, 2.9vw, 2.48rem) no-repeat,
+    radial-gradient(circle at 50% 50%, rgba(29, 117, 94, 0.26) 0 0.82rem, transparent 1.04rem),
     linear-gradient(180deg, rgba(203, 245, 229, 0.3), rgba(29, 117, 94, 0.14));
   box-shadow: inset 0 0 0 2px rgba(29, 117, 94, 0.28);
   opacity: 0.82;
@@ -1904,10 +1924,19 @@ button:focus-visible {
 
 .parchment-game-shell .point-ai-trail .point-lane {
   background:
-    radial-gradient(circle at 50% 50%, rgba(43, 106, 151, 0.26) 0 0.95rem, transparent 1.2rem),
-    url("/assets/ui/point-ring-empty.png") center / clamp(2.08rem, 3vw, 2.56rem) clamp(2rem, 2.9vw, 2.48rem) no-repeat,
+    radial-gradient(circle at 50% 50%, rgba(43, 106, 151, 0.22) 0 0.82rem, transparent 1.04rem),
     linear-gradient(180deg, rgba(224, 242, 254, 0.28), rgba(43, 106, 151, 0.12));
   opacity: 0.82;
+}
+
+.parchment-game-shell .point-source .point-lane::after,
+.parchment-game-shell .point-selected .point-lane::after,
+.parchment-game-shell .point-target .point-lane::after,
+.parchment-game-shell .point-ai-trail .point-lane::after {
+  display: block;
+  height: clamp(1.5rem, 2.18vw, 1.9rem);
+  opacity: 0.78;
+  width: clamp(1.55rem, 2.24vw, 1.96rem);
 }
 
 .parchment-game-shell .point-surface > .absolute.left-2 {

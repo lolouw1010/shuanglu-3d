@@ -54,6 +54,7 @@ export function BoardPoint({
   const tone = index % 2 === 0 ? "point-lane-warm" : "point-lane-dark";
   const pointShape = row === "top" ? "point-lane-top top-0" : "point-lane-bottom bottom-0";
   const owner = point.owner;
+  const hasPieces = Boolean(owner && point.count > 0);
   const visibleCount = Math.min(point.count, 6);
   const pieceLayout = row === "top" ? "piece-rack-top top-7" : "piece-rack-bottom bottom-7";
   const sourceStepLabel = Array.from(new Set(sourceSteps)).join("/");
@@ -74,7 +75,9 @@ export function BoardPoint({
     <button
       type="button"
       aria-label={`${index} 点，${ownerLabel}，${stateLabel}`}
-      className={`point-surface point-${row} relative min-h-[clamp(6.7rem,13.2vh,9rem)] overflow-hidden border transition ${
+      className={`point-surface point-${row} ${
+        hasPieces ? `point-occupied point-owner-${owner}` : "point-empty"
+      } relative min-h-[clamp(6.7rem,13.2vh,9rem)] overflow-hidden border transition ${
         isTarget
           ? "point-target target-pulse border-emerald-200 bg-emerald-300/12"
           : isSource

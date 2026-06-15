@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-15 17:40 CST
+Last updated: 2026-06-15 22:15 CST
 
 ## Current Target
 
@@ -140,6 +140,18 @@ Implemented:
 - Latest cloud UI tuning screenshot: `/tmp/shuanglu-screens/game-ui-tuning-final.png`.
 - Latest Aliyun UI tuning backup: `/opt/shuanglu_backups/shuanglu_before_ui_tuning_final_20260615_172912`.
 - Aliyun root filesystem after latest cleanup: 29G available, 25% used.
+- Completed a local 2D point/layout correction pass after visual QA:
+  - Board points now distinguish empty and occupied states.
+  - Empty point circles are smaller and lighter.
+  - Occupied points hide the circle marker so horses do not sit on oversized round holes.
+  - Removed an extra board-shell grid overlay that made the live grid appear misaligned.
+  - Side portraits were retuned to preserve head/hat visibility.
+  - Local verification passed: `npx tsc --noEmit`, `npm test`, and `npm run build`.
+- Attempted to deploy the point/layout correction to Aliyun GD, but the server became unreachable during remote install/build:
+  - HTTP to `http://47.121.182.144/` timed out.
+  - SSH timed out during banner exchange.
+  - Cloud deployment status for this latest pass is not confirmed.
+  - Next cloud action must first verify or recover `/opt/shuanglu`, PM2, Nginx, and disk usage.
 - Restyled the stable 2D board screen toward the approved light parchment reference:
   - Top brand/chapter/action bar.
   - Left and right character-side panels.
