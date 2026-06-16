@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-16 00:20 CST
+Last updated: 2026-06-17 02:35 CST
 
 ## Current Target
 
@@ -161,6 +161,13 @@ Implemented:
   - Recovery visual QA room: `A9D96C`.
   - Recovery screenshot: `/tmp/shuanglu-screens/game-recovery-check-20260616001747.png`.
   - The final local point-circle tuning commit `93c0a91` remains pushed to GitHub/BigNAS but is not currently confirmed as deployed on Aliyun.
+- Removed the large baked-in left/right side circles from the active 2D board texture:
+  - Updated `public/assets/ui/2d-board-texture.png`.
+  - Applied to Aliyun as a static asset hotfix only; PM2 was not restarted.
+  - Previous cloud PNG backup: `/opt/shuanglu_backups/2d-board-texture-before-remove-side-circles-20260617_023141.png`.
+  - Cloud visual QA room: `06495C`.
+  - Cloud visual QA screenshot: `/tmp/shuanglu-screens/game-remove-side-circles-20260617023305.png`.
+  - Local verification passed: `npx tsc --noEmit`, `npm test`, and `npm run build`.
 - Restyled the stable 2D board screen toward the approved light parchment reference:
   - Top brand/chapter/action bar.
   - Left and right character-side panels.

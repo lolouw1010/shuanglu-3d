@@ -3698,3 +3698,41 @@ Captured cloud screenshot at /tmp/shuanglu-screens/game-recovery-check-202606160
 - The cloud runtime is restored to the latest complete backup taken before the failed point/layout deployment.
 - The final local point-circle tuning commit `93c0a91` is pushed to GitHub and BigNAS but is not currently confirmed as deployed on Aliyun.
 - Do not run another direct in-place deployment with `rm -rf /opt/shuanglu` before a successful server-side build exists in a separate release directory.
+
+## 2026-06-17 02:35 CST
+
+### Objective
+
+Remove the visually intrusive large side circles baked into the 2D board texture.
+
+### Changes
+
+- Edited `public/assets/ui/2d-board-texture.png`.
+- Removed the left and right vertical rows of large dark circles from the baked board background.
+- Preserved the existing board dimensions, border, center medallion area, labels, and live UI asset path.
+- Did not change rules, game state, AI, dice behavior, React components, or PM2 process configuration.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+```
+
+### Cloud Hotfix
+
+```txt
+Backed up previous cloud asset to /opt/shuanglu_backups/2d-board-texture-before-remove-side-circles-20260617_023141.png.
+Copied the updated PNG directly to /opt/shuanglu/public/assets/ui/2d-board-texture.png.
+Did not restart PM2.
+PM2 process shuanglu remained online.
+Nginx configuration test passed.
+Cloud room 06495C created for visual QA.
+Captured cloud screenshot at /tmp/shuanglu-screens/game-remove-side-circles-20260617023305.png.
+```
+
+### Visual QA Notes
+
+- Confirmed the board's left and right side columns no longer show the large baked-in circular holes.
+- Remaining visible circles are the normal live point markers and bottom piece shadows from the original texture.

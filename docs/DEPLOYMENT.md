@@ -868,6 +868,51 @@ Deployment rule update:
 - Future deploys should build in a separate release directory, then atomically switch or copy the verified release into place.
 - Keep the previous complete runtime until the new runtime returns HTTP 200 through Nginx.
 
+## 2026-06-17 Board Texture Hotfix
+
+Purpose:
+
+- Remove the large left/right side circles baked into the 2D parchment board texture.
+- Avoid a full application deployment because only one static public PNG changed.
+
+Changed asset:
+
+```txt
+public/assets/ui/2d-board-texture.png
+```
+
+Local verification:
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+```
+
+Cloud method:
+
+```txt
+cp /opt/shuanglu/public/assets/ui/2d-board-texture.png /opt/shuanglu_backups/2d-board-texture-before-remove-side-circles-20260617_023141.png
+scp public/assets/ui/2d-board-texture.png root@47.121.182.144:/opt/shuanglu/public/assets/ui/2d-board-texture.png
+nginx -t
+```
+
+Runtime impact:
+
+```txt
+PM2 was not restarted.
+No application code or build directory was replaced.
+PM2 shuanglu remained online.
+```
+
+Verification:
+
+```txt
+Cloud room 06495C was created.
+Cloud screenshot captured at /tmp/shuanglu-screens/game-remove-side-circles-20260617023305.png.
+Nginx configuration test passed.
+```
+
 ## 2026-06-13 HUD and Portrait Alignment Deployment
 
 Purpose:
