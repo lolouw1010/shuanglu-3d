@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-17 02:35 CST
+Last updated: 2026-06-21 22:05 CST
 
 ## Current Target
 
@@ -168,6 +168,16 @@ Implemented:
   - Cloud visual QA room: `06495C`.
   - Cloud visual QA screenshot: `/tmp/shuanglu-screens/game-remove-side-circles-20260617023305.png`.
   - Local verification passed: `npx tsc --noEmit`, `npm test`, and `npm run build`.
+- Mounted six user-generated faux-3D dice faces:
+  - Corrected baked checkerboard backgrounds into real transparency.
+  - Normalized all faces to `512×512 RGBA` with consistent visual height, center, and baseline.
+  - `DiceFace` now renders `/assets/ui/dice/dice-1.png` through `dice-6.png` for numeric results.
+  - Existing roll timing and CSS animation remain active.
+  - Deployed through an independent release directory with temporary-port smoke testing before the live switch.
+  - Latest Aliyun backup: `/opt/shuanglu_backups/shuanglu_before_dice_ui_20260621_215030`.
+  - Cloud visual QA room: `C2B3E1`, rolled `5-3`.
+  - Cloud visual QA screenshot: `/tmp/shuanglu-screens/game-dice-assets-review.png`.
+  - Local and cloud production builds passed; 10 test files and 38 tests passed.
 - Restyled the stable 2D board screen toward the approved light parchment reference:
   - Top brand/chapter/action bar.
   - Left and right character-side panels.

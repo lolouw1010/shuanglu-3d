@@ -913,6 +913,46 @@ Cloud screenshot captured at /tmp/shuanglu-screens/game-remove-side-circles-2026
 Nginx configuration test passed.
 ```
 
+## 2026-06-21 Generated Dice UI Deployment
+
+Purpose:
+
+- Deploy six normalized faux-3D dice PNGs and render them in the live parchment HUD.
+
+Deployment method:
+
+- Uploaded the source archive without replacing the live runtime.
+- Extracted to an independent directory under `/opt/shuanglu_releases`.
+- Hard-linked the existing production `node_modules` into the release directory.
+- Ran `npm run build` in the independent release directory.
+- Started the release on temporary port `3102`.
+- Verified the page and `dice-6.png` asset over HTTP on the temporary port.
+- Stopped only PM2 process `shuanglu` after the smoke test passed.
+- Moved the previous runtime to:
+
+```txt
+/opt/shuanglu_backups/shuanglu_before_dice_ui_20260621_215030
+```
+
+- Moved the verified release into `/opt/shuanglu`.
+- Restarted PM2 process `shuanglu`, saved the PM2 list, tested Nginx, and reloaded Nginx.
+
+Verification:
+
+```txt
+Local npx tsc --noEmit passed.
+Local npm test passed: 10 test files, 38 tests.
+Local npm run build passed.
+Server npm run build passed.
+Temporary release HTTP smoke test passed on 127.0.0.1:3102.
+Final runtime returned HTTP 200 on 127.0.0.1:3002.
+Public URL returned HTTP 200.
+PM2 shuanglu is online.
+Nginx configuration test passed.
+Cloud room C2B3E1 rolled 5-3.
+Cloud screenshot captured at /tmp/shuanglu-screens/game-dice-assets-review.png.
+```
+
 ## 2026-06-13 HUD and Portrait Alignment Deployment
 
 Purpose:

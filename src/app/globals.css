@@ -288,6 +288,28 @@ button:focus-visible {
   position: absolute;
 }
 
+.die-body-asset {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.die-body-asset::before,
+.die-body-asset::after {
+  display: none;
+}
+
+.die-face-image {
+  height: 118%;
+  max-width: none;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  width: 118%;
+}
+
 .die-pip-grid {
   display: grid;
   gap: 4px;
@@ -2119,6 +2141,13 @@ button:focus-visible {
     0 0.2rem 0.36rem rgba(74, 46, 18, 0.18);
   height: 3rem;
   width: 3rem;
+}
+
+.parchment-game-shell .die-body-asset {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .parchment-game-shell .die-pip {

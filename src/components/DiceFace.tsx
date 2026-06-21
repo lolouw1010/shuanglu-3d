@@ -27,14 +27,25 @@ function pipClass(position: string): string {
 
 export function DiceFace({ value, rolling }: DiceFaceProps) {
   const pips = typeof value === "number" ? pipPositions[value] : [];
+  const assetPath = typeof value === "number" ? `/assets/ui/dice/dice-${value}.png` : null;
 
   return (
     <div
       aria-label={typeof value === "number" ? `${value} 点` : "未掷"}
-      className={`die-body ${rolling ? "dice-tumble" : "dice-pop"}`}
+      className={`die-body ${assetPath ? "die-body-asset" : ""} ${
+        rolling ? "dice-tumble" : "dice-pop"
+      }`}
       role="img"
     >
-      {typeof value === "number" ? (
+      {assetPath ? (
+        <img
+          src={assetPath}
+          alt=""
+          aria-hidden="true"
+          className="die-face-image"
+          draggable={false}
+        />
+      ) : typeof value === "number" ? (
         <div className="die-pip-grid">
           {pips.map((position) => (
             <span key={position} className={`die-pip ${pipClass(position)}`} />

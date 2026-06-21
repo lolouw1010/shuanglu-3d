@@ -3736,3 +3736,66 @@ Captured cloud screenshot at /tmp/shuanglu-screens/game-remove-side-circles-2026
 
 - Confirmed the board's left and right side columns no longer show the large baked-in circular holes.
 - Remaining visible circles are the normal live point markers and bottom piece shadows from the original texture.
+
+## 2026-06-21 22:05 CST
+
+### Objective
+
+Mount the six user-generated faux-3D dice faces in the active 2D parchment HUD.
+
+### Asset Preparation
+
+- Imported `dice-1.png` through `dice-6.png` from the user asset folder.
+- Confirmed all six pip layouts are correct.
+- Found that five source images had a baked checkerboard instead of a real alpha channel; only `dice-2.png` initially contained RGBA transparency.
+- Found substantial source differences in canvas ratio, die scale, perspective, and baseline.
+- Normalized all six final assets to:
+
+```txt
+512 x 512 RGBA PNG
+transparent background
+consistent visual height
+consistent center alignment
+consistent bottom baseline
+```
+
+- Final runtime assets:
+
+```txt
+public/assets/ui/dice/dice-1.png
+public/assets/ui/dice/dice-2.png
+public/assets/ui/dice/dice-3.png
+public/assets/ui/dice/dice-4.png
+public/assets/ui/dice/dice-5.png
+public/assets/ui/dice/dice-6.png
+```
+
+### UI Changes
+
+- Updated `DiceFace` to render the normalized PNG matching each numeric result.
+- Kept the existing CSS die for the unrolled `-` state.
+- Preserved the existing 520ms rolling preview, result timing, and game rules.
+- Added asset-specific CSS so generated dice do not inherit the old CSS die background, border, or pseudo-element highlights.
+
+### Verification
+
+```txt
+npx tsc --noEmit passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Aliyun release-directory npm run build passed.
+Temporary port 3102 smoke test passed before switching the live directory.
+PM2 process shuanglu restarted and is online.
+Nginx configuration test passed and reloaded.
+http://47.121.182.144/ returned HTTP 200.
+Cloud room C2B3E1 created for visual QA.
+Cloud room rolled 5-3.
+Captured cloud screenshot at /tmp/shuanglu-screens/game-dice-assets-review.png.
+```
+
+### Visual QA Notes
+
+- Confirmed both dice align in the live HUD.
+- Confirmed transparent edges are clean against the parchment background.
+- Confirmed the 5 and 3 pip layouts remain readable at the production display size.
+- The generated dice retain small silhouette differences, but normalization removes the severe source-size jumps.
