@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-06-21 22:05 CST
+Last updated: 2026-07-06 CST
 
 ## Current Target
 
@@ -9,6 +9,36 @@ Version target: `0.5`
 Goal: maintain a playable cloud-hosted 0.5 prototype while documenting the current system clearly enough for continued development.
 
 The current priority is a stable playable baseline and clear handoff documentation, not commercial completeness.
+
+## Production Baseline
+
+Current production:
+
+```txt
+URL: https://shuanglu.uway.click
+Server: Linode Singapore
+Tailscale node: linode-singapore
+Runtime: Node.js 20.20.2
+Service: systemd unit shuanglu.service
+Application: /opt/apps/shuanglu/current
+Internal address: 127.0.0.1:3002
+Reverse proxy: Docker nginx
+```
+
+The previous Aliyun IP deployment is retired infrastructure and is retained only in historical documentation.
+
+Production operations are tracked in the repository:
+
+```txt
+.nvmrc
+ops/systemd/shuanglu.service
+ops/systemd/shuanglu-certbot-renew.service
+ops/systemd/shuanglu-certbot-renew.timer
+ops/nginx/shuanglu.uway.click.conf
+ops/scripts/deploy-certificate.sh
+scripts/deploy-production.sh
+scripts/production-health-check.sh
+```
 
 ## Current State
 
@@ -958,16 +988,15 @@ The current MiniMac operating policy is cloud-only runtime testing. Do not start
 Current public test targets:
 
 ```txt
-http://47.121.182.144/
-http://47.121.182.144/3d
+https://shuanglu.uway.click/
+https://shuanglu.uway.click/3d
 ```
 
 ## Known Risks
 
-- The Aliyun GD server currently runs Node `18.19.1`; `npm ci` completed, but one transitive development dependency warned that newer Node versions are preferred.
-- The deployed public endpoint is plain HTTP on the server IP. A production hostname and HTTPS certificate are still needed before a public launch.
-- The server could not reliably fetch the GitHub repository directly, so deployments currently use local Git archive upload from the synced commit.
-- The latest visual deployment was made from Git commit `badaa8d` using local archive upload.
+- Production uses Node.js 20. Local development must use the version pinned in `.nvmrc` to avoid Node 24/production drift.
+- The production certificate must be monitored through the certbot timer and deploy hook; a valid certificate alone is not proof that renewal is working.
+- Deployments use Git archives from a clean `main` revision that matches `origin/main`; each release must include a `REVISION` file.
 - Online rooms are currently in-memory only. A PM2 restart will clear active rooms.
 - Online room access is intentionally lightweight for testing and does not yet include accounts, passwords, or private invites.
 - Online clients use polling rather than WebSocket. This is acceptable for the first turn-based friend-play test but should be reviewed after playtesting.
@@ -995,11 +1024,11 @@ http://47.121.182.144/3d
 
 ## Next Engineering Priorities
 
-1. Assign a production hostname and enable HTTPS for the Aliyun GD deployment.
-2. Deploy the online room build to Aliyun and test one match with two browsers or two devices.
-3. Add shareable room URLs and refresh/reconnect UX.
-4. Browser-test `/?room=<ROOM_ID>` with two clients.
-5. Run desktop screenshot QA for the new `/3d` greybox.
+1. Verify the Linode certificate renewal dry-run and timer.
+2. Exercise one release and rollback through the tracked deployment script.
+3. Test one complete online match with two browsers or two devices.
+4. Improve refresh/reconnect UX and browser-test `/?room=<ROOM_ID>` with two clients.
+5. Run desktop screenshot QA for the `/3d` greybox.
 6. Tune camera, board scale, and point spacing against the approved concept images.
 7. Prepare authored GLB assets for the bottle-shaped white/black horses.
 8. Consider a controlled Node 20 LTS upgrade on Aliyun for the 3D dependency stack.

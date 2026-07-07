@@ -1,12 +1,12 @@
 # Documentation Index
 
-Last updated: 2026-06-11 CST
+Last updated: 2026-07-06 CST
 
 ## Start Here
 
 - `PROJECT_STATUS.md` records the current product state, verified commands, known risks, and next engineering priorities.
 - `DEV_LOG.md` records chronological development work and decisions as they happened.
-- `DEPLOYMENT.md` records Aliyun GD deployment history and operational verification.
+- `DEPLOYMENT.md` records the current Linode deployment model followed by historical Aliyun deployment notes.
 - `WORK_SUMMARY_2026-06-12.md` records the June 12 2D interface work summary, deployment verification, and Git sync state.
 
 ## Rules And Scope
@@ -29,8 +29,8 @@ Last updated: 2026-06-11 CST
 ## Current Public Test Targets
 
 ```txt
-http://47.121.182.144/
-http://47.121.182.144/3d
+https://shuanglu.uway.click/
+https://shuanglu.uway.click/3d
 ```
 
 The stable playable target is `/`. The `/3d` route is an isolated visual spike.
@@ -41,3 +41,4 @@ The stable playable target is `/`. The `/3d` route is an isolated visual spike.
 - Keep historical claims conservative and label confidence clearly.
 - Distinguish historically supported elements, playable reconstruction mechanics, and future game adaptations.
 - Record meaningful development and deployment work in `DEV_LOG.md`, `PROJECT_STATUS.md`, and `DEPLOYMENT.md` before publishing.
+- Keep current production instructions at the top of operational documents and label retired infrastructure as historical.

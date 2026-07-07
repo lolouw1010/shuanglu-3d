@@ -18,7 +18,7 @@ React components must only render state and dispatch actions.
 - Build: npm run build
 
 ## Do Not
-- Do not add online multiplayer.
+- Do not expand online multiplayer beyond the existing lightweight friend-room MVP unless explicitly requested.
 - Do not add authentication.
 - Do not add payment.
 - Do not hardcode rules inside UI components.

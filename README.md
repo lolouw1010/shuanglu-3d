@@ -4,14 +4,14 @@ A playable web prototype of Shuanglu, an ancient Chinese dice-and-race board gam
 
 ## Live Build
 
-Current cloud test build:
+Current production build:
 
 ```txt
-http://47.121.182.144/
-http://47.121.182.144/3d
+https://shuanglu.uway.click/
+https://shuanglu.uway.click/3d
 ```
 
-Production runtime is a Next.js Node service behind Nginx on the Aliyun GD server. The stable playable interface is the 2D board at `/`; `/3d` is a separate visual spike and is not the primary play surface yet.
+Production runs on Linode Singapore as a systemd-managed Next.js service behind a Docker-hosted Nginx reverse proxy. The stable playable interface is the 2D board at `/`; `/3d` is a separate visual spike and is not the primary play surface yet.
 
 ## Current Scope
 
@@ -44,12 +44,15 @@ Avoid using the iCloud/Obsidian directory as the main program workspace because 
 
 ```bash
 npm install
+npm run typecheck
 npm test
 npm run build
 npm run dev
 ```
 
 Local runtime policy for the current MiniMac workflow: do not start a local web service unless explicitly requested. Use cloud deployment for runtime checks.
+
+Node.js 20 is the supported development and production major version. Run `nvm use` before installing dependencies.
 
 ## Architecture
 

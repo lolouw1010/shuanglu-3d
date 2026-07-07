@@ -3799,3 +3799,59 @@ Captured cloud screenshot at /tmp/shuanglu-screens/game-dice-assets-review.png.
 - Confirmed transparent edges are clean against the parchment background.
 - Confirmed the 5 and 3 pip layouts remain readable at the production display size.
 - The generated dice retain small silhouette differences, but normalization removes the severe source-size jumps.
+
+## 2026-07-06 Production Baseline
+
+### Objective
+
+Replace the retired Aliyun operating assumptions with a reproducible Linode production baseline without changing game behavior.
+
+### Repository Changes
+
+- Pinned development and production to Node.js 20 through `.nvmrc` and `package.json`.
+- Added the `npm run typecheck` command.
+- Added tracked templates for the production systemd service and Docker-hosted Nginx virtual host.
+- Added a certificate deployment hook with certificate validation, Nginx configuration validation, rollback, and reload.
+- Added dedicated certificate renewal service/timer templates using the pinned `certbot/certbot:v5.6.0` image.
+- Added a public production health-check script.
+- Added a deployment script that requires clean `main == origin/main`, builds an independent release, performs a temporary-port smoke test, switches the `current` symlink, and restores the previous release if startup fails.
+- Updated active operational documentation to use `https://shuanglu.uway.click` and moved Aliyun instructions into historical context.
+- Updated the online-room project instruction to permit maintenance of the existing lightweight friend-room MVP without expanding its scope.
+
+### Linode Changes
+
+- Preserved the previous systemd and Nginx configurations under `/opt/apps/shuanglu/backups/production-baseline-20260706`.
+- Migrated the active application directory into:
+
+```txt
+/opt/apps/shuanglu/releases/20260705T015850Z-0563e64
+```
+
+- Changed `/opt/apps/shuanglu/current` into a symlink to the active release.
+- Added `REVISION` containing `0563e64d6f9ecc3afd77bb8a8363c20ac40a5353`.
+- Installed and enabled `shuanglu-certbot-renew.timer`.
+- Installed `/usr/local/sbin/deploy-shuanglu-certificate`.
+
+### Certificate Verification
+
+- An initial unrestricted `certbot renew --dry-run` also processed archived domains and exposed unrelated failures.
+- Restricted the Shuanglu timer to `--cert-name shuanglu.uway.click` so it does not manage other certificates.
+- The targeted Shuanglu staging renewal succeeded.
+- The real renewal check and deploy hook exited successfully.
+- The deployed Nginx certificate hash matches the Let's Encrypt live certificate hash.
+- The timer is active and enabled, with the next run scheduled by systemd.
+
+### Operational Verification
+
+```txt
+shuanglu.service active and enabled.
+Application restart count: 0.
+Internal 127.0.0.1:3002 returned HTTP 200.
+https://shuanglu.uway.click/health returned ok.
+https://shuanglu.uway.click/ returned HTTP 200.
+https://shuanglu.uway.click/3d returned HTTP 200.
+Docker Nginx configuration test passed.
+Certificate staging renewal passed for shuanglu.uway.click.
+```
+
+The first directory-migration attempt performed an immediate HTTP check after `systemctl restart` and correctly rolled back when Next.js had not finished starting. The readiness check was changed to retry for up to 30 seconds, after which the migration completed successfully.

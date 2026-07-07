@@ -2,6 +2,100 @@
 
 This document records repository and deployment state for the Shuanglu prototype.
 
+## Current Production: Linode Singapore
+
+Last verified: 2026-07-06 CST
+
+```txt
+Public URL: https://shuanglu.uway.click
+Public /3d: https://shuanglu.uway.click/3d
+Health check: https://shuanglu.uway.click/health
+Tailscale node: linode-singapore
+Public IP: 139.162.57.49
+Application root: /opt/apps/shuanglu
+Active release: /opt/apps/shuanglu/current
+Internal address: 127.0.0.1:3002
+Service: shuanglu.service
+Runtime user: shuanglu
+Node.js: 20.20.2
+Reverse proxy: Docker container nginx
+Nginx host config: /home/web/conf.d/shuanglu.uway.click.conf
+Certificate host directory: /home/web/certs
+```
+
+SSH is available through Tailscale. Public TCP port 22 is intentionally blocked.
+
+```bash
+ssh uway@linode-singapore
+ssh root@linode-singapore
+```
+
+Tracked production templates:
+
+```txt
+ops/systemd/shuanglu.service
+ops/systemd/shuanglu-certbot-renew.service
+ops/systemd/shuanglu-certbot-renew.timer
+ops/nginx/shuanglu.uway.click.conf
+ops/scripts/deploy-certificate.sh
+```
+
+### Release Procedure
+
+The supported release command is:
+
+```bash
+./scripts/deploy-production.sh
+```
+
+It requires:
+
+- A clean `main` working tree.
+- Local `HEAD` equal to `origin/main`.
+- Node.js 20 selected through `.nvmrc`.
+- Working Tailscale SSH access to `root@linode-singapore`.
+
+The script performs:
+
+1. Local clean-tree and revision checks.
+2. Local clean install, typecheck, tests, and production build.
+3. Git archive upload into a new independent release directory.
+4. Server-side clean install and production build.
+5. Temporary-port smoke checks for `/` and `/3d`.
+6. Atomic `current` symlink switch.
+7. `shuanglu.service` restart and internal HTTP check.
+8. Public `/health`, `/`, and `/3d` checks.
+9. Automatic restoration of the previous release if the live service fails.
+
+Each release contains a `REVISION` file. Verify the deployed revision with:
+
+```bash
+ssh root@linode-singapore 'cat /opt/apps/shuanglu/current/REVISION'
+```
+
+### Manual Verification
+
+```bash
+./scripts/production-health-check.sh
+ssh root@linode-singapore 'systemctl status shuanglu --no-pager'
+ssh root@linode-singapore 'docker exec nginx nginx -t'
+```
+
+### TLS Renewal
+
+Let's Encrypt uses the webroot `/var/www/letsencrypt`. The `shuanglu-certbot-renew.timer` unit runs the pinned `certbot/certbot:v5.6.0` container twice daily. A successful renewal runs `/usr/local/sbin/deploy-shuanglu-certificate`, which updates the certificate files mounted into the Nginx container, validates the Nginx configuration, and reloads Nginx.
+
+Verification:
+
+```bash
+ssh root@linode-singapore 'systemctl list-timers shuanglu-certbot-renew.timer --no-pager'
+ssh root@linode-singapore 'docker run --rm --network host -v /etc/letsencrypt:/etc/letsencrypt -v /home/web/letsencrypt:/var/www/letsencrypt certbot/certbot:v5.6.0 renew --dry-run --no-random-sleep-on-renew --cert-name shuanglu.uway.click'
+```
+
+### Runtime State
+
+Online rooms are in memory only. Restarting `shuanglu.service` clears active rooms. Shuanglu currently has no production database or user-upload directory.
+
 ## GitHub
 
 Status: synced.
@@ -9,12 +103,7 @@ Status: synced.
 - Repository: `louiezhelee-uway/shuanglu`
 - Visibility at sync time: public
 - Branch: `main`
-- Application commit deployed: `b7b9e554787ae3f62e08f2b8f7160c84bf2f6982`
-- Commit summary:
-  - `b7b9e55` add deployment tracking and GitHub sync notes
-  - `9211616` merge remote repository placeholder
-  - `dd43221` initial Shuanglu prototype
-  - `95768b4` remote placeholder commit
+- Current verified application baseline: `0563e64d6f9ecc3afd77bb8a8363c20ac40a5353`.
 
 The local repository excludes generated or machine-local files:
 
@@ -51,9 +140,9 @@ Result:
 Next.js production build passed
 ```
 
-## Aliyun GD Deployment
+## Historical: Aliyun GD Deployment
 
-Status: deployed.
+Status: retired after migration to Linode. The remaining sections are historical recovery and deployment records; do not use them for current releases.
 
 Deployment target:
 

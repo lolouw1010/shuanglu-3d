@@ -1,241 +1,155 @@
-# Cloud Assets
+# Cloud Runtime And Assets
 
-This document records the current cloud runtime and operational assets for Shuanglu.
+Last updated: 2026-07-06 CST
 
-Last updated: 2026-05-07 07:48 CST
+This document records the current Shuanglu production runtime. Historical Aliyun deployment details remain in `docs/DEPLOYMENT.md`.
 
-## Operating Policy
-
-- Local MiniMac should not run the Shuanglu web service by default.
-- Local repository is for code editing and documentation.
-- Runtime verification should use the cloud deployment unless explicitly requested otherwise.
-- Cloud production URL:
+## Production Endpoints
 
 ```txt
-http://47.121.182.144/
+https://shuanglu.uway.click/
+https://shuanglu.uway.click/3d
+https://shuanglu.uway.click/health
 ```
 
-- Cloud 3D test URL:
-
-```txt
-http://47.121.182.144/3d
-```
+The stable playable interface is `/`. The `/3d` route remains an isolated visual spike.
 
 ## Local Repository
 
-MiniMac repository path:
+Primary workspace:
 
 ```txt
-/Users/lizhe/Library/Mobile Documents/iCloud~md~obsidian/Documents/shuanglu/shuanglu
+/Users/lizhe/Projects/shuanglu
 ```
 
-Current local Git state at takeover:
+Do not use the iCloud/Obsidian directory as the program workspace. The repository, dependencies, and build cache create many files that do not belong in document sync.
+
+The supported Node.js major version is pinned in `.nvmrc` and `package.json`:
 
 ```txt
-HEAD: 8b41eb1 Deploy 3D horse scale correction
-Working tree: clean
+Node.js 20
 ```
 
-Local service ports checked and intentionally left unused:
+## Linode Access
 
 ```txt
-127.0.0.1:3000
-127.0.0.1:3001
-127.0.0.1:3002
-127.0.0.1:3004
+Tailscale node: linode-singapore
+Tailscale IP: 100.110.183.126
+Public IP: 139.162.57.49
+Recommended SSH user: uway
+Administrative SSH user: root
 ```
 
-Local verification note:
-
-- `npm test` ran all 27 tests successfully on MiniMac.
-- Vitest then failed to write `node_modules/.vite/vitest/results.json` because of local iCloud/sandbox permissions.
-- Treat that as a cache-write failure, not a rule-test failure.
-- `npm run build` passed when allowed to write `.next`.
-
-## SSH Access
-
-Aliyun GD host:
-
-```txt
-47.121.182.144
-```
-
-MiniMac SSH key:
-
-```txt
-/Users/lizhe/.ssh/shuanglu_aliyun_gd
-```
-
-SSH command:
+Use Tailscale SSH:
 
 ```bash
-ssh -i /Users/lizhe/.ssh/shuanglu_aliyun_gd -o IdentitiesOnly=yes root@47.121.182.144
+ssh uway@linode-singapore
+ssh root@linode-singapore
 ```
 
-Previous Mac key path used in older records:
-
-```txt
-/Users/louie/Downloads/aliyun_test.pem
-```
-
-Do not rely on the old path on MiniMac.
+Public TCP port 22 is intentionally blocked by UFW. Do not open public SSH without first disabling password authentication and unrestricted root login.
 
 ## Server Runtime
 
-Observed on 2026-05-07 07:33 CST:
+Verified on 2026-07-06 CST:
 
 ```txt
-Hostname: iZdygvq0meelhfZ
-Uptime: 1 day, 11:59
-Load average: 0.09, 0.03, 0.01
-Node.js: v18.19.1
-npm: 9.2.0
-PM2: 6.0.14
-Nginx: 1.24.0 (Ubuntu)
-Disk: /dev/vda3 40G total, 9.0G used, 29G available, 25% used
+Operating system: Ubuntu 24.04.4 LTS
+Node.js: 20.20.2
+npm: 11.16.0
+Application user: shuanglu
+Application root: /opt/apps/shuanglu
+Active release: /opt/apps/shuanglu/current
+Internal address: 127.0.0.1:3002
+Service manager: systemd
+Service unit: shuanglu.service
 ```
 
-Known runtime risk:
+The service runs as the non-login `shuanglu` user. The tracked unit template is `ops/systemd/shuanglu.service`.
 
-- The 3D dependency stack has warned in prior deployments that some packages prefer Node 20+.
-- Current Node 18.19.1 can build and run the current app, but Node upgrade planning remains a future ops task.
-
-## PM2 Processes
-
-Observed PM2 process table:
-
-```txt
-gaokao-sprint-coach    online    internal port 3001
-school-application     online    internal port 8000
-shuanglu               online    internal port 3002
-```
-
-Shuanglu PM2 details:
-
-```txt
-Name: shuanglu
-Status: online
-Exec cwd: /opt/shuanglu
-Script path: /usr/bin/npm
-Script args: start -- --hostname 127.0.0.1 --port 3002
-Node.js: 18.19.1
-Watch: disabled
-Error log: /root/.pm2/logs/shuanglu-error.log
-Out log: /root/.pm2/logs/shuanglu-out.log
-```
-
-Operational boundary:
-
-- `gaokao-sprint-coach` and `school-application` are separate services on the same host.
-- Do not stop or reconfigure them when deploying Shuanglu.
-
-## Network And Nginx
-
-Listening ports observed:
-
-```txt
-0.0.0.0:80          nginx public HTTP
-[::]:80             nginx public HTTP
-0.0.0.0:8080        nginx public HTTP alternate
-[::]:8080           nginx public HTTP alternate
-0.0.0.0:22          sshd
-[::]:22             sshd
-127.0.0.1:3002      shuanglu Next.js
-127.0.0.1:3001      gaokao-sprint-coach Next.js
-127.0.0.1:8000      school-application Python
-```
-
-Nginx config directory:
-
-```txt
-/etc/nginx/conf.d
-```
-
-Relevant config file:
-
-```txt
-/etc/nginx/conf.d/shuanglu.conf
-```
-
-Current routing in `shuanglu.conf`:
-
-```txt
-/             -> http://127.0.0.1:3002
-/gaokao       -> http://127.0.0.1:3001/gaokao
-/gaokao/      -> http://127.0.0.1:3001/gaokao/
-/school       -> 302 /school/
-/school/      -> http://127.0.0.1:8000
-```
-
-Nginx verification:
-
-```txt
-nginx -t passed.
-```
-
-## Application Files
-
-Production app path:
-
-```txt
-/opt/shuanglu
-```
-
-Backup root:
-
-```txt
-/opt/shuanglu_backups
-```
-
-Observed backups:
-
-```txt
-/opt/shuanglu_backups/node_modules.broken_20260501_183014
-/opt/shuanglu_backups/partial_node_modules
-/opt/shuanglu_backups/shuanglu_before_3d_isolated_7f73e37
-/opt/shuanglu_backups/shuanglu_before_3d_scale_20260505_2005
-/opt/shuanglu_backups/shuanglu_before_online_0108b27
-/opt/shuanglu_backups/shuanglu_before_visual_20260502_2349
-```
-
-Important operational lesson:
-
-- Do not leave broken or partial `node_modules` directories inside `/opt/shuanglu` or any active release root.
-- Next.js may scan them during build and fail.
-- Keep broken dependency backups under `/opt/shuanglu_backups`, outside the active project root.
-
-## Cloud Verification
-
-Verified on 2026-05-07 07:48 CST:
+Useful checks:
 
 ```bash
-curl -I --max-time 20 http://47.121.182.144/
-curl -I --max-time 20 http://47.121.182.144/3d
-curl -s --max-time 20 -X POST http://47.121.182.144/api/rooms \
-  -H 'Content-Type: application/json' \
-  -d '{"playerId":"codex-cloud-only-test"}'
+systemctl status shuanglu --no-pager
+systemctl is-enabled shuanglu
+curl -fsS http://127.0.0.1:3002/ >/dev/null
 ```
 
-Result:
+## Nginx And TLS
+
+The active Nginx proxy runs in the Docker container named `nginx` with host networking and restart policy `always`.
+
+Host mounts:
 
 ```txt
-Public root path returned HTTP 200.
-Public /3d path returned HTTP 200.
-POST /api/rooms created room 3B24A7 and seated creator as white.
+/home/web/nginx.conf -> /etc/nginx/nginx.conf
+/home/web/conf.d -> /etc/nginx/conf.d
+/home/web/certs -> /etc/nginx/certs
+/home/web/letsencrypt -> /var/www/letsencrypt
 ```
 
-## Deployment Notes
+The Shuanglu virtual-host template is tracked at `ops/nginx/shuanglu.uway.click.conf`.
 
-Canonical deployment history remains in:
+Useful checks:
+
+```bash
+docker ps --filter name=nginx
+docker exec nginx nginx -t
+curl -fsS https://shuanglu.uway.click/health
+```
+
+The certificate is issued by Let's Encrypt. The `shuanglu-certbot-renew.timer` unit runs the pinned `certbot/certbot:v5.6.0` container twice daily. Renewal uses the webroot `/var/www/letsencrypt` and deploys the renewed certificate into `/home/web/certs` through `ops/scripts/deploy-certificate.sh`.
+
+## Release Model
+
+Production releases use this layout:
 
 ```txt
-docs/DEPLOYMENT.md
+/opt/apps/shuanglu/
+├── releases/
+│   └── <UTC timestamp>-<short Git revision>/
+└── current -> releases/<active release>/
 ```
 
-For the current cloud-only testing workflow:
+Each release contains a `REVISION` file with the full Git commit. Deployments build and smoke-test an independent release before switching `current`.
 
-1. Make code changes locally.
-2. Run local non-service checks only when needed.
-3. Build and deploy to Aliyun.
-4. Verify via cloud URLs and cloud API calls.
-5. Keep this document and `docs/DEPLOYMENT.md` updated.
+The canonical deployment command is:
+
+```bash
+./scripts/deploy-production.sh
+```
+
+The script refuses to deploy a dirty working tree, a non-`main` branch, or a revision that does not match `origin/main`. It runs local verification, builds the release on Linode, tests it on a temporary port, switches the symlink, restarts `shuanglu.service`, and restores the previous release if the live health check fails.
+
+Public health verification is also available separately:
+
+```bash
+./scripts/production-health-check.sh
+```
+
+## Runtime State
+
+Online rooms are held in the Next.js process memory. Restarting `shuanglu.service` clears active rooms. There is currently no production database or user-upload directory for Shuanglu.
+
+## Tracked Assets
+
+Runtime art assets are stored under `public/assets` and versioned in Git. The cloud server must not be treated as the only copy of generated art.
+
+Key groups:
+
+```txt
+public/assets/backgrounds
+public/assets/characters
+public/assets/concepts
+public/assets/pieces
+public/assets/ui
+```
+
+## Operational Boundaries
+
+- Do not build inside the active release directory.
+- Do not replace `node_modules` in the active release.
+- Do not expose port 3002 publicly.
+- Do not print certificate private keys or application secrets in logs.
+- Do not expand the current in-memory room architecture without an explicit product requirement.
+- Keep `/3d` isolated from the stable 2D online flow until it passes its own QA.
