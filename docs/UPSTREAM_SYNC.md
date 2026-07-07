@@ -6,7 +6,7 @@ The 3D application is an independent codebase. It does not import or link runtim
 
 ```txt
 Remote: upstream-2d
-Repository: git@github.com:louiezhelee-uway/shuanglu.git
+Repository: https://github.com/lolouw1010/shuanglu.git
 Initial fork: a792bf5bba974022401c402a1b6193d40deffb0a
 ```
 
