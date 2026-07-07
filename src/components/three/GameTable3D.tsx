@@ -1,9 +1,10 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
-import { Suspense, useMemo } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { DoubleSide, LatheGeometry, Shape, Vector2 } from "three";
-import type { BoardState, Move, Player, Point } from "@/game";
+import type { Group } from "three";
+import type { BoardState, Move, MoveRecord, Player, Point } from "@/game";
 import { CharacterActors } from "@/components/scene3d/CharacterActors";
 import { FixedCameraRig } from "@/components/scene3d/FixedCameraRig";
 import { RoomEnvironment } from "@/components/scene3d/RoomEnvironment";
@@ -34,6 +35,12 @@ const POINT_STEP = 0.76;
 const POINT_LENGTH = 2.34;
 const PIECE_SCALE = 0.35;
 const SELECTED_PIECE_SCALE = 0.4;
+const MOVE_ANIMATION_SECONDS = 0.68;
+
+type PresentedMove = {
+  historyLength: number;
+  move: MoveRecord;
+};
 
 function pointPosition(index: number): PointPosition {
   if (index >= 12) {
@@ -66,6 +73,52 @@ function pieceOffsets(count: number): Array<[number, number, number]> {
     const row = Math.floor(index / 2);
     return [(lane - 0.5) * 0.12, row * 0.105, index * 0.12];
   });
+}
+
+function pointPiecePosition(index: number, count: number): [number, number, number] {
+  const point = pointPosition(index);
+  const offsets = pieceOffsets(Math.max(1, count));
+  const [x, y, depth] = offsets.at(-1) ?? [0, 0, 0];
+
+  return [
+    point.x + x,
+    0.25 + y,
+    point.z + point.direction * (0.16 + depth),
+  ];
+}
+
+function usePresentedMove(state: BoardState): PresentedMove | null {
+  const previousHistoryLength = useRef(state.moveHistory.length);
+  const [presentedMove, setPresentedMove] = useState<PresentedMove | null>(null);
+
+  useEffect(() => {
+    const historyLength = state.moveHistory.length;
+    const delta = historyLength - previousHistoryLength.current;
+    previousHistoryLength.current = historyLength;
+
+    const latest = state.moveHistory.at(-1);
+    if (
+      delta !== 1 ||
+      !latest ||
+      typeof latest.from !== "number" ||
+      typeof latest.to !== "number"
+    ) {
+      setPresentedMove(null);
+      return undefined;
+    }
+
+    const next = { historyLength, move: latest };
+    setPresentedMove(next);
+    const timer = window.setTimeout(() => {
+      setPresentedMove((current) =>
+        current?.historyLength === historyLength ? null : current,
+      );
+    }, MOVE_ANIMATION_SECONDS * 1000);
+
+    return () => window.clearTimeout(timer);
+  }, [state, state.moveHistory.length]);
+
+  return presentedMove;
 }
 
 function GoldBar({
@@ -168,6 +221,53 @@ function VasePiece({
   );
 }
 
+function AnimatedMovePiece({
+  state,
+  presentedMove,
+}: {
+  state: BoardState;
+  presentedMove: PresentedMove;
+}) {
+  const group = useRef<Group>(null);
+  const elapsed = useRef(0);
+  const { move } = presentedMove;
+  const from = move.from as number;
+  const to = move.to as number;
+  const start = useMemo(
+    () => pointPiecePosition(from, state.points[from].count + 1),
+    [from, state.points],
+  );
+  const end = useMemo(
+    () => pointPiecePosition(to, state.points[to].count),
+    [state.points, to],
+  );
+
+  useFrame((_, delta) => {
+    if (!group.current) return;
+    elapsed.current = Math.min(MOVE_ANIMATION_SECONDS, elapsed.current + delta);
+    const progress = elapsed.current / MOVE_ANIMATION_SECONDS;
+    const eased = progress * progress * (3 - 2 * progress);
+
+    group.current.position.set(
+      start[0] + (end[0] - start[0]) * eased,
+      start[1] + (end[1] - start[1]) * eased + Math.sin(Math.PI * progress) * 0.82,
+      start[2] + (end[2] - start[2]) * eased,
+    );
+    group.current.rotation.y = Math.sin(Math.PI * progress) * 0.22;
+  });
+
+  return (
+    <group ref={group} position={start}>
+      <VasePiece
+        owner={move.player}
+        selected={false}
+        active
+        position={[0, 0, 0]}
+      />
+    </group>
+  );
+}
+
 function TrayPieces({
   owner,
   count,
@@ -210,6 +310,7 @@ function BoardPoint3D({
   isSource,
   isTarget,
   canSelect,
+  hideTopPiece,
   onSelectSource,
   onSelectTarget,
 }: {
@@ -218,6 +319,7 @@ function BoardPoint3D({
   isSource: boolean;
   isTarget: boolean;
   canSelect: boolean;
+  hideTopPiece: boolean;
   onSelectSource: () => void;
   onSelectTarget: () => void;
 }) {
@@ -277,19 +379,21 @@ function BoardPoint3D({
         />
       </mesh>
       {point.owner
-        ? pieceOffsets(point.count).map(([x, y, depth], pieceIndex) => (
-            <VasePiece
-              key={pieceIndex}
-              owner={point.owner as Player}
-              selected={isSource}
-              active={isTarget || canSelect || isSource}
-              position={[
-                x,
-                0.13 + y,
-                position.direction * (0.16 + depth),
-              ]}
-            />
-          ))
+        ? pieceOffsets(point.count).map(([x, y, depth], pieceIndex, offsets) =>
+            hideTopPiece && pieceIndex === offsets.length - 1 ? null : (
+              <VasePiece
+                key={pieceIndex}
+                owner={point.owner as Player}
+                selected={isSource}
+                active={isTarget || canSelect || isSource}
+                position={[
+                  x,
+                  0.13 + y,
+                  position.direction * (0.16 + depth),
+                ]}
+              />
+            ),
+          )
         : null}
       {point.count > 7 ? (
         <mesh position={[0.2, 0.63, position.direction * 0.54]}>
@@ -384,7 +488,8 @@ function LacquerBoard({
   targetMoves,
   onSelectSource,
   onSelectTarget,
-}: GameTable3DProps) {
+  presentedMove,
+}: GameTable3DProps & { presentedMove: PresentedMove | null }) {
   const targetPoints = useMemo(
     () =>
       new Set(
@@ -463,11 +568,16 @@ function LacquerBoard({
             isSource={selectedSource === index}
             isTarget={targetPoints.has(index)}
             canSelect={sourcePoints.has(index)}
+            hideTopPiece={presentedMove?.move.to === index}
             onSelectSource={() => onSelectSource(index)}
             onSelectTarget={() => onSelectTarget(index)}
           />
         );
       })}
+
+      {presentedMove ? (
+        <AnimatedMovePiece state={state} presentedMove={presentedMove} />
+      ) : null}
 
       <group position={[-5.05, 0.38, 0]}>
         <mesh
@@ -541,6 +651,8 @@ function LacquerBoard({
 }
 
 function Scene(props: GameTable3DProps) {
+  const presentedMove = usePresentedMove(props.state);
+
   return (
     <>
       <color attach="background" args={["#080605"]} />
@@ -560,7 +672,7 @@ function Scene(props: GameTable3DProps) {
       <Suspense fallback={null}>
         <CharacterActors currentPlayer={props.state.currentPlayer} />
       </Suspense>
-      <LacquerBoard {...props} />
+      <LacquerBoard {...props} presentedMove={presentedMove} />
     </>
   );
 }
@@ -570,7 +682,7 @@ export function GameTable3D(props: GameTable3DProps) {
     <section className="game-3d-shell" aria-label="三维双陆棋桌测试">
       <div className="game-3d-badge">
         <span>固定机位 · 对弈场景</span>
-        <strong>灰盒 02</strong>
+        <strong>灰盒 03</strong>
       </div>
       <div className="game-3d-canvas">
         <Canvas

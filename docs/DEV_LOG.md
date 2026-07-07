@@ -3885,3 +3885,30 @@ Roll, source selection, target selection, and one complete move passed with no b
 ```
 
 The remaining `THREE.Clock` console warning originates in the current React Three Fiber/Three.js dependency combination and does not affect the greybox runtime. Dependency upgrades are deferred until they can be tested as a separate change.
+
+## 2026-07-08 Point-To-Point Horse Animation
+
+### Objective
+
+Explain committed normal moves in the 3D renderer without moving rule ownership into the scene.
+
+### Changes
+
+- Added a renderer-only presentation hook that reacts only to one newly appended move record.
+- Added a 680ms lift, travel, and settle path for point-to-point moves.
+- Temporarily hides the authoritative target stack's top horse while its presentation copy is moving, preventing duplicate horses.
+- Snaps directly to authoritative state for reloads, history jumps, bar entry, and bearing off instead of replaying stale or incomplete animation.
+- Increased only the 3D AI response delay from 450ms to 800ms so a human horse can settle before the AI state update; the 2D delay is unchanged.
+- Advanced the in-scene marker from greybox 02 to greybox 03.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Desktop roll, source selection, target selection, mid-flight frame, and settled frame passed.
+390x844 post-move resize passed.
+No runtime errors; the existing missing favicon request and upstream THREE.Clock warning remain non-gameplay diagnostics.
+```

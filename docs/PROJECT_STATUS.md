@@ -1,6 +1,6 @@
 # 3D Project Status
 
-Last updated: 2026-07-07 CST
+Last updated: 2026-07-08 CST
 
 ## Target
 
@@ -8,7 +8,7 @@ Build an independent fixed-camera Shuanglu room application. Two visible charact
 
 ## Current Milestone
 
-Fixed-camera greybox:
+Fixed-camera playable greybox:
 
 - Independent local Git repository.
 - Fetch-only `upstream-2d` sync remote.
@@ -20,17 +20,18 @@ Fixed-camera greybox:
 - 2.5D identity-preserving character stand-ins in the room.
 - Procedural dimensional board and bottle-shaped horses.
 - Point, bar, and borne-off state rendered and clickable.
+- Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
+- Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.
+- The 3D AI response delay leaves the human move animation enough time to settle.
 - Rules and state remain outside the renderer.
 
 ## Next Milestones
 
-1. Browser screenshot QA against the approved concept.
-2. Tune camera, character scale, and board framing.
-3. Add presentation-state reconciliation and horse move animation.
-4. Add hit, bar-entry, and borne-off animation.
-5. Produce optimized GLB board and horse assets.
-6. Produce seated character GLBs after the static composition is approved.
-7. Create independent 3D staging deployment on port 3003.
+1. Add hit, bar-entry, and borne-off animation.
+2. Add dice settle animation using the rule-determined result.
+3. Produce optimized GLB board and horse assets.
+4. Produce seated character GLBs after the static composition is approved.
+5. Create independent 3D staging deployment on port 3003.
 
 ## Known Boundaries
 
