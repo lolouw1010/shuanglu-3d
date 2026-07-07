@@ -13,7 +13,6 @@ import { ParchmentCommandPanel } from "./ParchmentCommandPanel";
 import { PlayFeedback } from "./PlayFeedback";
 import { latestContiguousMovesForPlayer } from "./moveDisplay";
 import { TurnCoach } from "./TurnCoach";
-import { VictoryTracker } from "./VictoryTracker";
 
 const GameTable3D = dynamic(
   () =>
@@ -93,18 +92,18 @@ export function GameScreen() {
       : "parchment-game-shell min-h-screen overflow-x-hidden px-2 py-2 text-[#3b2514] sm:px-3";
   const layoutClass =
     boardView === "3d"
-      ? "relative z-10 mx-auto grid max-w-[1500px] gap-2 xl:grid-cols-[220px_1fr_220px]"
+      ? "relative z-10 mx-auto grid max-w-[1600px] gap-2"
       : "parchment-game-layout relative z-10 mx-auto grid max-w-[1780px] gap-2";
 
   return (
     <main className={shellClass}>
       <div className={layoutClass}>
-        <div className="game-topbar parchment-topbar flex items-center justify-between gap-3 rounded border px-3 py-2 xl:col-span-3">
+        <div className={`game-topbar parchment-topbar flex items-center justify-between gap-3 rounded border px-3 py-2 ${boardView === "3d" ? "" : "xl:col-span-3"}`}>
           <div className="brand-block min-w-0">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="brand-title font-display text-3xl sm:text-5xl">双陆</h1>
               <span className="brand-subtitle text-sm font-semibold">唐宋博戏</span>
-              {boardView === "3d" ? <span className="text-xs text-amber-100/80">3D 测试局</span> : null}
+              {boardView === "3d" ? <span className="text-xs text-amber-100/80">固定机位 · 立体对弈</span> : null}
             </div>
             {mode === "online" && online ? (
               <p className="mt-0.5 truncate text-xs">
@@ -135,26 +134,44 @@ export function GameScreen() {
               <Settings size={22} />
               <span>设置</span>
             </button>
-            <button type="button" aria-label="返回" className="topbar-icon-button" onClick={backToMenu}>
-              <ArrowLeft size={22} />
-              <span>返回</span>
-            </button>
+            {boardView === "3d" ? null : (
+              <button type="button" aria-label="返回" className="topbar-icon-button" onClick={backToMenu}>
+                <ArrowLeft size={22} />
+                <span>返回</span>
+              </button>
+            )}
           </div>
         </div>
 
-        <div className={`${boardView === "3d" ? "order-3 xl:order-none" : "parchment-side-panel parchment-side-left order-2"}`}>
-          <CharacterPanel
-            character={characters.white}
-            active={state.currentPlayer === "white"}
-            barCount={state.bar.white}
-            borneOff={state.borneOff.white}
-          />
-        </div>
+        {boardView === "3d" ? null : (
+          <div className="parchment-side-panel parchment-side-left order-2">
+            <CharacterPanel
+              character={characters.white}
+              active={state.currentPlayer === "white"}
+              barCount={state.bar.white}
+              borneOff={state.borneOff.white}
+            />
+          </div>
+        )}
 
-        <div className="parchment-play-area order-2 grid gap-2 xl:order-none">
+        <div className={boardView === "3d" ? "order-2 grid min-w-0 gap-2" : "parchment-play-area order-2 grid gap-2 xl:order-none"}>
           {boardView === "3d" ? (
             <div className="game-compact-hud grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(230px,270px)]">
-              <VictoryTracker state={state} />
+              <section className="game-3d-statusbar" aria-label="棋局状态">
+                <div>
+                  <span>回合 {roundLabel}</span>
+                  <strong>{actionLabel}</strong>
+                </div>
+                <div className="game-3d-score" aria-label="双方出马进度">
+                  <span>白方出马 {state.borneOff.white}/15</span>
+                  <span>黑方出马 {state.borneOff.black}/15</span>
+                </div>
+                {(state.bar.white > 0 || state.bar.black > 0) && (
+                  <span className="game-3d-bar-count">
+                    待返场 白 {state.bar.white} · 黑 {state.bar.black}
+                  </span>
+                )}
+              </section>
               <DicePanel
                 state={state}
                 onRoll={() => rollCurrentPlayer()}
@@ -256,14 +273,16 @@ export function GameScreen() {
           ) : null}
         </div>
 
-        <div className={`${boardView === "3d" ? "order-4 xl:order-none" : "parchment-side-panel parchment-side-right order-3"}`}>
-          <CharacterPanel
-            character={characters.black}
-            active={state.currentPlayer === "black"}
-            barCount={state.bar.black}
-            borneOff={state.borneOff.black}
-          />
-        </div>
+        {boardView === "3d" ? null : (
+          <div className="parchment-side-panel parchment-side-right order-3">
+            <CharacterPanel
+              character={characters.black}
+              active={state.currentPlayer === "black"}
+              barCount={state.bar.black}
+              borneOff={state.borneOff.black}
+            />
+          </div>
+        )}
 
         {boardView === "3d" ? null : (
           <nav className="parchment-footer-nav order-4" aria-label="棋局导航">

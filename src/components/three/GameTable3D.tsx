@@ -1,10 +1,12 @@
 "use client";
 
-import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { DoubleSide, LatheGeometry, Shape, Vector2 } from "three";
 import type { BoardState, Move, Player, Point } from "@/game";
+import { CharacterActors } from "@/components/scene3d/CharacterActors";
+import { FixedCameraRig } from "@/components/scene3d/FixedCameraRig";
+import { RoomEnvironment } from "@/components/scene3d/RoomEnvironment";
 
 type Source = number | "bar";
 
@@ -166,6 +168,42 @@ function VasePiece({
   );
 }
 
+function TrayPieces({
+  owner,
+  count,
+  center,
+}: {
+  owner: Player;
+  count: number;
+  center: [number, number, number];
+}) {
+  const visible = Math.min(count, 6);
+
+  return (
+    <group position={center}>
+      {Array.from({ length: visible }, (_, index) => {
+        const lane = index % 2;
+        const row = Math.floor(index / 2);
+        return (
+          <VasePiece
+            key={`${owner}-${index}`}
+            owner={owner}
+            selected={false}
+            active={false}
+            position={[(lane - 0.5) * 0.2, row * 0.12, (row - 1) * 0.31]}
+          />
+        );
+      })}
+      {count > visible ? (
+        <mesh position={[0, 0.72, 0]}>
+          <sphereGeometry args={[0.08, 18, 12]} />
+          <meshStandardMaterial color="#e6bd70" emissive="#5d3208" emissiveIntensity={0.3} />
+        </mesh>
+      ) : null}
+    </group>
+  );
+}
+
 function BoardPoint3D({
   point,
   position,
@@ -204,14 +242,16 @@ function BoardPoint3D({
   };
 
   return (
-    <group position={[position.x, 0.12, position.z]}>
+    <group
+      position={[position.x, 0.12, position.z]}
+      onClick={(event) => {
+        event.stopPropagation();
+        handleClick();
+      }}
+    >
       <mesh
         receiveShadow
         rotation={[-Math.PI / 2, 0, 0]}
-        onClick={(event) => {
-          event.stopPropagation();
-          handleClick();
-        }}
       >
         <shapeGeometry args={[triangle]} />
         <meshStandardMaterial
@@ -337,55 +377,6 @@ function DiceCube({
   );
 }
 
-function StudyAtmosphere() {
-  return (
-    <group>
-      <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.08, 0]}>
-        <planeGeometry args={[18, 12]} />
-        <meshStandardMaterial color="#211511" roughness={0.78} />
-      </mesh>
-      <mesh receiveShadow position={[0, 2.2, -4.78]}>
-        <boxGeometry args={[15, 4.5, 0.16]} />
-        <meshStandardMaterial color="#1b1110" roughness={0.86} />
-      </mesh>
-      {[-4.6, -2.3, 0, 2.3, 4.6].map((x) => (
-        <mesh key={x} position={[x, 2.18, -4.66]}>
-          <boxGeometry args={[0.045, 3.55, 0.08]} />
-          <meshStandardMaterial color="#7a5126" metalness={0.18} roughness={0.34} />
-        </mesh>
-      ))}
-      <mesh position={[-5.7, 0.08, 2.65]} rotation={[0, 0.22, 0]}>
-        <boxGeometry args={[2.15, 0.08, 0.72]} />
-        <meshStandardMaterial color="#efe2c0" roughness={0.5} />
-      </mesh>
-      <mesh position={[-4.9, 0.17, 2.42]} rotation={[0, -0.08, 0]}>
-        <cylinderGeometry args={[0.035, 0.035, 1.35, 16]} />
-        <meshStandardMaterial color="#2f160c" roughness={0.4} />
-      </mesh>
-      <mesh position={[5.05, 0.1, 2.72]} rotation={[0, -0.24, 0]}>
-        <boxGeometry args={[2.2, 0.06, 0.32]} />
-        <meshStandardMaterial color="#c8a15f" roughness={0.46} />
-      </mesh>
-      <mesh position={[5.82, 0.18, 2.63]} rotation={[0, -0.24, Math.PI / 2]}>
-        <cylinderGeometry args={[0.13, 0.13, 0.36, 24]} />
-        <meshStandardMaterial color="#6b2b18" roughness={0.42} metalness={0.1} />
-      </mesh>
-      <mesh position={[4.9, 0.22, -2.98]}>
-        <cylinderGeometry args={[0.54, 0.72, 0.28, 42]} />
-        <meshStandardMaterial color="#5b1f1b" roughness={0.72} />
-      </mesh>
-      <mesh position={[-4.9, 0.22, -2.98]}>
-        <cylinderGeometry args={[0.54, 0.72, 0.28, 42]} />
-        <meshStandardMaterial color="#20283b" roughness={0.74} />
-      </mesh>
-      <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[5.9, 7.4, 72]} />
-        <meshBasicMaterial color="#000000" transparent opacity={0.26} side={DoubleSide} />
-      </mesh>
-    </group>
-  );
-}
-
 function LacquerBoard({
   state,
   availableMoves,
@@ -497,6 +488,8 @@ function LacquerBoard({
           />
         </mesh>
         <GoldBar position={[0, 0.12, 0]} scale={[0.64, 0.035, 2.16]} />
+        <TrayPieces owner="white" count={state.bar.white} center={[0, 0.16, -0.62]} />
+        <TrayPieces owner="black" count={state.bar.black} center={[0, 0.16, 0.62]} />
       </group>
 
       <group position={[5.05, 0.38, 0]}>
@@ -518,6 +511,8 @@ function LacquerBoard({
           />
         </mesh>
         <GoldBar position={[0, 0.12, 0]} scale={[0.64, 0.035, 2.16]} />
+        <TrayPieces owner="white" count={state.borneOff.white} center={[0, 0.16, -0.62]} />
+        <TrayPieces owner="black" count={state.borneOff.black} center={[0, 0.16, 0.62]} />
       </group>
 
       <group position={[0, 0.29, 0.08]}>
@@ -560,16 +555,12 @@ function Scene(props: GameTable3DProps) {
       />
       <pointLight position={[-4.5, 3.1, 2.7]} color="#f2b35f" intensity={1.55} />
       <pointLight position={[4.2, 2.6, -2.8]} color="#b66a42" intensity={0.82} />
-      <StudyAtmosphere />
+      <FixedCameraRig />
+      <RoomEnvironment />
+      <Suspense fallback={null}>
+        <CharacterActors currentPlayer={props.state.currentPlayer} />
+      </Suspense>
       <LacquerBoard {...props} />
-      <OrbitControls
-        enablePan={false}
-        minDistance={7.8}
-        maxDistance={10.8}
-        minPolarAngle={0.58}
-        maxPolarAngle={1.02}
-        target={[0, 0.62, 0]}
-      />
     </>
   );
 }
@@ -578,14 +569,14 @@ export function GameTable3D(props: GameTable3DProps) {
   return (
     <section className="game-3d-shell" aria-label="三维双陆棋桌测试">
       <div className="game-3d-badge">
-        <span>博物复原桌面</span>
-        <strong>灰盒 01</strong>
+        <span>固定机位 · 对弈场景</span>
+        <strong>灰盒 02</strong>
       </div>
       <div className="game-3d-canvas">
         <Canvas
-          camera={{ position: [0, 6.15, 8.35], fov: 39 }}
+          camera={{ position: [0, 5.35, 11.3], fov: 35 }}
           dpr={[1, 1.4]}
-          shadows
+          shadows="basic"
         >
           <Scene {...props} />
         </Canvas>

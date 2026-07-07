@@ -14,7 +14,7 @@ export function ThreeTestApp() {
 
   useEffect(() => {
     if (screen !== "game" || boardView !== "3d") {
-      startMatch("human", "3d");
+      startMatch("ai", "3d");
     }
   }, [boardView, screen, startMatch]);
 

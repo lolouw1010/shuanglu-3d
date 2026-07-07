@@ -1,12 +1,13 @@
-# Documentation Index
+# 3D Documentation Index
 
-Last updated: 2026-07-06 CST
+Last updated: 2026-07-07 CST
 
 ## Start Here
 
-- `PROJECT_STATUS.md` records the current product state, verified commands, known risks, and next engineering priorities.
+- `PROJECT_STATUS.md` records the independent fixed-camera 3D status and next milestones.
 - `DEV_LOG.md` records chronological development work and decisions as they happened.
-- `DEPLOYMENT.md` records the current Linode deployment model followed by historical Aliyun deployment notes.
+- `DEPLOYMENT.md` records the planned isolated 3D deployment boundary.
+- `UPSTREAM_SYNC.md` defines selective 2D-to-3D bug-fix synchronization.
 - `WORK_SUMMARY_2026-06-12.md` records the June 12 2D interface work summary, deployment verification, and Git sync state.
 
 ## Rules And Scope
@@ -29,11 +30,10 @@ Last updated: 2026-07-06 CST
 ## Current Public Test Targets
 
 ```txt
-https://shuanglu.uway.click/
-https://shuanglu.uway.click/3d
+No 3D public deployment yet.
 ```
 
-The stable playable target is `/`. The `/3d` route is an isolated visual spike.
+The local root route is the fixed-camera 3D application. The stable 2D production application remains a separate repository and deployment.
 
 ## Documentation Rules
 

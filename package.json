@@ -1,6 +1,6 @@
 {
-  "name": "shuanglu",
-  "version": "0.5.0",
+  "name": "shuanglu-3d",
+  "version": "0.6.0-dev",
   "private": true,
   "engines": {
     "node": ">=20 <21"

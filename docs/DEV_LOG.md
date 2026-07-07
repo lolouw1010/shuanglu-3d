@@ -3855,3 +3855,33 @@ Certificate staging renewal passed for shuanglu.uway.click.
 ```
 
 The first directory-migration attempt performed an immediate HTTP check after `systemctl restart` and correctly rolled back when Next.js had not finished starting. The readiness check was changed to retry for up to 30 seconds, after which the migration completed successfully.
+
+## 2026-07-07 Independent Fixed-Camera 3D Sandbox
+
+### Objective
+
+Start the independently versioned 3D application from the approved fixed-camera room concept while preserving the existing 2D rules and interaction model.
+
+### Changes
+
+- Forked the Linode production baseline into the independent `shuanglu-3d` repository.
+- Disabled pushes to the 2D upstream remote and recorded the imported 2D revision in `.upstream-2d-revision`.
+- Added an audit script and documentation for selectively cherry-picking relevant 2D fixes into 3D.
+- Removed copied 2D production deployment files so the new application cannot accidentally target the existing service.
+- Changed `/` and `/3d` to open a fixed-camera 3D match directly.
+- Added a room greybox, fixed responsive camera presets, 2.5D character stand-ins, a lacquer board, interactive vase pieces, bar/off trays, and 3D dice.
+- Replaced the 2D victory card in the 3D view with a compact round and progress status bar.
+- Kept all rule generation, move application, AI, room state, and victory logic unchanged.
+
+### Verification
+
+```txt
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Desktop browser QA passed at 1440x1000.
+Compact browser QA passed at 390x844.
+Roll, source selection, target selection, and one complete move passed with no browser errors.
+```
+
+The remaining `THREE.Clock` console warning originates in the current React Three Fiber/Three.js dependency combination and does not affect the greybox runtime. Dependency upgrades are deferred until they can be tested as a separate change.

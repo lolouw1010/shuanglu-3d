@@ -417,13 +417,19 @@ button:focus-visible {
 }
 
 .game-3d-canvas {
-  height: clamp(520px, 66vh, 780px);
+  height: clamp(620px, 76vh, 900px);
   position: relative;
   width: 100%;
 }
 
 .game-3d-canvas canvas {
   display: block;
+}
+
+@media (max-width: 720px) {
+  .game-3d-canvas {
+    height: clamp(560px, 70vh, 720px);
+  }
 }
 
 .board-scene {
@@ -1154,6 +1160,59 @@ button:focus-visible {
 
 .game-compact-hud {
   align-items: stretch;
+}
+
+.game-3d-statusbar {
+  align-items: center;
+  background: rgba(13, 8, 7, 0.68);
+  border: 1px solid rgba(253, 230, 138, 0.16);
+  border-radius: 0.25rem;
+  color: rgba(255, 244, 216, 0.76);
+  display: flex;
+  gap: 1.25rem;
+  min-height: 5.6rem;
+  padding: 0.75rem 1rem;
+}
+
+.game-3d-statusbar div:first-child {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.game-3d-statusbar div:first-child span,
+.game-3d-score span,
+.game-3d-bar-count {
+  font-size: 0.75rem;
+}
+
+.game-3d-statusbar strong {
+  color: #fff0bf;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.game-3d-score {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+}
+
+.game-3d-bar-count {
+  color: #fcd34d;
+  margin-left: auto;
+}
+
+@media (max-width: 720px) {
+  .game-3d-statusbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .game-3d-bar-count {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 900px) {
