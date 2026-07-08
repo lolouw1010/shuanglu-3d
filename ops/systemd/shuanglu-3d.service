@@ -1,0 +1,23 @@
+[Unit]
+Description=Shuanglu fixed-camera 3D Next.js application
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=shuanglu3d
+Group=shuanglu3d
+WorkingDirectory=/opt/apps/shuanglu-3d/current
+Environment=NODE_ENV=production
+Environment=HOME=/opt/apps/shuanglu-3d
+ExecStart=/usr/bin/npm start -- --hostname 127.0.0.1 --port 3003
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+MemoryMax=1G
+CPUQuota=100%
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
