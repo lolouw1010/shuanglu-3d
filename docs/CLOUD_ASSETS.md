@@ -12,6 +12,17 @@ public/assets/concepts/3d-fixed-room-board-priority.png
 
 The character-priority frame is the approved desktop target. The other frames guide compact and interaction-heavy compositions.
 
+## Application Icon
+
+```txt
+public/assets/brand/shuanglu-3d-icon-master.png
+src/app/icon.png
+src/app/apple-icon.png
+src/app/favicon.ico
+```
+
+The mark uses two simplified gold Shuanglu horses around the board's central bar on a deep lacquer field. It contains no text and is designed to remain distinct at favicon size.
+
 ## Greybox References
 
 The copied character illustrations are temporary in-scene stand-ins:

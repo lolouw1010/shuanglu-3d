@@ -3954,3 +3954,11 @@ Docker Nginx configuration validation passed.
 Desktop WebGL, roll, source selection, target selection, mid-flight move, and settled move passed.
 390x844 production viewport passed.
 ```
+
+## 2026-07-08 Application Icon
+
+- Generated a square lacquer-and-gilt identity mark with mirrored Shuanglu horses and a central board bar.
+- Preserved the 1254px master under `public/assets/brand`.
+- Added Next.js metadata icons at 512px and 180px.
+- Added a multi-size 16px, 32px, and 48px favicon.
+- Confirmed the emblem remains readable in a direct 32px render.
