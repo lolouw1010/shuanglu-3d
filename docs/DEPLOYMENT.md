@@ -1,8 +1,10 @@
 # 3D Deployment
 
-Status: independent Linode production configuration ready.
+Status: active on Linode production.
 
 Public hostname: `https://3d.shuanglu.uway.click`
+
+Initial deployed application revision: `b94a60226da66ad0c08e78ccc0ff239802a2adb5`
 
 The 3D application must not reuse the 2D production directory, service, port, certificate, or release symlink.
 

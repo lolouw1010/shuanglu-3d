@@ -3912,3 +3912,45 @@ Desktop roll, source selection, target selection, mid-flight frame, and settled 
 390x844 post-move resize passed.
 No runtime errors; the existing missing favicon request and upstream THREE.Clock warning remain non-gameplay diagnostics.
 ```
+
+## 2026-07-08 Independent Linode Production Deployment
+
+### Boundary
+
+```txt
+Public URL: https://3d.shuanglu.uway.click
+Application root: /opt/apps/shuanglu-3d
+Release: /opt/apps/shuanglu-3d/releases/20260708T152312Z-b94a602
+Service: shuanglu-3d.service
+System user: shuanglu3d
+Internal port: 127.0.0.1:3003
+Temporary smoke port: 127.0.0.1:3103
+```
+
+The existing 2D service remains under `/opt/apps/shuanglu`, `shuanglu.service`, and port 3002.
+
+### Production Changes
+
+- Added a clean-main deployment script with local and remote builds, a temporary-port smoke test, an atomic release switch, and previous-release rollback.
+- Installed and enabled the sandboxed `shuanglu-3d.service` with a 1 GiB memory limit.
+- Added a dedicated Docker Nginx virtual host and HTTPS redirect.
+- Issued a dedicated Let's Encrypt certificate for `3d.shuanglu.uway.click`.
+- Installed and enabled a certificate renewal timer restricted to the 3D certificate.
+- Kept BigNAS outside the deployment and Git synchronization path.
+
+### Verification
+
+```txt
+Local Node.js 20.20.2 typecheck, 38 tests, and production build passed.
+Remote npm clean install, production build, and port 3103 smoke test passed.
+shuanglu-3d.service active and enabled; restart count 0.
+shuanglu.service active and enabled after the deployment.
+https://3d.shuanglu.uway.click/health returned ok.
+Public / and /3d returned HTTP 200.
+HTTP redirects to HTTPS.
+Certificate simulated renewal passed.
+Deployed certificate hash matches the Let's Encrypt live certificate hash.
+Docker Nginx configuration validation passed.
+Desktop WebGL, roll, source selection, target selection, mid-flight move, and settled move passed.
+390x844 production viewport passed.
+```

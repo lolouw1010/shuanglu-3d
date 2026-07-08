@@ -23,6 +23,8 @@ Fixed-camera playable greybox:
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
 - Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.
 - The 3D AI response delay leaves the human move animation enough time to settle.
+- Independent Linode production is live at `https://3d.shuanglu.uway.click` on internal port 3003.
+- The dedicated systemd service, Docker Nginx host, Let's Encrypt certificate, and renewal timer are active.
 - Rules and state remain outside the renderer.
 
 ## Next Milestones
@@ -31,7 +33,6 @@ Fixed-camera playable greybox:
 2. Add dice settle animation using the rule-determined result.
 3. Produce optimized GLB board and horse assets.
 4. Produce seated character GLBs after the static composition is approved.
-5. Create independent 3D staging deployment on port 3003.
 
 ## Known Boundaries
 
