@@ -4045,3 +4045,28 @@ npm run build passed.
 Desktop screenshot captured at output/playwright/texture-baseline-06-local.png.
 390x844 screenshot captured at output/playwright/texture-baseline-06-mobile-local.png.
 ```
+
+## 2026-07-10 3D Background Baseline 07
+
+### Objective
+
+Replace the remaining procedural room and flat in-scene character stand-ins with a user-provided fixed-camera room background plate while keeping the WebGL board, horses, dice, and game hit zones dynamic.
+
+### Changes
+
+- Added `public/ui/scene-background-02.png` as the active fixed-room background plate.
+- Changed the 3D shell to render the room plate as the DOM background behind the WebGL canvas.
+- Made the WebGL canvas transparent and removed the old procedural room and `CharacterActors` layer from the active scene.
+- Kept the image-textured board, dynamic horses, rounded dice, move animation, and transparent interaction zones in the WebGL layer.
+- Advanced the in-scene marker from `贴图基线 06` to `背景基线 07`.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Desktop screenshot captured at output/playwright/background-baseline-07-local.png.
+390x844 screenshot captured at output/playwright/background-baseline-07-mobile-local.png.
+```

@@ -418,6 +418,10 @@ button:focus-visible {
 }
 
 .game-3d-canvas {
+  background:
+    linear-gradient(180deg, rgba(8, 5, 4, 0.04), rgba(8, 5, 4, 0.16) 62%, rgba(8, 5, 4, 0.34)),
+    url("/ui/scene-background-02.png") center / cover no-repeat,
+    #120907;
   height: clamp(660px, 78vh, 940px);
   position: relative;
   width: 100%;

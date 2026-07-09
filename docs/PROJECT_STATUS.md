@@ -1,6 +1,6 @@
 # 3D Project Status
 
-Last updated: 2026-07-09 CST
+Last updated: 2026-07-10 CST
 
 ## Target
 
@@ -17,9 +17,7 @@ Fixed-camera playable visual baseline:
 - Human versus AI is the default test mode.
 - OrbitControls removed.
 - Authored desktop and compact camera presets.
-- 2.5D identity-preserving character stand-ins in the room.
-- Enlarged and relit character stand-ins to match the approved fixed-room composition more closely.
-- Procedural scholar-room staging now includes a table surface, screen panels, side windows, lantern, scrolls, vase, and restrained background ornaments.
+- User-provided fixed-room background plate replaces the previous procedural room and flat character stand-ins.
 - Refined concept-aligned table-side camera with an image-textured lacquer board, slimmer gold-rimmed bottle-shaped horses, smaller rounded dice, and transparent interaction lanes.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
@@ -39,9 +37,8 @@ Fixed-camera playable visual baseline:
 
 ## Known Boundaries
 
-- The character stand-ins are flat identity references, not final 3D models.
-- The current room is still procedural staging, not a final modeled GLB environment.
-- The user-provided board texture is active; the provided `scene-background-01.png` is a board image rather than a room/background plate, so the room and character background still need a separate usable asset.
+- The room and seated characters are currently a fixed 2.5D background plate, not modeled GLB assets.
+- The user-provided board texture is active; `scene-background-02.png` is active as the runtime room/background plate.
 - Online rooms remain copied and in-memory; 2D and 3D deployments will not share rooms.
 - The copied 2D presentation remains in the repository only as fork history and fallback code; the 3D root does not use it.
 - Core 2D bug fixes require explicit review through `docs/UPSTREAM_SYNC.md`.

@@ -2,13 +2,11 @@
 
 import { ContactShadows, RoundedBox, useTexture } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DoubleSide, LatheGeometry, SRGBColorSpace, Shape, Vector2 } from "three";
 import type { Group } from "three";
 import type { BoardState, Move, MoveRecord, Player, Point } from "@/game";
-import { CharacterActors } from "@/components/scene3d/CharacterActors";
 import { FixedCameraRig } from "@/components/scene3d/FixedCameraRig";
-import { RoomEnvironment } from "@/components/scene3d/RoomEnvironment";
 
 type Source = number | "bar";
 
@@ -666,7 +664,6 @@ function Scene(props: GameTable3DProps) {
 
   return (
     <>
-      <color attach="background" args={["#120907"]} />
       <fog attach="fog" args={["#120907", 11, 23]} />
       <ambientLight intensity={0.42} />
       <hemisphereLight args={["#ffe0a4", "#170806", 0.92]} />
@@ -687,10 +684,6 @@ function Scene(props: GameTable3DProps) {
       <pointLight position={[-4.8, 2.95, 2.9]} color="#f2b35f" intensity={1.65} />
       <pointLight position={[4.2, 2.7, -2.5]} color="#b66a42" intensity={0.96} />
       <FixedCameraRig />
-      <RoomEnvironment />
-      <Suspense fallback={null}>
-        <CharacterActors currentPlayer={props.state.currentPlayer} />
-      </Suspense>
       <LacquerBoard {...props} presentedMove={presentedMove} />
       <ContactShadows
         position={[0, 0.34, 0.3]}
@@ -708,12 +701,13 @@ export function GameTable3D(props: GameTable3DProps) {
     <section className="game-3d-shell" aria-label="三维双陆棋桌测试">
       <div className="game-3d-badge">
         <span>固定机位 · 对弈场景</span>
-        <strong>贴图基线 06</strong>
+        <strong>背景基线 07</strong>
       </div>
       <div className="game-3d-canvas">
         <Canvas
           camera={{ position: [-0.28, 3.92, 9.05], fov: 42 }}
           dpr={[1, 1.4]}
+          gl={{ alpha: true }}
           shadows="basic"
         >
           <Scene {...props} />

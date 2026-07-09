@@ -33,6 +33,7 @@ public/ui/board-top-orthographic-cropped.png
 public/ui/board-angled-reference-01.png
 public/ui/horse-piece-reference-01.png
 public/ui/scene-background-01.png
+public/ui/scene-background-02.png
 ```
 
 Current runtime use:
@@ -41,17 +42,18 @@ Current runtime use:
 - `public/ui/horse-piece-reference-01.png` guides the gold-rimmed bottle-piece material direction.
 - `public/ui/board-angled-reference-01.png` remains a visual reference for later board/camera tuning.
 - `public/ui/scene-background-01.png` is not active because it is a board image, not a room/background plate.
+- `public/ui/scene-background-02.png` is the active fixed-room background plate behind the transparent WebGL board layer.
 
-## Greybox References
+## Historical Greybox References
 
-The copied character illustrations are temporary in-scene stand-ins:
+The copied character illustrations are no longer rendered in the active 3D scene, but remain available as historical identity references:
 
 ```txt
 public/assets/characters/li-qingzhao-halfbody.png
 public/assets/characters/song-emperor-halfbody.png
 ```
 
-They validate identity and composition. They are not final 3D actors.
+They validated identity and composition during greybox work. They are not final 3D actors.
 
 ## Final Runtime Policy
 
