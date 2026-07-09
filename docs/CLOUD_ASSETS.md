@@ -1,6 +1,6 @@
 # 3D Asset Inventory
 
-Last updated: 2026-07-07 CST
+Last updated: 2026-07-09 CST
 
 ## Approved Concepts
 
@@ -22,6 +22,25 @@ src/app/favicon.ico
 ```
 
 The mark uses two simplified gold Shuanglu horses around the board's central bar on a deep lacquer field. It contains no text and is designed to remain distinct at favicon size.
+
+## Runtime 2.5D Texture Baseline
+
+User-provided generated assets live under:
+
+```txt
+public/ui/board-top-orthographic-01.png
+public/ui/board-top-orthographic-cropped.png
+public/ui/board-angled-reference-01.png
+public/ui/horse-piece-reference-01.png
+public/ui/scene-background-01.png
+```
+
+Current runtime use:
+
+- `public/ui/board-top-orthographic-cropped.png` is the active lacquer board surface texture.
+- `public/ui/horse-piece-reference-01.png` guides the gold-rimmed bottle-piece material direction.
+- `public/ui/board-angled-reference-01.png` remains a visual reference for later board/camera tuning.
+- `public/ui/scene-background-01.png` is not active because it is a board image, not a room/background plate.
 
 ## Greybox References
 
@@ -55,4 +74,4 @@ fx
 audio
 ```
 
-No 3D production deployment exists yet. See `docs/DEPLOYMENT.md`.
+The 3D production deployment is live. See `docs/DEPLOYMENT.md`.

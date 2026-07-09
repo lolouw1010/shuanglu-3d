@@ -4015,3 +4015,33 @@ npm run build passed.
 Desktop screenshot captured at output/playwright/visual-baseline-05-final-local.png.
 390x844 screenshot captured at output/playwright/visual-baseline-05-final-mobile-local.png.
 ```
+
+## 2026-07-09 3D Texture Baseline 06
+
+### Objective
+
+Replace the rough procedural board surface with a user-provided generated lacquer board texture while keeping rules, dynamic pieces, dice, and transparent interaction hit zones under runtime control.
+
+### Changes
+
+- Added user-provided generated references under `public/ui`.
+- Derived `public/ui/board-top-orthographic-cropped.png` from the generated orthographic board image for runtime use.
+- Replaced the procedural board top and visible point-lane geometry with the image-textured lacquer board surface.
+- Kept point, bar, and borne-off meshes as transparent interaction layers with visible highlights only when actionable.
+- Updated horse pieces to use gold rims and bases, matching the provided horse-piece reference more closely.
+- Advanced the in-scene marker from `视觉基线 05` to `贴图基线 06`.
+
+### Asset Boundary
+
+`public/ui/scene-background-01.png` is not a usable room/background plate; it contains a board image. The background characters and procedural room remain active until a separate fixed-camera room plate is available.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Desktop screenshot captured at output/playwright/texture-baseline-06-local.png.
+390x844 screenshot captured at output/playwright/texture-baseline-06-mobile-local.png.
+```

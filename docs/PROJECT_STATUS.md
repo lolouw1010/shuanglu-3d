@@ -20,7 +20,7 @@ Fixed-camera playable visual baseline:
 - 2.5D identity-preserving character stand-ins in the room.
 - Enlarged and relit character stand-ins to match the approved fixed-room composition more closely.
 - Procedural scholar-room staging now includes a table surface, screen panels, side windows, lantern, scrolls, vase, and restrained background ornaments.
-- Refined concept-aligned table-side camera with a lacquer board, slimmer bottle-shaped horses, smaller rounded dice, and triangle-forward point lanes.
+- Refined concept-aligned table-side camera with an image-textured lacquer board, slimmer gold-rimmed bottle-shaped horses, smaller rounded dice, and transparent interaction lanes.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
 - Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.
@@ -41,6 +41,7 @@ Fixed-camera playable visual baseline:
 
 - The character stand-ins are flat identity references, not final 3D models.
 - The current room is still procedural staging, not a final modeled GLB environment.
+- The user-provided board texture is active; the provided `scene-background-01.png` is a board image rather than a room/background plate, so the room and character background still need a separate usable asset.
 - Online rooms remain copied and in-memory; 2D and 3D deployments will not share rooms.
 - The copied 2D presentation remains in the repository only as fork history and fallback code; the 3D root does not use it.
 - Core 2D bug fixes require explicit review through `docs/UPSTREAM_SYNC.md`.
