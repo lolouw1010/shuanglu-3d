@@ -1,6 +1,6 @@
 "use client";
 
-import { ContactShadows } from "@react-three/drei";
+import { ContactShadows, RoundedBox } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { DoubleSide, LatheGeometry, Shape, Vector2 } from "three";
@@ -34,8 +34,8 @@ const BOARD_WIDTH = 11.35;
 const BOARD_DEPTH = 6.15;
 const POINT_STEP = 0.76;
 const POINT_LENGTH = 2.34;
-const PIECE_SCALE = 0.35;
-const SELECTED_PIECE_SCALE = 0.4;
+const PIECE_SCALE = 0.285;
+const SELECTED_PIECE_SCALE = 0.33;
 const MOVE_ANIMATION_SECONDS = 0.68;
 
 type PresentedMove = {
@@ -72,7 +72,7 @@ function pieceOffsets(count: number): Array<[number, number, number]> {
   return Array.from({ length: visible }, (_, index) => {
     const lane = index % 2;
     const row = Math.floor(index / 2);
-    return [(lane - 0.5) * 0.12, row * 0.105, index * 0.12];
+    return [(lane - 0.5) * 0.1, row * 0.086, index * 0.105];
   });
 }
 
@@ -158,18 +158,18 @@ function VasePiece({
 }) {
   const geometry = useMemo(() => {
     const profile = [
-      new Vector2(0.18, 0),
-      new Vector2(0.31, 0.05),
-      new Vector2(0.36, 0.14),
-      new Vector2(0.5, 0.5),
-      new Vector2(0.46, 0.82),
-      new Vector2(0.31, 1.06),
-      new Vector2(0.16, 1.26),
-      new Vector2(0.15, 1.68),
-      new Vector2(0.23, 1.88),
-      new Vector2(0.38, 1.98),
-      new Vector2(0.3, 2.09),
-      new Vector2(0.08, 2.13),
+      new Vector2(0.14, 0),
+      new Vector2(0.24, 0.05),
+      new Vector2(0.31, 0.16),
+      new Vector2(0.39, 0.48),
+      new Vector2(0.35, 0.78),
+      new Vector2(0.24, 1.02),
+      new Vector2(0.13, 1.22),
+      new Vector2(0.13, 1.58),
+      new Vector2(0.2, 1.78),
+      new Vector2(0.31, 1.86),
+      new Vector2(0.25, 1.96),
+      new Vector2(0.08, 2.0),
     ];
     return new LatheGeometry(profile, 40);
   }, []);
@@ -194,11 +194,11 @@ function VasePiece({
         />
       </mesh>
       <mesh castShadow position={[0, 0.035, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.27, 0.045, 12, 44]} />
+        <torusGeometry args={[0.21, 0.035, 12, 44]} />
         <meshStandardMaterial color={rimColor} roughness={0.18} metalness={0.03} />
       </mesh>
       <mesh castShadow position={[0, 1.94, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.3, 0.04, 12, 48]} />
+        <torusGeometry args={[0.24, 0.032, 12, 48]} />
         <meshPhysicalMaterial
           color={rimColor}
           roughness={0.12}
@@ -206,16 +206,16 @@ function VasePiece({
           clearcoatRoughness={0.04}
         />
       </mesh>
-      <mesh position={[-0.24, 1.06, 0.28]} rotation={[0.16, -0.2, -0.18]}>
-        <boxGeometry args={[0.035, 0.82, 0.012]} />
+      <mesh position={[-0.19, 1.0, 0.22]} rotation={[0.16, -0.2, -0.18]}>
+        <boxGeometry args={[0.026, 0.68, 0.01]} />
         <meshBasicMaterial color={highlightColor} transparent opacity={isWhite ? 0.5 : 0.7} />
       </mesh>
-      <mesh position={[-0.07, 1.78, 0.31]} rotation={[0.1, 0, -0.1]}>
-        <boxGeometry args={[0.025, 0.32, 0.012]} />
+      <mesh position={[-0.06, 1.66, 0.24]} rotation={[0.1, 0, -0.1]}>
+        <boxGeometry args={[0.02, 0.26, 0.01]} />
         <meshBasicMaterial color={highlightColor} transparent opacity={0.62} />
       </mesh>
       <mesh position={[0, 0.018, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <circleGeometry args={[0.42, 42]} />
+        <circleGeometry args={[0.34, 42]} />
         <meshStandardMaterial color="#020101" transparent opacity={0.32} />
       </mesh>
     </group>
@@ -291,7 +291,7 @@ function TrayPieces({
             owner={owner}
             selected={false}
             active={false}
-            position={[(lane - 0.5) * 0.2, row * 0.12, (row - 1) * 0.31]}
+            position={[(lane - 0.5) * 0.16, row * 0.095, (row - 1) * 0.25]}
           />
         );
       })}
@@ -333,8 +333,9 @@ function BoardPoint3D({
       ]),
     [position.direction],
   );
-  const baseColor = position.index % 2 === 0 ? "#4a3018" : "#21100b";
+  const baseColor = position.index % 2 === 0 ? "#8a5d29" : "#241009";
   const activeColor = isTarget ? "#74d8a4" : isSource ? "#f4d16a" : canSelect ? "#d5b15d" : baseColor;
+  const laneOpacity = isTarget || isSource || canSelect ? 0.9 : position.index % 2 === 0 ? 0.34 : 0.72;
 
   const handleClick = () => {
     if (isTarget) {
@@ -346,7 +347,7 @@ function BoardPoint3D({
 
   return (
     <group
-      position={[position.x, 0.12, position.z]}
+      position={[position.x, 0.148, position.z]}
       onClick={(event) => {
         event.stopPropagation();
         handleClick();
@@ -364,6 +365,8 @@ function BoardPoint3D({
           metalness={0.3}
           roughness={0.36}
           side={DoubleSide}
+          transparent
+          opacity={laneOpacity}
         />
       </mesh>
       <mesh
@@ -412,10 +415,10 @@ function BoardPoint3D({
   );
 }
 
-function Pip({ x, z }: { x: number; z: number }) {
+function Pip({ x, z, size }: { x: number; z: number; size: number }) {
   return (
-    <mesh position={[x, 0.271, z]} rotation={[-Math.PI / 2, 0, 0]}>
-      <circleGeometry args={[0.052, 18]} />
+    <mesh position={[x, size / 2 + 0.003, z]} rotation={[-Math.PI / 2, 0, 0]}>
+      <circleGeometry args={[size * 0.075, 18]} />
       <meshStandardMaterial color="#24140d" roughness={0.32} />
     </mesh>
   );
@@ -425,60 +428,92 @@ function DiceCube({
   value,
   position,
   rotation,
+  size = 0.38,
 }: {
   value: number | "-";
   position: [number, number, number];
   rotation: [number, number, number];
+  size?: number;
 }) {
+  const pipNear = size * 0.24;
+  const pipFar = size * 0.27;
   const pips: Record<number, Array<[number, number]>> = {
     1: [[0, 0]],
     2: [
-      [-0.13, -0.13],
-      [0.13, 0.13],
+      [-pipNear, -pipNear],
+      [pipNear, pipNear],
     ],
     3: [
-      [-0.14, -0.14],
+      [-pipNear, -pipNear],
       [0, 0],
-      [0.14, 0.14],
+      [pipNear, pipNear],
     ],
     4: [
-      [-0.14, -0.14],
-      [0.14, -0.14],
-      [-0.14, 0.14],
-      [0.14, 0.14],
+      [-pipNear, -pipNear],
+      [pipNear, -pipNear],
+      [-pipNear, pipNear],
+      [pipNear, pipNear],
     ],
     5: [
-      [-0.14, -0.14],
-      [0.14, -0.14],
+      [-pipNear, -pipNear],
+      [pipNear, -pipNear],
       [0, 0],
-      [-0.14, 0.14],
-      [0.14, 0.14],
+      [-pipNear, pipNear],
+      [pipNear, pipNear],
     ],
     6: [
-      [-0.14, -0.16],
-      [0.14, -0.16],
-      [-0.14, 0],
-      [0.14, 0],
-      [-0.14, 0.16],
-      [0.14, 0.16],
+      [-pipNear, -pipFar],
+      [pipNear, -pipFar],
+      [-pipNear, 0],
+      [pipNear, 0],
+      [-pipNear, pipFar],
+      [pipNear, pipFar],
     ],
   };
 
   return (
     <group position={position} rotation={rotation}>
-      <mesh castShadow receiveShadow>
-        <boxGeometry args={[0.56, 0.56, 0.56]} />
+      <RoundedBox
+        args={[size, size, size]}
+        castShadow
+        receiveShadow
+        radius={size * 0.12}
+        smoothness={4}
+      >
         <meshPhysicalMaterial
           color="#f3d393"
           roughness={0.22}
           clearcoat={0.86}
           clearcoatRoughness={0.12}
         />
-      </mesh>
+      </RoundedBox>
       {typeof value === "number"
-        ? pips[value].map(([x, z], index) => <Pip key={index} x={x} z={z} />)
+        ? pips[value].map(([x, z], index) => (
+            <Pip key={index} x={x} z={z} size={size} />
+          ))
         : null}
     </group>
+  );
+}
+
+function GoldStud({
+  position,
+  radius = 0.055,
+}: {
+  position: [number, number, number];
+  radius?: number;
+}) {
+  return (
+    <mesh position={position} rotation={[-Math.PI / 2, 0, 0]}>
+      <circleGeometry args={[radius, 24]} />
+      <meshStandardMaterial
+        color="#d7a958"
+        emissive="#4d2a08"
+        emissiveIntensity={0.14}
+        metalness={0.48}
+        roughness={0.24}
+      />
+    </mesh>
   );
 }
 
@@ -513,15 +548,25 @@ function LacquerBoard({
   const canBearOff = targetMoves.some((move) => move.to === "off");
 
   return (
-    <group position={[0, 0.54, 0]} scale={[0.94, 0.94, 0.94]}>
+    <group position={[0.1, 0.54, 0.1]} rotation={[0, -0.035, 0]} scale={[0.92, 0.92, 0.92]}>
       <mesh castShadow receiveShadow position={[0, -0.28, 0]}>
         <boxGeometry args={[12.75, 0.56, 7.45]} />
         <meshPhysicalMaterial
-          color="#38120c"
-          roughness={0.24}
+          color="#2c100c"
+          roughness={0.3}
           metalness={0.03}
-          clearcoat={0.92}
-          clearcoatRoughness={0.12}
+          clearcoat={0.96}
+          clearcoatRoughness={0.16}
+        />
+      </mesh>
+      <mesh castShadow receiveShadow position={[0, 0.04, 0]}>
+        <boxGeometry args={[12.26, 0.14, 6.96]} />
+        <meshPhysicalMaterial
+          color="#090505"
+          roughness={0.22}
+          metalness={0.05}
+          clearcoat={1}
+          clearcoatRoughness={0.1}
         />
       </mesh>
       {[[-5.86, -3.28], [5.86, -3.28], [-5.86, 3.28], [5.86, 3.28]].map(([x, z]) => (
@@ -539,37 +584,35 @@ function LacquerBoard({
       <mesh castShadow receiveShadow position={[0, 0.02, 0]}>
         <boxGeometry args={[BOARD_WIDTH, 0.16, BOARD_DEPTH]} />
         <meshPhysicalMaterial
-          color="#120907"
-          roughness={0.42}
+          color="#100706"
+          roughness={0.36}
           metalness={0.04}
-          clearcoat={0.64}
-          clearcoatRoughness={0.24}
+          clearcoat={0.86}
+          clearcoatRoughness={0.18}
         />
       </mesh>
       <mesh receiveShadow position={[0, 0.125, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[10.7, 5.54]} />
         <meshStandardMaterial
-          color="#1a0d09"
-          roughness={0.54}
+          color="#120806"
+          roughness={0.48}
           metalness={0.04}
           emissive="#160806"
-          emissiveIntensity={0.12}
+          emissiveIntensity={0.08}
         />
       </mesh>
+      <mesh receiveShadow position={[0, 0.128, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[3.0, 5.18, 96]} />
+        <meshBasicMaterial color="#000000" transparent opacity={0.12} side={DoubleSide} />
+      </mesh>
 
-      <GoldBar position={[0, 0.235, 0]} scale={[0.09, 0.075, BOARD_DEPTH - 0.42]} />
-      <GoldBar position={[-5.42, 0.235, 0]} scale={[0.08, 0.09, BOARD_DEPTH - 0.14]} />
-      <GoldBar position={[5.42, 0.235, 0]} scale={[0.08, 0.09, BOARD_DEPTH - 0.14]} />
-      <GoldBar position={[0, 0.236, -2.98]} scale={[BOARD_WIDTH - 0.26, 0.07, 0.075]} />
-      <GoldBar position={[0, 0.236, 2.98]} scale={[BOARD_WIDTH - 0.26, 0.07, 0.075]} />
-
-      {Array.from({ length: 13 }, (_, index) => (
-        <GoldBar
-          key={index}
-          position={[(index - 6) * POINT_STEP, 0.226, 0]}
-          scale={[0.024, 0.026, BOARD_DEPTH - 0.62]}
-        />
-      ))}
+      <GoldBar position={[0, 0.245, 0]} scale={[0.055, 0.052, BOARD_DEPTH - 0.42]} />
+      <GoldBar position={[-5.42, 0.245, 0]} scale={[0.052, 0.06, BOARD_DEPTH - 0.14]} />
+      <GoldBar position={[5.42, 0.245, 0]} scale={[0.052, 0.06, BOARD_DEPTH - 0.14]} />
+      <GoldBar position={[0, 0.246, -2.98]} scale={[BOARD_WIDTH - 0.26, 0.045, 0.048]} />
+      <GoldBar position={[0, 0.246, 2.98]} scale={[BOARD_WIDTH - 0.26, 0.045, 0.048]} />
+      <GoldBar position={[0, 0.255, -2.64]} scale={[10.2, 0.018, 0.026]} />
+      <GoldBar position={[0, 0.255, 2.64]} scale={[10.2, 0.018, 0.026]} />
 
       {state.points.map((point, index) => {
         const position = pointPosition(index);
@@ -638,20 +681,22 @@ function LacquerBoard({
         <TrayPieces owner="black" count={state.borneOff.black} center={[0, 0.16, 0.62]} />
       </group>
 
-      <group position={[0, 0.29, 0.08]}>
+      <group position={[-2.78, 0.22, 3.12]} rotation={[0, 0.03, 0]}>
         <mesh receiveShadow position={[0, -0.02, 0]}>
-          <boxGeometry args={[1.72, 0.08, 1.14]} />
-          <meshStandardMaterial color="#180b08" roughness={0.5} metalness={0.08} />
+          <boxGeometry args={[0.82, 0.04, 0.52]} />
+          <meshStandardMaterial color="#130807" roughness={0.46} metalness={0.08} />
         </mesh>
         <DiceCube
           value={state.currentRoll?.[0] ?? "-"}
-          position={[-0.38, 0.34, -0.1]}
-          rotation={[0.08, 0.22, -0.08]}
+          position={[-0.18, 0.18, -0.04]}
+          rotation={[0.12, 0.38, -0.08]}
+          size={0.28}
         />
         <DiceCube
           value={state.currentRoll?.[1] ?? "-"}
-          position={[0.4, 0.34, 0.08]}
-          rotation={[-0.05, -0.28, 0.1]}
+          position={[0.2, 0.18, 0.04]}
+          rotation={[-0.06, -0.34, 0.1]}
+          size={0.28}
         />
       </group>
 
@@ -710,11 +755,11 @@ export function GameTable3D(props: GameTable3DProps) {
     <section className="game-3d-shell" aria-label="三维双陆棋桌测试">
       <div className="game-3d-badge">
         <span>固定机位 · 对弈场景</span>
-        <strong>视觉基线 04</strong>
+        <strong>视觉基线 05</strong>
       </div>
       <div className="game-3d-canvas">
         <Canvas
-          camera={{ position: [0, 4.85, 10.75], fov: 38 }}
+          camera={{ position: [-0.28, 3.92, 9.05], fov: 42 }}
           dpr={[1, 1.4]}
           shadows="basic"
         >

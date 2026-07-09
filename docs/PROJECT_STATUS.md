@@ -20,7 +20,7 @@ Fixed-camera playable visual baseline:
 - 2.5D identity-preserving character stand-ins in the room.
 - Enlarged and relit character stand-ins to match the approved fixed-room composition more closely.
 - Procedural scholar-room staging now includes a table surface, screen panels, side windows, lantern, scrolls, vase, and restrained background ornaments.
-- Procedural dimensional board and bottle-shaped horses.
+- Refined concept-aligned table-side camera with a lacquer board, slimmer bottle-shaped horses, smaller rounded dice, and triangle-forward point lanes.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
 - Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.

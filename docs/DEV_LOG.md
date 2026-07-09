@@ -3989,3 +3989,29 @@ npm run build passed.
 Desktop screenshot captured at output/playwright/visual-baseline-04-final-local.png.
 390x844 screenshot captured at output/playwright/visual-baseline-04-final-mobile-local.png.
 ```
+
+## 2026-07-09 3D Visual Baseline 05
+
+### Objective
+
+Address the first visual review of the deployed 3D baseline: the board looked insufficiently refined, the horse and dice proportions were off, and the camera needed to follow the approved concept frame more closely.
+
+### Changes
+
+- Lowered and moved the fixed camera closer to a table-side concept angle.
+- Scaled down the bottle-shaped horses and slimmed their profile.
+- Moved the in-scene dice toward the front-left table area, reduced their size, and switched them to rounded dice geometry.
+- Removed the rectangular grid impression from the board and restored triangle-forward point lanes.
+- Added additional lacquer board layering and subtler gold rails while keeping point, bar, and borne-off hit zones intact.
+- Advanced the in-scene marker from `视觉基线 04` to `视觉基线 05`.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Desktop screenshot captured at output/playwright/visual-baseline-05-final-local.png.
+390x844 screenshot captured at output/playwright/visual-baseline-05-final-mobile-local.png.
+```
