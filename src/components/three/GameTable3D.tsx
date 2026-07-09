@@ -1,5 +1,6 @@
 "use client";
 
+import { ContactShadows } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { DoubleSide, LatheGeometry, Shape, Vector2 } from "three";
@@ -332,7 +333,7 @@ function BoardPoint3D({
       ]),
     [position.direction],
   );
-  const baseColor = position.index % 2 === 0 ? "#c89a48" : "#6f4324";
+  const baseColor = position.index % 2 === 0 ? "#4a3018" : "#21100b";
   const activeColor = isTarget ? "#74d8a4" : isSource ? "#f4d16a" : canSelect ? "#d5b15d" : baseColor;
 
   const handleClick = () => {
@@ -360,8 +361,8 @@ function BoardPoint3D({
           color={activeColor}
           emissive={isTarget || isSource || canSelect ? activeColor : "#120804"}
           emissiveIntensity={isTarget ? 0.36 : isSource || canSelect ? 0.16 : 0.06}
-          metalness={0.42}
-          roughness={0.28}
+          metalness={0.3}
+          roughness={0.36}
           side={DoubleSide}
         />
       </mesh>
@@ -512,7 +513,7 @@ function LacquerBoard({
   const canBearOff = targetMoves.some((move) => move.to === "off");
 
   return (
-    <group position={[0, 0.52, 0]}>
+    <group position={[0, 0.54, 0]} scale={[0.94, 0.94, 0.94]}>
       <mesh castShadow receiveShadow position={[0, -0.28, 0]}>
         <boxGeometry args={[12.75, 0.56, 7.45]} />
         <meshPhysicalMaterial
@@ -523,6 +524,18 @@ function LacquerBoard({
           clearcoatRoughness={0.12}
         />
       </mesh>
+      {[[-5.86, -3.28], [5.86, -3.28], [-5.86, 3.28], [5.86, 3.28]].map(([x, z]) => (
+        <mesh key={`${x}-${z}`} position={[x, 0.06, z]} rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[0.18, 28]} />
+          <meshStandardMaterial
+            color="#d5a34f"
+            emissive="#4f2b08"
+            emissiveIntensity={0.16}
+            metalness={0.42}
+            roughness={0.22}
+          />
+        </mesh>
+      ))}
       <mesh castShadow receiveShadow position={[0, 0.02, 0]}>
         <boxGeometry args={[BOARD_WIDTH, 0.16, BOARD_DEPTH]} />
         <meshPhysicalMaterial
@@ -644,7 +657,7 @@ function LacquerBoard({
 
       <mesh position={[0, -0.3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[13.2, 7.9]} />
-        <meshBasicMaterial color="#000000" transparent opacity={0.18} />
+        <meshBasicMaterial color="#000000" transparent opacity={0.14} />
       </mesh>
     </group>
   );
@@ -655,24 +668,39 @@ function Scene(props: GameTable3DProps) {
 
   return (
     <>
-      <color attach="background" args={["#080605"]} />
-      <fog attach="fog" args={["#080605", 9, 18]} />
-      <ambientLight intensity={0.64} />
-      <hemisphereLight args={["#ffe0a4", "#170806", 1.05]} />
+      <color attach="background" args={["#120907"]} />
+      <fog attach="fog" args={["#120907", 11, 23]} />
+      <ambientLight intensity={0.42} />
+      <hemisphereLight args={["#ffe0a4", "#170806", 0.92]} />
       <directionalLight
         castShadow
-        position={[3.8, 7.6, 4.8]}
-        intensity={2.9}
+        position={[3.9, 7.4, 4.4]}
+        intensity={2.55}
         shadow-mapSize={[1024, 1024]}
       />
-      <pointLight position={[-4.5, 3.1, 2.7]} color="#f2b35f" intensity={1.55} />
-      <pointLight position={[4.2, 2.6, -2.8]} color="#b66a42" intensity={0.82} />
+      <spotLight
+        castShadow
+        position={[-4.4, 5.4, 3.6]}
+        angle={0.52}
+        penumbra={0.72}
+        intensity={2.35}
+        color="#ffd08a"
+      />
+      <pointLight position={[-4.8, 2.95, 2.9]} color="#f2b35f" intensity={1.65} />
+      <pointLight position={[4.2, 2.7, -2.5]} color="#b66a42" intensity={0.96} />
       <FixedCameraRig />
       <RoomEnvironment />
       <Suspense fallback={null}>
         <CharacterActors currentPlayer={props.state.currentPlayer} />
       </Suspense>
       <LacquerBoard {...props} presentedMove={presentedMove} />
+      <ContactShadows
+        position={[0, 0.34, 0.3]}
+        opacity={0.38}
+        scale={12}
+        blur={2.4}
+        far={4.8}
+      />
     </>
   );
 }
@@ -682,11 +710,11 @@ export function GameTable3D(props: GameTable3DProps) {
     <section className="game-3d-shell" aria-label="三维双陆棋桌测试">
       <div className="game-3d-badge">
         <span>固定机位 · 对弈场景</span>
-        <strong>灰盒 03</strong>
+        <strong>视觉基线 04</strong>
       </div>
       <div className="game-3d-canvas">
         <Canvas
-          camera={{ position: [0, 5.35, 11.3], fov: 35 }}
+          camera={{ position: [0, 4.85, 10.75], fov: 38 }}
           dpr={[1, 1.4]}
           shadows="basic"
         >

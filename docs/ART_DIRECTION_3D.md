@@ -1,8 +1,8 @@
 # Fixed-Camera 3D Art Direction
 
-Last updated: 2026-07-07 CST
+Last updated: 2026-07-09 CST
 
-Status: fixed-room concept approved; greybox implementation active.
+Status: fixed-room concept approved; playable visual baseline active.
 
 ## Product Goal
 
@@ -56,6 +56,16 @@ Greybox acceptance:
 - The current player receives restrained scene emphasis.
 - DOM HUD remains compact and outside the Canvas.
 - Compact screens receive a tighter fixed board-priority camera.
+
+## Visual Baseline Strategy
+
+Before final GLB assets are available, the runtime uses procedural staging to close the gap between the greybox and the approved concept:
+
+- Characters are larger, brighter, and placed closer to the table edge while remaining behind playable lanes.
+- The room includes screen panels, side windows, table mass, a lantern, scrolls, a vase, and restrained background decoration.
+- The camera favors a fixed table-side composition rather than a pure board-test angle.
+- Board scale and lane contrast are tuned for readability first; cinematic obstruction is deferred until interaction safety is proven.
+- The in-scene marker uses `视觉基线` while this remains a procedural art pass rather than final modeled art.
 
 ## Final Asset Language
 

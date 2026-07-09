@@ -3962,3 +3962,30 @@ Desktop WebGL, roll, source selection, target selection, mid-flight move, and se
 - Added Next.js metadata icons at 512px and 180px.
 - Added a multi-size 16px, 32px, and 48px favicon.
 - Confirmed the emblem remains readable in a direct 32px render.
+
+## 2026-07-09 3D Visual Baseline 04
+
+### Objective
+
+Move the deployed 3D view from a functional greybox toward the approved fixed-room concept without introducing final GLB asset dependencies or changing gameplay rules.
+
+### Changes
+
+- Re-authored the fixed camera to a lower table-side composition that keeps both characters and the full board visible.
+- Enlarged, relit, and repositioned the 2.5D character stand-ins so they read as seated opponents rather than distant background decals.
+- Added procedural room staging: table mass, screen panels, side windows, lantern, scrolls, vase, brush prop, softer screen ornamentation, and warmer lighting.
+- Reduced the board scale slightly and lowered point-lane contrast so the board remains playable while leaving more room for characters and environment.
+- Added contact shadows and adjusted scene fog/background color for more grounded depth.
+- Updated the 3D marker from `灰盒 03` to `视觉基线 04`.
+- Tightened the 3D page chrome and dice/status surfaces so the WebGL scene reads more like the primary view.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Desktop screenshot captured at output/playwright/visual-baseline-04-final-local.png.
+390x844 screenshot captured at output/playwright/visual-baseline-04-final-mobile-local.png.
+```

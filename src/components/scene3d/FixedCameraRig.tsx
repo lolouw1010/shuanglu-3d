@@ -12,11 +12,11 @@ export function FixedCameraRig() {
     if (!(camera instanceof PerspectiveCamera)) return;
 
     const compact = size.width / Math.max(size.height, 1) < 1.2;
-    camera.position.set(0, compact ? 7.35 : 5.35, compact ? 10.7 : 11.3);
-    camera.fov = compact ? 45 : 35;
+    camera.position.set(0, compact ? 6.95 : 4.85, compact ? 10.25 : 10.75);
+    camera.fov = compact ? 46 : 38;
     camera.near = 0.1;
     camera.far = 40;
-    camera.lookAt(0, compact ? 0.72 : 1.18, compact ? -0.45 : -0.72);
+    camera.lookAt(0, compact ? 0.86 : 1.34, compact ? -0.62 : -1.18);
     camera.updateProjectionMatrix();
   }, [camera, size.height, size.width]);
 

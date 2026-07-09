@@ -367,14 +367,15 @@ button:focus-visible {
 
 .game-3d-shell {
   background:
-    radial-gradient(circle at 50% 0%, rgba(245, 184, 89, 0.18), transparent 36%),
-    linear-gradient(145deg, rgba(8, 6, 5, 0.94), rgba(45, 14, 12, 0.92) 54%, rgba(6, 5, 5, 0.96));
-  border: 1px solid rgba(253, 230, 138, 0.16);
-  border-radius: 8px;
+    radial-gradient(circle at 36% 10%, rgba(245, 184, 89, 0.22), transparent 32%),
+    radial-gradient(circle at 72% 16%, rgba(139, 54, 37, 0.28), transparent 36%),
+    linear-gradient(145deg, rgba(13, 7, 5, 0.96), rgba(45, 17, 12, 0.94) 54%, rgba(7, 5, 5, 0.98));
+  border: 1px solid rgba(253, 230, 138, 0.2);
+  border-radius: 12px;
   box-shadow:
-    0 1.6rem 4.4rem rgba(0, 0, 0, 0.48),
-    inset 0 1px 0 rgba(255, 244, 204, 0.08);
-  min-height: clamp(520px, 66vh, 780px);
+    0 1.8rem 5rem rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 244, 204, 0.1);
+  min-height: clamp(620px, 72vh, 880px);
   overflow: hidden;
   position: relative;
 }
@@ -417,7 +418,7 @@ button:focus-visible {
 }
 
 .game-3d-canvas {
-  height: clamp(620px, 76vh, 900px);
+  height: clamp(660px, 78vh, 940px);
   position: relative;
   width: 100%;
 }
@@ -428,7 +429,7 @@ button:focus-visible {
 
 @media (max-width: 720px) {
   .game-3d-canvas {
-    height: clamp(560px, 70vh, 720px);
+    height: clamp(590px, 72vh, 760px);
   }
 }
 
@@ -1158,6 +1159,41 @@ button:focus-visible {
   min-height: 3.05rem;
 }
 
+.game-3d-page .game-3d-layout {
+  padding-bottom: 0.75rem;
+}
+
+.game-3d-page .game-3d-topbar,
+.game-3d-page .dice-tray,
+.game-3d-page .feedback-enter,
+.game-3d-page .game-3d-statusbar,
+.game-3d-page .game-3d-control-strip + section {
+  backdrop-filter: blur(7px);
+}
+
+.game-3d-page .game-3d-topbar {
+  background:
+    linear-gradient(90deg, rgba(27, 12, 10, 0.82), rgba(63, 25, 17, 0.74), rgba(27, 12, 10, 0.82));
+  border-color: rgba(255, 232, 170, 0.24);
+  box-shadow:
+    0 0.5rem 1.8rem rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 247, 214, 0.08);
+}
+
+.game-3d-page .brand-title {
+  line-height: 0.9;
+}
+
+.game-3d-page .topbar-icon-button {
+  background: rgba(255, 226, 158, 0.06);
+  border-color: rgba(255, 232, 170, 0.14);
+  min-width: 4rem;
+}
+
+.game-3d-control-strip {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .game-compact-hud {
   align-items: stretch;
 }
@@ -1172,6 +1208,16 @@ button:focus-visible {
   gap: 1.25rem;
   min-height: 5.6rem;
   padding: 0.75rem 1rem;
+}
+
+.game-3d-page .dice-tray {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 226, 158, 0.14), transparent 42%),
+    linear-gradient(135deg, rgba(32, 12, 10, 0.78), rgba(72, 25, 20, 0.72));
+  border-color: rgba(253, 230, 138, 0.2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 247, 214, 0.08),
+    0 0.45rem 1.4rem rgba(0, 0, 0, 0.18);
 }
 
 .game-3d-statusbar div:first-child {

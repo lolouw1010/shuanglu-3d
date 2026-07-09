@@ -89,17 +89,17 @@ export function GameScreen() {
 
   const shellClass =
     boardView === "3d"
-      ? "min-h-screen overflow-x-hidden px-2 py-2 text-stone-100 sm:px-3 bg-[radial-gradient(circle_at_50%_0%,rgba(214,162,80,.16),transparent_28%),linear-gradient(140deg,#120d0c,#351317_48%,#15100e)]"
+      ? "game-3d-page min-h-screen overflow-x-hidden px-2 py-2 text-stone-100 sm:px-3 bg-[radial-gradient(circle_at_50%_0%,rgba(214,162,80,.16),transparent_28%),linear-gradient(140deg,#120d0c,#351317_48%,#15100e)]"
       : "parchment-game-shell min-h-screen overflow-x-hidden px-2 py-2 text-[#3b2514] sm:px-3";
   const layoutClass =
     boardView === "3d"
-      ? "relative z-10 mx-auto grid max-w-[1600px] gap-2"
+      ? "game-3d-layout relative z-10 mx-auto grid max-w-[1680px] gap-2"
       : "parchment-game-layout relative z-10 mx-auto grid max-w-[1780px] gap-2";
 
   return (
     <main className={shellClass}>
       <div className={layoutClass}>
-        <div className={`game-topbar parchment-topbar flex items-center justify-between gap-3 rounded border px-3 py-2 ${boardView === "3d" ? "" : "xl:col-span-3"}`}>
+        <div className={`game-topbar parchment-topbar flex items-center justify-between gap-3 rounded border px-3 py-2 ${boardView === "3d" ? "game-3d-topbar" : "xl:col-span-3"}`}>
           <div className="brand-block min-w-0">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h1 className="brand-title font-display text-3xl sm:text-5xl">双陆</h1>
@@ -157,7 +157,7 @@ export function GameScreen() {
 
         <div className={boardView === "3d" ? "order-2 grid min-w-0 gap-2" : "parchment-play-area order-2 grid gap-2 xl:order-none"}>
           {boardView === "3d" ? (
-            <div className="game-compact-hud grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(230px,270px)]">
+            <div className="game-compact-hud game-3d-control-strip grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(230px,270px)]">
               <section className="game-3d-statusbar" aria-label="棋局状态">
                 <div>
                   <span>回合 {roundLabel}</span>
