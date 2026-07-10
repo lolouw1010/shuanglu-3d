@@ -17,7 +17,7 @@ Fixed-camera playable visual baseline:
 - Human versus AI is the default test mode.
 - OrbitControls removed.
 - Authored desktop and compact camera presets.
-- User-provided fixed-room background plate replaces the previous procedural room and flat character stand-ins.
+- User-provided fixed-room background plate replaces the previous procedural room and flat character stand-ins, with the stage cropped to avoid the old greybox lower gutter.
 - Refined concept-aligned table-side camera with an image-textured lacquer board, slimmer gold-rimmed bottle-shaped horses, smaller rounded dice, and transparent interaction lanes.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
