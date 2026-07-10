@@ -32,8 +32,8 @@ const BOARD_WIDTH = 11.35;
 const BOARD_DEPTH = 6.15;
 const POINT_STEP = 0.76;
 const POINT_LENGTH = 2.34;
-const PIECE_SCALE = 0.285;
-const SELECTED_PIECE_SCALE = 0.33;
+const PIECE_SCALE = 0.245;
+const SELECTED_PIECE_SCALE = 0.285;
 const MOVE_ANIMATION_SECONDS = 0.68;
 
 type PresentedMove = {
@@ -70,7 +70,7 @@ function pieceOffsets(count: number): Array<[number, number, number]> {
   return Array.from({ length: visible }, (_, index) => {
     const lane = index % 2;
     const row = Math.floor(index / 2);
-    return [(lane - 0.5) * 0.1, row * 0.086, index * 0.105];
+    return [(lane - 0.5) * 0.18, row * 0.008, row * 0.28 + lane * 0.04];
   });
 }
 
@@ -81,7 +81,7 @@ function pointPiecePosition(index: number, count: number): [number, number, numb
 
   return [
     point.x + x,
-    0.25 + y,
+    0.18 + y,
     point.z + point.direction * (0.16 + depth),
   ];
 }
@@ -371,7 +371,7 @@ function BoardPoint3D({
                 active={isTarget || canSelect || isSource}
                 position={[
                   x,
-                  0.13 + y,
+                  0.03 + y,
                   position.direction * (0.16 + depth),
                 ]}
               />
@@ -510,9 +510,9 @@ function LacquerBoard({
   const canBearOff = targetMoves.some((move) => move.to === "off");
 
   return (
-    <group position={[0.1, 0.54, 0.1]} rotation={[0, -0.035, 0]} scale={[0.92, 0.92, 0.92]}>
-      <mesh castShadow receiveShadow position={[0, -0.28, 0]}>
-        <boxGeometry args={[12.75, 0.56, 7.45]} />
+    <group position={[0.04, 0.12, 0.12]} rotation={[0, -0.035, 0]} scale={[0.7, 0.7, 0.7]}>
+      <mesh castShadow receiveShadow position={[0, -0.17, 0]}>
+        <boxGeometry args={[12.75, 0.34, 7.45]} />
         <meshPhysicalMaterial
           color="#2c100c"
           roughness={0.3}
@@ -686,9 +686,9 @@ function Scene(props: GameTable3DProps) {
       <FixedCameraRig />
       <LacquerBoard {...props} presentedMove={presentedMove} />
       <ContactShadows
-        position={[0, 0.34, 0.3]}
+        position={[0, 0.18, 0.3]}
         opacity={0.38}
-        scale={12}
+        scale={10.5}
         blur={2.4}
         far={4.8}
       />
@@ -701,7 +701,7 @@ export function GameTable3D(props: GameTable3DProps) {
     <section className="game-3d-shell" aria-label="三维双陆棋桌测试">
       <div className="game-3d-badge">
         <span>固定机位 · 对弈场景</span>
-        <strong>背景基线 07</strong>
+        <strong>构图基线 08</strong>
       </div>
       <div className="game-3d-canvas">
         <Canvas

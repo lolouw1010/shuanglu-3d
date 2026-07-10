@@ -1,6 +1,6 @@
 # 3D Project Status
 
-Last updated: 2026-07-10 CST
+Last updated: 2026-07-11 CST
 
 ## Target
 
@@ -18,7 +18,7 @@ Fixed-camera playable visual baseline:
 - OrbitControls removed.
 - Authored desktop and compact camera presets.
 - User-provided fixed-room background plate replaces the previous procedural room and flat character stand-ins, with the stage cropped to avoid the old greybox lower gutter.
-- Refined concept-aligned table-side camera with an image-textured lacquer board, slimmer gold-rimmed bottle-shaped horses, smaller rounded dice, and transparent interaction lanes.
+- Refined concept-aligned table-side camera with an image-textured lacquer board, slimmer gold-rimmed bottle-shaped horses, smaller rounded dice, transparent interaction lanes, and a lowered/smaller board composition that leaves the seated characters visible.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
 - Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.
@@ -29,11 +29,11 @@ Fixed-camera playable visual baseline:
 
 ## Next Milestones
 
-1. Review the deployed visual baseline against the approved concept and tune composition if needed.
+1. Continue fine-tuning the board material, side trays, and piece silhouettes against the approved concept.
 2. Add hit, bar-entry, and borne-off animation.
 3. Add dice settle animation using the rule-determined result.
 4. Produce optimized GLB board and horse assets.
-5. Produce seated character GLBs after the static composition is approved.
+5. Produce seated character GLBs only if the fixed background plate becomes insufficient.
 
 ## Known Boundaries
 

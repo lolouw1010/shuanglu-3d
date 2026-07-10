@@ -4073,3 +4073,29 @@ Desktop screenshot captured at output/playwright/background-baseline-07-local.pn
 Desktop crop check captured at output/playwright/background-baseline-07-tight2-local.png.
 390x844 crop check captured at output/playwright/background-baseline-07-tight2-mobile-local.png.
 ```
+
+## 2026-07-11 3D Composition Baseline 08
+
+### Objective
+
+Respond to visual feedback that the dynamic 3D board was too large/high against the fixed room background, blocked the seated characters, and made the bottle-shaped horses look unnaturally stacked.
+
+### Changes
+
+- Reduced the active WebGL board group scale so it reads as a physical board on the table rather than a foreground layer spanning the whole scene.
+- Lowered the board group in the fixed camera composition, revealing more of both seated characters.
+- Reduced the visible board base thickness so the front lacquer edge no longer dominates the lower playfield.
+- Reduced horse scale and lowered the horse base height so pieces sit closer to the textured board surface.
+- Reworked occupied-point offsets from vertical stacking into shallow staggered rows that advance along the triangular points.
+- Advanced the in-scene marker from `背景基线 07` to `构图基线 08`.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Desktop screenshot captured at output/playwright/composition-baseline-08b-local.png.
+390x844 screenshot captured at output/playwright/composition-baseline-08b-mobile-local.png.
+```
