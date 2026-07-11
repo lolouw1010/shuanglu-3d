@@ -9,9 +9,10 @@ type DicePanelProps = {
   state: BoardState;
   onRoll: () => void;
   canRollOverride?: boolean;
+  variant?: "default" | "scene";
 };
 
-export function DicePanel({ state, onRoll, canRollOverride = true }: DicePanelProps) {
+export function DicePanel({ state, onRoll, canRollOverride = true, variant = "default" }: DicePanelProps) {
   const [isRolling, setIsRolling] = useState(false);
   const [previewRoll, setPreviewRoll] = useState<[number, number]>([1, 6]);
   const canRoll = canRollOverride && state.turnPhase === "awaiting_roll";
@@ -40,7 +41,7 @@ export function DicePanel({ state, onRoll, canRollOverride = true }: DicePanelPr
   };
 
   return (
-    <section className="dice-tray rounded border border-amber-200/20 bg-black/24 p-2">
+    <section className={`dice-tray ${variant === "scene" ? "dice-tray-scene" : ""} rounded border border-amber-200/20 bg-black/24 p-2`}>
       <div className="dice-tray-header mb-1.5 flex items-center justify-between gap-2">
         <div className="dice-tray-title">
           <p className="text-[10px] uppercase text-amber-200/70">Dice</p>

@@ -68,6 +68,8 @@ export function GameScreen() {
       : state.currentPlayer === "white"
         ? "白方行动中"
         : "黑方行动中";
+  const horsesPerPlayer = state.ruleConfig.horsesPerPlayer;
+  const hasReturnHorse = state.bar.white > 0 || state.bar.black > 0;
 
   useEffect(() => {
     if (mode === "ai" && state.currentPlayer === "black") {
@@ -118,10 +120,12 @@ export function GameScreen() {
               </p>
             ) : null}
           </div>
-          <div className="chapter-heading hidden min-w-0 text-center md:block">
-            <p className="font-display text-2xl font-semibold">第一章 · 初入京城</p>
-            <p className="mt-1 text-sm">与对手对坐，一局雅弈</p>
-          </div>
+          {boardView === "3d" ? null : (
+            <div className="chapter-heading hidden min-w-0 text-center md:block">
+              <p className="font-display text-2xl font-semibold">第一章 · 初入京城</p>
+              <p className="mt-1 text-sm">与对手对坐，一局雅弈</p>
+            </div>
+          )}
           <div className="topbar-actions flex shrink-0 gap-2">
             <button type="button" aria-label="博戏志" className="topbar-icon-button" onClick={toggleRules}>
               <BookOpen size={22} />
@@ -157,28 +161,7 @@ export function GameScreen() {
 
         <div className={boardView === "3d" ? "order-2 grid min-w-0 gap-2" : "parchment-play-area order-2 grid gap-2 xl:order-none"}>
           {boardView === "3d" ? (
-            <div className="game-compact-hud game-3d-control-strip grid gap-2 lg:grid-cols-[minmax(0,1fr)_minmax(230px,270px)]">
-              <section className="game-3d-statusbar" aria-label="棋局状态">
-                <div>
-                  <span>回合 {roundLabel}</span>
-                  <strong>{actionLabel}</strong>
-                </div>
-                <div className="game-3d-score" aria-label="双方出马进度">
-                  <span>白方出马 {state.borneOff.white}/15</span>
-                  <span>黑方出马 {state.borneOff.black}/15</span>
-                </div>
-                {(state.bar.white > 0 || state.bar.black > 0) && (
-                  <span className="game-3d-bar-count">
-                    待返场 白 {state.bar.white} · 黑 {state.bar.black}
-                  </span>
-                )}
-              </section>
-              <DicePanel
-                state={state}
-                onRoll={() => rollCurrentPlayer()}
-                canRollOverride={canAct}
-              />
-            </div>
+            null
           ) : (
             <div className="parchment-round-strip">
               <div className="round-status-plaque">
@@ -213,14 +196,47 @@ export function GameScreen() {
             </section>
           ) : null}
           {boardView === "3d" ? (
-            <GameTable3D
-              state={state}
-              availableMoves={availableMoves}
-              selectedSource={selectedSource}
-              targetMoves={targetMoves}
-              onSelectSource={selectSource}
-              onSelectTarget={selectTarget}
-            />
+            <div className="game-3d-stage-wrap">
+              <GameTable3D
+                state={state}
+                availableMoves={availableMoves}
+                selectedSource={selectedSource}
+                targetMoves={targetMoves}
+                onSelectSource={selectSource}
+                onSelectTarget={selectTarget}
+              />
+              <aside className="game-3d-scene-hud" aria-label="棋局浮层">
+                <section className="game-3d-turn-chip" aria-label="当前回合">
+                  <span className={`game-3d-player-orb ${state.currentPlayer === "white" ? "is-white" : "is-black"}`} />
+                  <span>第 {roundLabel} 回</span>
+                  <strong>{actionLabel}</strong>
+                </section>
+                <section className="game-3d-token-hud" aria-label="出马与待返场">
+                  <div className="game-3d-symbol-stat" aria-label="双方出马">
+                    <span className="game-3d-stat-symbol" aria-hidden="true">🏁</span>
+                    <span className="game-3d-stat-label">出马</span>
+                    <span className="game-3d-stat-counts">
+                      <span className="is-white">○ {state.borneOff.white}/{horsesPerPlayer}</span>
+                      <span className="is-black">● {state.borneOff.black}/{horsesPerPlayer}</span>
+                    </span>
+                  </div>
+                  <div className={`game-3d-symbol-stat ${hasReturnHorse ? "is-alert" : ""}`} aria-label="双方待返场">
+                    <span className="game-3d-stat-symbol" aria-hidden="true">↺</span>
+                    <span className="game-3d-stat-label">待返场</span>
+                    <span className="game-3d-stat-counts">
+                      <span className="is-white">○ {state.bar.white}</span>
+                      <span className="is-black">● {state.bar.black}</span>
+                    </span>
+                  </div>
+                </section>
+                <DicePanel
+                  state={state}
+                  onRoll={() => rollCurrentPlayer()}
+                  canRollOverride={canAct}
+                  variant="scene"
+                />
+              </aside>
+            </div>
           ) : (
             <Board
               state={state}

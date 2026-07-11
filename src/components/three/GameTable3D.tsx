@@ -699,10 +699,6 @@ function Scene(props: GameTable3DProps) {
 export function GameTable3D(props: GameTable3DProps) {
   return (
     <section className="game-3d-shell" aria-label="三维双陆棋桌测试">
-      <div className="game-3d-badge">
-        <span>固定机位 · 对弈场景</span>
-        <strong>构图基线 08</strong>
-      </div>
       <div className="game-3d-canvas">
         <Canvas
           camera={{ position: [-0.28, 3.92, 9.05], fov: 42 }}

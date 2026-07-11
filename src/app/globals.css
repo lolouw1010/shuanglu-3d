@@ -1181,16 +1181,34 @@ button:focus-visible {
   box-shadow:
     0 0.5rem 1.8rem rgba(0, 0, 0, 0.28),
     inset 0 1px 0 rgba(255, 247, 214, 0.08);
+  min-height: 2.72rem;
+  padding-block: 0.32rem;
 }
 
 .game-3d-page .brand-title {
+  font-size: clamp(1.8rem, 3.2vw, 2.5rem);
   line-height: 0.9;
+}
+
+.game-3d-page .brand-subtitle {
+  font-size: 0.78rem;
 }
 
 .game-3d-page .topbar-icon-button {
   background: rgba(255, 226, 158, 0.06);
   border-color: rgba(255, 232, 170, 0.14);
-  min-width: 4rem;
+  border-radius: 0.18rem;
+  min-width: 2.45rem;
+  padding: 0.34rem 0.42rem;
+}
+
+.game-3d-page .topbar-icon-button span {
+  display: none;
+}
+
+.game-3d-page .topbar-icon-button svg {
+  height: 1.16rem;
+  width: 1.16rem;
 }
 
 .game-3d-control-strip {
@@ -1252,7 +1270,290 @@ button:focus-visible {
   margin-left: auto;
 }
 
+.game-3d-stage-wrap {
+  position: relative;
+}
+
+.game-3d-scene-hud {
+  align-items: flex-start;
+  display: grid;
+  gap: 0.48rem;
+  grid-template-columns: max-content minmax(18rem, 1fr) max-content;
+  left: 0.78rem;
+  pointer-events: none;
+  position: absolute;
+  right: 0.78rem;
+  top: 0.72rem;
+  z-index: 8;
+}
+
+.game-3d-turn-chip,
+.game-3d-symbol-stat,
+.dice-tray-scene {
+  background:
+    linear-gradient(135deg, rgba(15, 8, 6, 0.62), rgba(58, 25, 16, 0.5)),
+    radial-gradient(circle at 15% 0%, rgba(255, 226, 158, 0.18), transparent 46%);
+  border: 1px solid rgba(250, 222, 151, 0.22);
+  box-shadow:
+    0 0.45rem 1.35rem rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 247, 214, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.game-3d-turn-chip,
+.game-3d-token-hud {
+  pointer-events: none;
+}
+
+.game-3d-turn-chip {
+  align-items: center;
+  border-radius: 999px;
+  color: rgba(255, 244, 216, 0.78);
+  display: inline-flex;
+  gap: 0.46rem;
+  min-height: 2.32rem;
+  padding: 0.38rem 0.68rem;
+  white-space: nowrap;
+}
+
+.game-3d-turn-chip span {
+  font-size: 0.74rem;
+}
+
+.game-3d-turn-chip strong {
+  color: #fff0bf;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.45vw, 1.25rem);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.game-3d-player-orb {
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 1px rgba(251, 226, 162, 0.4),
+    0 0.18rem 0.45rem rgba(0, 0, 0, 0.38);
+  display: inline-block;
+  height: 0.72rem;
+  width: 0.72rem;
+}
+
+.game-3d-player-orb.is-white {
+  background: radial-gradient(circle at 32% 24%, #fffef4, #dfc893 62%, #947039);
+}
+
+.game-3d-player-orb.is-black {
+  background: radial-gradient(circle at 34% 25%, #766859, #12100f 58%, #050302);
+}
+
+.game-3d-token-hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  min-width: 0;
+}
+
+.game-3d-symbol-stat {
+  align-items: center;
+  border-radius: 999px;
+  color: rgba(255, 244, 216, 0.8);
+  display: inline-flex;
+  gap: 0.38rem;
+  min-height: 2.32rem;
+  padding: 0.32rem 0.58rem 0.32rem 0.42rem;
+}
+
+.game-3d-symbol-stat.is-alert {
+  border-color: rgba(134, 239, 172, 0.36);
+  box-shadow:
+    0 0.45rem 1.35rem rgba(0, 0, 0, 0.26),
+    0 0 1.15rem rgba(65, 160, 98, 0.16),
+    inset 0 1px 0 rgba(255, 247, 214, 0.1);
+}
+
+.game-3d-stat-symbol {
+  align-items: center;
+  background: rgba(255, 226, 158, 0.12);
+  border: 1px solid rgba(250, 222, 151, 0.22);
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.9rem;
+  height: 1.55rem;
+  justify-content: center;
+  width: 1.55rem;
+}
+
+.game-3d-stat-label {
+  color: rgba(255, 236, 179, 0.82);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.game-3d-stat-counts {
+  display: inline-flex;
+  gap: 0.42rem;
+}
+
+.game-3d-stat-counts span {
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.game-3d-stat-counts .is-white {
+  color: #fff2c4;
+}
+
+.game-3d-stat-counts .is-black {
+  color: #d7bd82;
+}
+
+.game-3d-page .dice-tray-scene {
+  border-radius: 1.1rem;
+  justify-self: end;
+  min-width: 13rem;
+  pointer-events: auto;
+  padding: 0.42rem 0.52rem;
+}
+
+.dice-tray-scene .dice-tray-header {
+  margin-bottom: 0.28rem;
+}
+
+.dice-tray-scene .dice-tray-title p {
+  display: none;
+}
+
+.dice-tray-scene .dice-tray-title h2 {
+  font-size: 0.9rem;
+}
+
+.dice-tray-scene .dice-roll-button {
+  border-radius: 999px;
+  padding: 0.42rem 0.62rem;
+}
+
+.dice-tray-scene .dice-result-row {
+  gap: 0.38rem;
+}
+
+.dice-tray-scene .dice-stage {
+  height: 34px;
+  width: 34px;
+}
+
+.dice-tray-scene .die-body {
+  border-radius: 8px;
+  height: 34px;
+  width: 34px;
+}
+
+.dice-tray-scene .dice-steps-label {
+  font-size: 0.7rem;
+  min-width: 2.6rem;
+}
+
 @media (max-width: 720px) {
+  .game-3d-page .game-3d-topbar {
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline: 0.58rem;
+  }
+
+  .game-3d-page .brand-title {
+    font-size: 1.72rem;
+  }
+
+  .game-3d-page .brand-subtitle,
+  .game-3d-page .brand-subtitle + span {
+    display: none;
+  }
+
+  .game-3d-page .topbar-actions {
+    gap: 0.35rem;
+  }
+
+  .game-3d-page .topbar-icon-button {
+    min-width: 2.2rem;
+    padding: 0.3rem 0.34rem;
+  }
+
+  .game-3d-scene-hud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.34rem;
+    justify-content: space-between;
+    left: 0.54rem;
+    right: 0.54rem;
+    top: 0.54rem;
+  }
+
+  .game-3d-turn-chip {
+    min-height: 2.05rem;
+    padding: 0.28rem 0.5rem;
+  }
+
+  .game-3d-turn-chip span {
+    font-size: 0.66rem;
+  }
+
+  .game-3d-turn-chip strong {
+    font-size: 0.98rem;
+  }
+
+  .game-3d-token-hud {
+    order: 3;
+    width: 100%;
+  }
+
+  .game-3d-symbol-stat {
+    flex: 1 1 8rem;
+    justify-content: center;
+    min-height: 1.95rem;
+    padding: 0.24rem 0.34rem;
+  }
+
+  .game-3d-stat-symbol {
+    font-size: 0.72rem;
+    height: 1.32rem;
+    width: 1.32rem;
+  }
+
+  .game-3d-stat-label,
+  .game-3d-stat-counts span {
+    font-size: 0.66rem;
+  }
+
+  .game-3d-page .dice-tray-scene {
+    min-width: 9.8rem;
+    padding: 0.34rem 0.42rem;
+  }
+
+  .dice-tray-scene .dice-tray-title h2 {
+    display: none;
+  }
+
+  .dice-tray-scene .dice-roll-button {
+    font-size: 0.78rem;
+    padding: 0.34rem 0.48rem;
+  }
+
+  .dice-tray-scene .dice-stage {
+    height: 30px;
+    width: 30px;
+  }
+
+  .dice-tray-scene .die-body {
+    border-radius: 7px;
+    height: 30px;
+    width: 30px;
+  }
+
+  .dice-tray-scene .dice-steps-label {
+    display: none;
+  }
+
   .game-3d-statusbar {
     align-items: flex-start;
     flex-direction: column;

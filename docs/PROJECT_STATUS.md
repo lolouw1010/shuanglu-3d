@@ -1,6 +1,6 @@
 # 3D Project Status
 
-Last updated: 2026-07-11 CST
+Last updated: 2026-07-12 CST
 
 ## Target
 
@@ -19,6 +19,7 @@ Fixed-camera playable visual baseline:
 - Authored desktop and compact camera presets.
 - User-provided fixed-room background plate replaces the previous procedural room and flat character stand-ins, with the stage cropped to avoid the old greybox lower gutter.
 - Refined concept-aligned table-side camera with an image-textured lacquer board, slimmer gold-rimmed bottle-shaped horses, smaller rounded dice, transparent interaction lanes, and a lowered/smaller board composition that leaves the seated characters visible.
+- Compressed the 3D title/HUD chrome: turn state, borne-off progress, bar/return state, and dice now live as compact scene-edge overlays instead of full-width panels.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
 - Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.

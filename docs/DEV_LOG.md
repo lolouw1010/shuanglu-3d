@@ -4099,3 +4099,29 @@ npm run build passed.
 Desktop screenshot captured at output/playwright/composition-baseline-08b-local.png.
 390x844 screenshot captured at output/playwright/composition-baseline-08b-mobile-local.png.
 ```
+
+## 2026-07-12 3D HUD Compression Baseline 09
+
+### Objective
+
+Reduce the top title and HUD footprint in the fixed-camera 3D view, and make borne-off and bar/return state read as lively symbols integrated with the game scene rather than separate information boxes.
+
+### Changes
+
+- Removed the full-width 3D status strip above the scene.
+- Compressed the 3D title bar by removing the chapter copy and hiding text labels from the top-right icon actions.
+- Moved turn state, borne-off progress, bar/return counts, and dice into a compact scene-edge overlay on top of the 3D board view.
+- Replaced plain `出马` and `待返场` text rows with icon-led stat chips: `🏁` for borne-off progress and `↺` for horses waiting to re-enter.
+- Removed the visible development baseline badge from the 3D scene.
+- Kept non-interactive HUD chips click-through so they do not block board hit zones; only the dice roll card remains pointer-active.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Desktop screenshot captured at output/playwright/hud-compression-09-local.png.
+390x844 screenshot captured at output/playwright/hud-compression-09-mobile-local.png.
+```
