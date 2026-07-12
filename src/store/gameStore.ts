@@ -171,16 +171,18 @@ function canActOnline(state: BoardState, online: OnlineSession | null): boolean 
   return Boolean(online && online.seat === state.currentPlayer);
 }
 
+const initial3DState = createInitialState();
+
 export const useGameStore = create<GameStore>((set, get) => ({
-  screen: "menu",
-  mode: "human",
-  boardView: "classic",
-  state: createInitialState(),
+  screen: "game",
+  mode: "ai",
+  boardView: "3d",
+  state: initial3DState,
   online: null,
   selectedSource: null,
   targetMoves: [],
   showRules: false,
-  message: "请开始一局双陆。",
+  message: messageForState(initial3DState),
   onlineStatus: null,
 
   startMatch: (mode, boardView = "classic") => {

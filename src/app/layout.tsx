@@ -13,6 +13,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
+      <head>
+        <link
+          rel="preload"
+          as="image"
+          href="/ui/scene-background-02.webp"
+          type="image/webp"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/ui/board-top-orthographic-cropped.webp"
+          type="image/webp"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

@@ -4125,3 +4125,36 @@ npm run build passed.
 Desktop screenshot captured at output/playwright/hud-compression-09-local.png.
 390x844 screenshot captured at output/playwright/hud-compression-09-mobile-local.png.
 ```
+
+## 2026-07-12 3D Startup Performance Baseline 10
+
+### Objective
+
+Reduce the perceived delay before the fixed-camera 3D board becomes playable by removing the initial 2D-shell render and shrinking the first 3D texture payload.
+
+### Findings
+
+- The 3D entry was server-rendering the classic parchment UI first because the store defaulted to `screen: "menu"` and `boardView: "classic"`, then `ThreeTestApp` switched to `startMatch("ai", "3d")` only after client hydration.
+- The active runtime room background and board texture were PNG files totaling roughly 4 MB, and the board PNG was observed taking several seconds to download from production.
+- Public image assets were served with `max-age=0`, causing unnecessary revalidation for stable release assets.
+
+### Changes
+
+- Changed the default game store state to start directly in `screen: "game"`, `mode: "ai"`, and `boardView: "3d"` for the 3D application entry.
+- Added `public/ui/scene-background-02.webp` and `public/ui/board-top-orthographic-cropped.webp`.
+- Updated the CSS room background and Three.js board texture loader to use the WebP assets.
+- Added preload hints for the two first-view WebP textures in the root layout.
+- Updated the production Nginx config template so `/ui` and `/assets` image responses can be served with long-lived immutable cache headers.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Local production HTML contains game-3d-page and no longer contains parchment-game-shell.
+Local production HTML preloads scene-background-02.webp and board-top-orthographic-cropped.webp.
+Desktop screenshot captured at output/playwright/perf-baseline-10-local.png.
+390x844 screenshot captured at output/playwright/perf-baseline-10-mobile-local.png.
+```

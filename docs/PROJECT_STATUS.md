@@ -20,6 +20,8 @@ Fixed-camera playable visual baseline:
 - User-provided fixed-room background plate replaces the previous procedural room and flat character stand-ins, with the stage cropped to avoid the old greybox lower gutter.
 - Refined concept-aligned table-side camera with an image-textured lacquer board, slimmer gold-rimmed bottle-shaped horses, smaller rounded dice, transparent interaction lanes, and a lowered/smaller board composition that leaves the seated characters visible.
 - Compressed the 3D title/HUD chrome: turn state, borne-off progress, bar/return state, and dice now live as compact scene-edge overlays instead of full-width panels.
+- The 3D route now starts directly in the 3D game state instead of server-rendering the classic 2D shell and switching after hydration.
+- Runtime 3D room and board textures now use WebP assets with preload hints, reducing the active background and board texture payload from roughly 4 MB to roughly 420 KB.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
 - Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.
@@ -39,7 +41,7 @@ Fixed-camera playable visual baseline:
 ## Known Boundaries
 
 - The room and seated characters are currently a fixed 2.5D background plate, not modeled GLB assets.
-- The user-provided board texture is active; `scene-background-02.png` is active as the runtime room/background plate.
+- The user-provided board texture is active; `scene-background-02.webp` is active as the runtime room/background plate and `board-top-orthographic-cropped.webp` is the runtime board texture.
 - Online rooms remain copied and in-memory; 2D and 3D deployments will not share rooms.
 - The copied 2D presentation remains in the repository only as fork history and fallback code; the 3D root does not use it.
 - Core 2D bug fixes require explicit review through `docs/UPSTREAM_SYNC.md`.

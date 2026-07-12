@@ -30,19 +30,21 @@ User-provided generated assets live under:
 ```txt
 public/ui/board-top-orthographic-01.png
 public/ui/board-top-orthographic-cropped.png
+public/ui/board-top-orthographic-cropped.webp
 public/ui/board-angled-reference-01.png
 public/ui/horse-piece-reference-01.png
 public/ui/scene-background-01.png
 public/ui/scene-background-02.png
+public/ui/scene-background-02.webp
 ```
 
 Current runtime use:
 
-- `public/ui/board-top-orthographic-cropped.png` is the active lacquer board surface texture.
+- `public/ui/board-top-orthographic-cropped.webp` is the active lacquer board surface texture; the PNG remains as the source-quality reference.
 - `public/ui/horse-piece-reference-01.png` guides the gold-rimmed bottle-piece material direction.
 - `public/ui/board-angled-reference-01.png` remains a visual reference for later board/camera tuning.
 - `public/ui/scene-background-01.png` is not active because it is a board image, not a room/background plate.
-- `public/ui/scene-background-02.png` is the active fixed-room background plate behind the transparent WebGL board layer.
+- `public/ui/scene-background-02.webp` is the active fixed-room background plate behind the transparent WebGL board layer; the PNG remains as the source-quality reference.
 
 ## Historical Greybox References
 

@@ -484,7 +484,7 @@ function LacquerBoard({
   onSelectTarget,
   presentedMove,
 }: GameTable3DProps & { presentedMove: PresentedMove | null }) {
-  const boardTexture = useTexture("/ui/board-top-orthographic-cropped.png");
+  const boardTexture = useTexture("/ui/board-top-orthographic-cropped.webp");
   boardTexture.colorSpace = SRGBColorSpace;
   boardTexture.anisotropy = 8;
 
