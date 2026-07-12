@@ -4158,3 +4158,38 @@ Local production HTML preloads scene-background-02.webp and board-top-orthograph
 Desktop screenshot captured at output/playwright/perf-baseline-10-local.png.
 390x844 screenshot captured at output/playwright/perf-baseline-10-mobile-local.png.
 ```
+
+## 2026-07-12 3D Perceived Startup Baseline 11
+
+### Objective
+
+Improve the first few seconds of the fixed-camera 3D experience after the WebP payload reduction: show a scene-accurate loading state immediately, and avoid delayed post-roll dice image downloads in the 3D HUD.
+
+### Changes
+
+- Replaced the plain dynamic-import loading text with a 3D loading fallback that reuses the active fixed-room WebP plate and scene shell.
+- Added a compact in-scene loading chip so the transition reads as the board being placed into an already visible room rather than a blank wait state.
+- Added a `useAsset` option to `DiceFace`.
+- Kept PNG dice assets enabled for the copied 2D/classic tray.
+- Changed the 3D scene dice tray to render CSS pips instead of requesting `/assets/ui/dice/dice-*.png` during rolls.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Local production HTML contains game-3d-page, game-3d-scene-hud, scene-background-02.webp, and board-top-orthographic-cropped.webp.
+Local production HTML does not contain parchment-game-shell.
+Desktop screenshot captured at output/playwright/perceived-startup-11-local.png.
+390x844 screenshot captured at output/playwright/perceived-startup-11-mobile-local.png.
+Static check confirmed the 3D scene dice tray passes useAsset=false, so it does not request /assets/ui/dice/dice-*.png.
+Deployed to production after the local verification passed.
+Production health check passed: / and /3d returned HTTP 200, /health returned ok, and shuanglu-3d.service was active.
+Production HTML contains game-3d-page, game-3d-scene-hud, scene-background-02.webp, and board-top-orthographic-cropped.webp.
+Production HTML does not contain parchment-game-shell.
+Production WebP assets are served with public, max-age=31536000, immutable cache headers.
+Desktop production screenshot captured at output/playwright/perceived-startup-11-cloud.png.
+390x844 production screenshot captured at output/playwright/perceived-startup-11-mobile-cloud.png.
+```

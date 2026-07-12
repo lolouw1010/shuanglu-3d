@@ -22,6 +22,7 @@ Fixed-camera playable visual baseline:
 - Compressed the 3D title/HUD chrome: turn state, borne-off progress, bar/return state, and dice now live as compact scene-edge overlays instead of full-width panels.
 - The 3D route now starts directly in the 3D game state instead of server-rendering the classic 2D shell and switching after hydration.
 - Runtime 3D room and board textures now use WebP assets with preload hints, reducing the active background and board texture payload from roughly 4 MB to roughly 420 KB.
+- The 3D loading fallback now shows the fixed-room plate immediately while the WebGL scene chunk initializes, and the scene HUD dice use lightweight CSS pips instead of requesting large PNG dice assets.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
 - Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.

@@ -1,6 +1,7 @@
 type DiceFaceProps = {
   value: number | "-";
   rolling: boolean;
+  useAsset?: boolean;
 };
 
 const pipPositions: Record<number, string[]> = {
@@ -25,9 +26,10 @@ function pipClass(position: string): string {
   return classes[position] ?? "";
 }
 
-export function DiceFace({ value, rolling }: DiceFaceProps) {
+export function DiceFace({ value, rolling, useAsset = true }: DiceFaceProps) {
   const pips = typeof value === "number" ? pipPositions[value] : [];
-  const assetPath = typeof value === "number" ? `/assets/ui/dice/dice-${value}.png` : null;
+  const assetPath =
+    useAsset && typeof value === "number" ? `/assets/ui/dice/dice-${value}.png` : null;
 
   return (
     <div

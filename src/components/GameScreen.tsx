@@ -20,9 +20,13 @@ const GameTable3D = dynamic(
   {
     ssr: false,
     loading: () => (
-      <section className="game-3d-shell">
-        <div className="flex min-h-[520px] items-center justify-center text-sm text-amber-100/75">
-          正在布置三维棋局...
+      <section className="game-3d-shell game-3d-loading-shell" aria-label="三维棋局加载中">
+        <div className="game-3d-canvas game-3d-loading-canvas">
+          <div className="game-3d-loading-card">
+            <span className="game-3d-loading-orb" />
+            <strong>正在布置棋局</strong>
+            <span>房间已就位，棋盘即将落桌</span>
+          </div>
         </div>
       </section>
     ),

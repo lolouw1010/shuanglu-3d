@@ -430,9 +430,80 @@ button:focus-visible {
   display: block;
 }
 
+.game-3d-loading-shell {
+  overflow: hidden;
+}
+
+.game-3d-loading-canvas {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.game-3d-loading-card {
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(15, 8, 6, 0.72), rgba(58, 25, 16, 0.56)),
+    radial-gradient(circle at 20% 0%, rgba(255, 226, 158, 0.2), transparent 48%);
+  border: 1px solid rgba(250, 222, 151, 0.24);
+  border-radius: 999px;
+  box-shadow:
+    0 0.8rem 2.4rem rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 247, 214, 0.12);
+  color: rgba(255, 244, 216, 0.78);
+  display: inline-flex;
+  gap: 0.62rem;
+  padding: 0.66rem 0.9rem;
+  transform: translateY(-12vh);
+}
+
+.game-3d-loading-card strong {
+  color: #fff0bf;
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 650;
+}
+
+.game-3d-loading-card span:last-child {
+  font-size: 0.78rem;
+}
+
+.game-3d-loading-orb {
+  animation: loading-pulse 1.2s ease-in-out infinite;
+  background: radial-gradient(circle at 35% 28%, #fff8cf, #d99b3a 58%, #6f2a16);
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 1px rgba(255, 226, 158, 0.5),
+    0 0 1.1rem rgba(245, 158, 11, 0.36);
+  height: 0.8rem;
+  width: 0.8rem;
+}
+
+@keyframes loading-pulse {
+  0%,
+  100% {
+    opacity: 0.64;
+    transform: scale(0.86);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
 @media (max-width: 720px) {
   .game-3d-canvas {
     height: clamp(520px, 64vh, 680px);
+  }
+
+  .game-3d-loading-card {
+    border-radius: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: min(18rem, calc(100% - 2rem));
+    text-align: center;
+    transform: translateY(-10vh);
   }
 }
 

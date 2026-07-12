@@ -66,7 +66,7 @@ export function DicePanel({ state, onRoll, canRollOverride = true, variant = "de
             key={`${rollKey}-${die}-${index}-${isRolling ? "rolling" : "settled"}`}
             className="dice-stage"
           >
-            <DiceFace value={die} rolling={isRolling} />
+            <DiceFace value={die} rolling={isRolling} useAsset={variant !== "scene"} />
           </div>
         ))}
         <div className="dice-steps-label min-w-0 text-xs text-stone-300">
