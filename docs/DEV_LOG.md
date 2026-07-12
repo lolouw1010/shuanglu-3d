@@ -4193,3 +4193,36 @@ Production WebP assets are served with public, max-age=31536000, immutable cache
 Desktop production screenshot captured at output/playwright/perceived-startup-11-cloud.png.
 390x844 production screenshot captured at output/playwright/perceived-startup-11-mobile-cloud.png.
 ```
+
+## 2026-07-12 3D Piece and Dice Readability Baseline 12
+
+### Objective
+
+Respond to visual feedback that the black horses were too hard to distinguish on the dark lacquer board, and that the visible dice were large, unrefined, and not integrated enough with the fixed-camera scene.
+
+### Changes
+
+- Changed black 3D horses from near-black lacquer to a brighter dark jade/oxidized-bronze material.
+- Added a gold waist ring and stronger warm highlight to black horses so they separate from the board texture at desktop and mobile sizes.
+- Removed the rough table-top 3D dice meshes from the board scene.
+- Changed the 3D HUD dice area to show compact text state (`待掷骰`, `骰点`, `余步`) instead of rendering dice cubes or dice face boxes.
+- Kept the 2D/classic dice presentation unchanged.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+npm run typecheck passed after build regenerated .next/types.
+Local production HTML contains game-3d-page and dice-result-text.
+Local production HTML does not contain DiceCube or parchment-game-shell.
+Desktop screenshot captured at output/playwright/piece-dice-refine-12-final-local.png.
+390x844 screenshot captured at output/playwright/piece-dice-refine-12-final-mobile-local.png.
+Deployed to production after the local verification passed.
+Production health check passed: / and /3d returned HTTP 200, /health returned ok, and shuanglu-3d.service was active.
+Production HTML contains game-3d-page and dice-result-text.
+Production HTML does not contain DiceCube or parchment-game-shell.
+Desktop production screenshot captured at output/playwright/piece-dice-refine-12-cloud.png.
+390x844 production screenshot captured at output/playwright/piece-dice-refine-12-mobile-cloud.png.
+```

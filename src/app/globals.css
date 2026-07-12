@@ -1483,7 +1483,7 @@ button:focus-visible {
 .game-3d-page .dice-tray-scene {
   border-radius: 1.1rem;
   justify-self: end;
-  min-width: 13rem;
+  min-width: 10.6rem;
   pointer-events: auto;
   padding: 0.42rem 0.52rem;
 }
@@ -1507,6 +1507,25 @@ button:focus-visible {
 
 .dice-tray-scene .dice-result-row {
   gap: 0.38rem;
+}
+
+.dice-tray-scene .dice-result-row-scene {
+  margin-top: 0.1rem;
+}
+
+.dice-tray-scene .dice-result-text {
+  color: rgba(255, 240, 191, 0.92);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.18;
+}
+
+.dice-tray-scene .dice-result-text span {
+  color: rgba(255, 236, 179, 0.66);
+  display: block;
+  font-size: 0.66rem;
+  font-weight: 600;
+  margin-top: 0.1rem;
 }
 
 .dice-tray-scene .dice-stage {
@@ -1597,7 +1616,7 @@ button:focus-visible {
   }
 
   .game-3d-page .dice-tray-scene {
-    min-width: 9.8rem;
+    min-width: 7.9rem;
     padding: 0.34rem 0.42rem;
   }
 
@@ -1613,6 +1632,14 @@ button:focus-visible {
   .dice-tray-scene .dice-stage {
     height: 30px;
     width: 30px;
+  }
+
+  .dice-tray-scene .dice-result-text {
+    font-size: 0.68rem;
+  }
+
+  .dice-tray-scene .dice-result-text span {
+    font-size: 0.6rem;
   }
 
   .dice-tray-scene .die-body {

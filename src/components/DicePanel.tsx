@@ -19,6 +19,15 @@ export function DicePanel({ state, onRoll, canRollOverride = true, variant = "de
   const rollKey = state.currentRoll ? state.currentRoll.join("-") : "empty";
   const idleRoll: Array<number | "-"> = state.currentRoll ?? ["-", "-"];
   const displayRoll: Array<number | "-"> = isRolling ? previewRoll : idleRoll;
+  const sceneRollLabel =
+    isRolling
+      ? "听骰中"
+      : state.currentRoll
+        ? `骰点 ${state.currentRoll.join(" · ")}`
+        : "待掷骰";
+  const sceneStepsLabel = state.diceSteps.length
+    ? `余步 ${state.diceSteps.join(" / ")}`
+    : "余步 无";
 
   useEffect(() => {
     if (!isRolling) return undefined;
@@ -60,22 +69,31 @@ export function DicePanel({ state, onRoll, canRollOverride = true, variant = "de
           {isRolling ? "听骰" : "掷骰"}
         </button>
       </div>
-      <div className="dice-result-row flex items-center gap-2">
-        {displayRoll.map((die, index) => (
-          <div
-            key={`${rollKey}-${die}-${index}-${isRolling ? "rolling" : "settled"}`}
-            className="dice-stage"
-          >
-            <DiceFace value={die} rolling={isRolling} useAsset={variant !== "scene"} />
+      {variant === "scene" ? (
+        <div className="dice-result-row dice-result-row-scene flex items-center gap-2">
+          <div className="dice-result-text min-w-0">
+            <p>{sceneRollLabel}</p>
+            <span>{sceneStepsLabel}</span>
           </div>
-        ))}
-        <div className="dice-steps-label min-w-0 text-xs text-stone-300">
-          <p>剩余</p>
-          <p className="truncate text-amber-100">
-            {state.diceSteps.length ? state.diceSteps.join(" / ") : "无"}
-          </p>
         </div>
-      </div>
+      ) : (
+        <div className="dice-result-row flex items-center gap-2">
+          {displayRoll.map((die, index) => (
+            <div
+              key={`${rollKey}-${die}-${index}-${isRolling ? "rolling" : "settled"}`}
+              className="dice-stage"
+            >
+              <DiceFace value={die} rolling={isRolling} />
+            </div>
+          ))}
+          <div className="dice-steps-label min-w-0 text-xs text-stone-300">
+            <p>剩余</p>
+            <p className="truncate text-amber-100">
+              {state.diceSteps.length ? state.diceSteps.join(" / ") : "无"}
+            </p>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

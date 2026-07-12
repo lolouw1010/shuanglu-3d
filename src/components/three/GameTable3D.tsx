@@ -1,6 +1,6 @@
 "use client";
 
-import { ContactShadows, RoundedBox, useTexture } from "@react-three/drei";
+import { ContactShadows, useTexture } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DoubleSide, LatheGeometry, SRGBColorSpace, Shape, Vector2 } from "three";
@@ -150,22 +150,22 @@ function VasePiece({
   }, []);
 
   const isWhite = owner === "white";
-  const bodyColor = isWhite ? "#fff0c5" : "#030303";
-  const rimColor = "#d6a34d";
-  const highlightColor = isWhite ? "#fff9e8" : "#e6ddd1";
+  const bodyColor = isWhite ? "#fff0c5" : "#243528";
+  const rimColor = isWhite ? "#d6a34d" : "#e0b35a";
+  const highlightColor = isWhite ? "#fff9e8" : "#f0c878";
 
   return (
     <group position={position} scale={selected ? SELECTED_PIECE_SCALE : PIECE_SCALE}>
       <mesh castShadow receiveShadow geometry={geometry}>
         <meshPhysicalMaterial
           color={bodyColor}
-          roughness={isWhite ? 0.16 : 0.11}
-          metalness={0.01}
+          roughness={isWhite ? 0.16 : 0.2}
+          metalness={isWhite ? 0.01 : 0.12}
           clearcoat={1}
-          clearcoatRoughness={0.05}
-          emissive={active ? "#4b2a08" : "#000000"}
-          emissiveIntensity={active ? 0.2 : 0}
-          reflectivity={0.72}
+          clearcoatRoughness={isWhite ? 0.05 : 0.1}
+          emissive={active ? (isWhite ? "#4b2a08" : "#3b552a") : isWhite ? "#000000" : "#0c1810"}
+          emissiveIntensity={active ? 0.2 : isWhite ? 0 : 0.1}
+          reflectivity={isWhite ? 0.72 : 0.58}
         />
       </mesh>
       <mesh castShadow position={[0, 0.035, 0]} rotation={[Math.PI / 2, 0, 0]}>
@@ -182,9 +182,15 @@ function VasePiece({
           clearcoatRoughness={0.04}
         />
       </mesh>
+      {!isWhite ? (
+        <mesh castShadow position={[0, 0.86, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.31, 0.018, 10, 44]} />
+          <meshStandardMaterial color="#d9a94e" roughness={0.2} metalness={0.52} />
+        </mesh>
+      ) : null}
       <mesh position={[-0.19, 1.0, 0.22]} rotation={[0.16, -0.2, -0.18]}>
-        <boxGeometry args={[0.026, 0.68, 0.01]} />
-        <meshBasicMaterial color={highlightColor} transparent opacity={isWhite ? 0.5 : 0.7} />
+        <boxGeometry args={[isWhite ? 0.026 : 0.032, 0.68, 0.01]} />
+        <meshBasicMaterial color={highlightColor} transparent opacity={isWhite ? 0.5 : 0.82} />
       </mesh>
       <mesh position={[-0.06, 1.66, 0.24]} rotation={[0.1, 0, -0.1]}>
         <boxGeometry args={[0.02, 0.26, 0.01]} />
@@ -192,7 +198,7 @@ function VasePiece({
       </mesh>
       <mesh position={[0, 0.018, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <circleGeometry args={[0.34, 42]} />
-        <meshStandardMaterial color="#020101" transparent opacity={0.32} />
+        <meshStandardMaterial color={isWhite ? "#020101" : "#000000"} transparent opacity={isWhite ? 0.32 : 0.24} />
       </mesh>
     </group>
   );
@@ -394,87 +400,6 @@ function BoardPoint3D({
   );
 }
 
-function Pip({ x, z, size }: { x: number; z: number; size: number }) {
-  return (
-    <mesh position={[x, size / 2 + 0.003, z]} rotation={[-Math.PI / 2, 0, 0]}>
-      <circleGeometry args={[size * 0.075, 18]} />
-      <meshStandardMaterial color="#24140d" roughness={0.32} />
-    </mesh>
-  );
-}
-
-function DiceCube({
-  value,
-  position,
-  rotation,
-  size = 0.38,
-}: {
-  value: number | "-";
-  position: [number, number, number];
-  rotation: [number, number, number];
-  size?: number;
-}) {
-  const pipNear = size * 0.24;
-  const pipFar = size * 0.27;
-  const pips: Record<number, Array<[number, number]>> = {
-    1: [[0, 0]],
-    2: [
-      [-pipNear, -pipNear],
-      [pipNear, pipNear],
-    ],
-    3: [
-      [-pipNear, -pipNear],
-      [0, 0],
-      [pipNear, pipNear],
-    ],
-    4: [
-      [-pipNear, -pipNear],
-      [pipNear, -pipNear],
-      [-pipNear, pipNear],
-      [pipNear, pipNear],
-    ],
-    5: [
-      [-pipNear, -pipNear],
-      [pipNear, -pipNear],
-      [0, 0],
-      [-pipNear, pipNear],
-      [pipNear, pipNear],
-    ],
-    6: [
-      [-pipNear, -pipFar],
-      [pipNear, -pipFar],
-      [-pipNear, 0],
-      [pipNear, 0],
-      [-pipNear, pipFar],
-      [pipNear, pipFar],
-    ],
-  };
-
-  return (
-    <group position={position} rotation={rotation}>
-      <RoundedBox
-        args={[size, size, size]}
-        castShadow
-        receiveShadow
-        radius={size * 0.12}
-        smoothness={4}
-      >
-        <meshPhysicalMaterial
-          color="#f3d393"
-          roughness={0.22}
-          clearcoat={0.86}
-          clearcoatRoughness={0.12}
-        />
-      </RoundedBox>
-      {typeof value === "number"
-        ? pips[value].map(([x, z], index) => (
-            <Pip key={index} x={x} z={z} size={size} />
-          ))
-        : null}
-    </group>
-  );
-}
-
 function LacquerBoard({
   state,
   availableMoves,
@@ -630,25 +555,6 @@ function LacquerBoard({
         </mesh>
         <TrayPieces owner="white" count={state.borneOff.white} center={[0, 0.16, -0.62]} />
         <TrayPieces owner="black" count={state.borneOff.black} center={[0, 0.16, 0.62]} />
-      </group>
-
-      <group position={[-2.78, 0.22, 3.12]} rotation={[0, 0.03, 0]}>
-        <mesh receiveShadow position={[0, -0.02, 0]}>
-          <boxGeometry args={[0.82, 0.04, 0.52]} />
-          <meshStandardMaterial color="#130807" roughness={0.46} metalness={0.08} />
-        </mesh>
-        <DiceCube
-          value={state.currentRoll?.[0] ?? "-"}
-          position={[-0.18, 0.18, -0.04]}
-          rotation={[0.12, 0.38, -0.08]}
-          size={0.28}
-        />
-        <DiceCube
-          value={state.currentRoll?.[1] ?? "-"}
-          position={[0.2, 0.18, 0.04]}
-          rotation={[-0.06, -0.34, 0.1]}
-          size={0.28}
-        />
       </group>
 
       <mesh position={[0, -0.3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
