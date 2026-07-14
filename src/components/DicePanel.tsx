@@ -71,6 +71,16 @@ export function DicePanel({ state, onRoll, canRollOverride = true, variant = "de
       </div>
       {variant === "scene" ? (
         <div className="dice-result-row dice-result-row-scene flex items-center gap-2">
+          <div className="scene-dice-faces flex items-center gap-1.5" aria-hidden="true">
+            {displayRoll.map((die, index) => (
+              <div
+                key={`${rollKey}-${die}-${index}-${isRolling ? "rolling" : "settled"}`}
+                className="dice-stage"
+              >
+                <DiceFace value={die} rolling={isRolling} useAsset={false} />
+              </div>
+            ))}
+          </div>
           <div className="dice-result-text min-w-0">
             <p>{sceneRollLabel}</p>
             <span>{sceneStepsLabel}</span>

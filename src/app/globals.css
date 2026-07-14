@@ -1510,6 +1510,7 @@ button:focus-visible {
 }
 
 .dice-tray-scene .dice-result-row-scene {
+  align-items: center;
   margin-top: 0.1rem;
 }
 
@@ -1529,14 +1530,29 @@ button:focus-visible {
 }
 
 .dice-tray-scene .dice-stage {
-  height: 34px;
-  width: 34px;
+  height: 26px;
+  width: 26px;
 }
 
 .dice-tray-scene .die-body {
-  border-radius: 8px;
-  height: 34px;
-  width: 34px;
+  border-radius: 6px;
+  height: 26px;
+  width: 26px;
+}
+
+.dice-tray-scene .die-pip-grid {
+  gap: 2px;
+  grid-template-columns: repeat(3, 4px);
+  grid-template-rows: repeat(3, 4px);
+}
+
+.dice-tray-scene .die-pip {
+  height: 4px;
+  width: 4px;
+}
+
+.dice-tray-scene .die-empty {
+  font-size: 1rem;
 }
 
 .dice-tray-scene .dice-steps-label {
@@ -1630,8 +1646,8 @@ button:focus-visible {
   }
 
   .dice-tray-scene .dice-stage {
-    height: 30px;
-    width: 30px;
+    height: 22px;
+    width: 22px;
   }
 
   .dice-tray-scene .dice-result-text {
@@ -1643,9 +1659,20 @@ button:focus-visible {
   }
 
   .dice-tray-scene .die-body {
-    border-radius: 7px;
-    height: 30px;
-    width: 30px;
+    border-radius: 5px;
+    height: 22px;
+    width: 22px;
+  }
+
+  .dice-tray-scene .die-pip-grid {
+    gap: 2px;
+    grid-template-columns: repeat(3, 3px);
+    grid-template-rows: repeat(3, 3px);
+  }
+
+  .dice-tray-scene .die-pip {
+    height: 3px;
+    width: 3px;
   }
 
   .dice-tray-scene .dice-steps-label {

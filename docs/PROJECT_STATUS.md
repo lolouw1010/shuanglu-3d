@@ -1,6 +1,6 @@
 # 3D Project Status
 
-Last updated: 2026-07-12 CST
+Last updated: 2026-07-15 CST
 
 ## Target
 
@@ -24,6 +24,7 @@ Fixed-camera playable visual baseline:
 - Runtime 3D room and board textures now use WebP assets with preload hints, reducing the active background and board texture payload from roughly 4 MB to roughly 420 KB.
 - The 3D loading fallback now shows the fixed-room plate immediately while the WebGL scene chunk initializes, and the scene HUD dice use lightweight CSS pips instead of requesting large PNG dice assets.
 - Black horses now use a brighter dark jade/bronze material with gold rim accents for better contrast against the lacquer board; the rough in-scene 3D dice have been removed, leaving dice state as compact HUD text.
+- The WebGL board is anchored lower in the fixed room plate so it reads as resting on the table rather than floating at chest height; the compact scene dice HUD now includes small CSS dice faces plus text state.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
 - Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.

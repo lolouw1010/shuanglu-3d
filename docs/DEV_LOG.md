@@ -4226,3 +4226,36 @@ Production HTML does not contain DiceCube or parchment-game-shell.
 Desktop production screenshot captured at output/playwright/piece-dice-refine-12-cloud.png.
 390x844 production screenshot captured at output/playwright/piece-dice-refine-12-mobile-cloud.png.
 ```
+
+## 2026-07-15 3D Board Anchor and HUD Dice Baseline 13
+
+### Objective
+
+Respond to visual feedback that the board still sat too high against the fixed room plate and read as floating near the characters' chests, while the compact HUD dice box became too plain after removing dice faces.
+
+### Changes
+
+- Lowered the WebGL board group within the fixed-camera scene so the board aligns closer to the visible table area in the background plate.
+- Kept the background plate unchanged; this was enough to improve the board/table relationship without regenerating room art.
+- Restored small CSS dice faces inside the compact 3D HUD dice box.
+- Kept the rough table-top 3D dice meshes removed from the board scene.
+- Kept the 2D/classic dice presentation unchanged.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm run build passed.
+npm test passed: 10 test files, 38 tests.
+Local production HTML contains game-3d-page, scene-dice-faces, and dice-result-text.
+Local production HTML does not contain DiceCube or parchment-game-shell.
+Desktop screenshot captured at output/playwright/board-anchor-dice-13-local.png.
+390x844 screenshot captured at output/playwright/board-anchor-dice-13-mobile-local.png.
+Deployed to production after the local verification passed.
+Production health check passed: / and /3d returned HTTP 200, /health returned ok, and shuanglu-3d.service was active.
+Production HTML contains game-3d-page, scene-dice-faces, and dice-result-text.
+Production HTML does not contain DiceCube or parchment-game-shell.
+Desktop production screenshot captured at output/playwright/board-anchor-dice-13-cloud.png.
+390x844 production screenshot captured at output/playwright/board-anchor-dice-13-mobile-cloud.png.
+```
