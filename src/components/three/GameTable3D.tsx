@@ -439,7 +439,7 @@ function LacquerBoard({
       <mesh castShadow receiveShadow position={[0, -0.17, 0]}>
         <boxGeometry args={[12.75, 0.34, 7.45]} />
         <meshPhysicalMaterial
-          color="#2c100c"
+          color="#3a1710"
           roughness={0.3}
           metalness={0.03}
           clearcoat={0.96}
@@ -449,7 +449,7 @@ function LacquerBoard({
       <mesh castShadow receiveShadow position={[0, 0.04, 0]}>
         <boxGeometry args={[12.42, 0.14, 6.18]} />
         <meshPhysicalMaterial
-          color="#090505"
+          color="#140908"
           roughness={0.22}
           metalness={0.05}
           clearcoat={1}
@@ -471,7 +471,7 @@ function LacquerBoard({
       <mesh castShadow receiveShadow position={[0, 0.02, 0]}>
         <boxGeometry args={[BOARD_WIDTH, 0.16, BOARD_DEPTH]} />
         <meshPhysicalMaterial
-          color="#100706"
+          color="#1a0c08"
           roughness={0.36}
           metalness={0.04}
           clearcoat={0.86}
@@ -482,8 +482,10 @@ function LacquerBoard({
         <planeGeometry args={[12.16, 6.0]} />
         <meshStandardMaterial
           map={boardTexture}
-          color="#fff4df"
-          roughness={0.34}
+          color="#ffffff"
+          emissive="#2d1908"
+          emissiveIntensity={0.16}
+          roughness={0.3}
           metalness={0.06}
         />
       </mesh>

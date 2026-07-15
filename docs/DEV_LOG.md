@@ -4259,3 +4259,30 @@ Production HTML does not contain DiceCube or parchment-game-shell.
 Desktop production screenshot captured at output/playwright/board-anchor-dice-13-cloud.png.
 390x844 production screenshot captured at output/playwright/board-anchor-dice-13-mobile-cloud.png.
 ```
+
+## 2026-07-15 3D Board Brightness Baseline 14
+
+### Objective
+
+Respond to visual feedback that the board still read too dark and made the points and horses harder to distinguish.
+
+### Changes
+
+- Lightened the board frame and inset base colors slightly.
+- Changed the textured board surface tint to white so the runtime board texture is not darkened by the material color.
+- Added a low warm emissive lift to the board surface material to raise the darkest areas without changing global scene lighting.
+- Kept the room background, camera, board position, game rules, horses, and HUD layout unchanged.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm run build passed.
+npm test passed: 10 test files, 38 tests.
+Local production HTML contains game-3d-page, board-top-orthographic-cropped.webp, and scene-dice-faces.
+Local production HTML does not contain parchment-game-shell.
+Desktop screenshot captured at output/playwright/board-brightness-14-local.png.
+390x844 screenshot captured at output/playwright/board-brightness-14-mobile-local.png.
+Cloud deployment and production screenshots are pending in this session.
+```

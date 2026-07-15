@@ -25,6 +25,7 @@ Fixed-camera playable visual baseline:
 - The 3D loading fallback now shows the fixed-room plate immediately while the WebGL scene chunk initializes, and the scene HUD dice use lightweight CSS pips instead of requesting large PNG dice assets.
 - Black horses now use a brighter dark jade/bronze material with gold rim accents for better contrast against the lacquer board; the rough in-scene 3D dice have been removed, leaving dice state as compact HUD text.
 - The WebGL board is anchored lower in the fixed room plate so it reads as resting on the table rather than floating at chest height; the compact scene dice HUD now includes small CSS dice faces plus text state.
+- The board frame and surface material have been lightly brightened to improve point and horse readability without changing the fixed room lighting.
 - Point, bar, and borne-off state rendered and clickable.
 - Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
 - Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.
