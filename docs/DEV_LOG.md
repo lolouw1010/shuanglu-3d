@@ -4284,5 +4284,11 @@ Local production HTML contains game-3d-page, board-top-orthographic-cropped.webp
 Local production HTML does not contain parchment-game-shell.
 Desktop screenshot captured at output/playwright/board-brightness-14-local.png.
 390x844 screenshot captured at output/playwright/board-brightness-14-mobile-local.png.
-Cloud deployment and production screenshots are pending in this session.
+Deployed to production after the local verification passed.
+Production revision is d86fab34d2ce572756629c75225d76a459ae4900 and shuanglu-3d.service is active.
+Production health check passed: / and /3d returned HTTP 200.
+Production HTML contains game-3d-page, board-top-orthographic-cropped.webp, and scene-dice-faces.
+Production HTML does not contain parchment-game-shell.
+Desktop production screenshot captured at output/playwright/board-brightness-14-cloud.png.
+390x844 production screenshot captured at output/playwright/board-brightness-14-mobile-cloud.png.
 ```
