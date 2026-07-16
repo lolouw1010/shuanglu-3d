@@ -4292,3 +4292,26 @@ Production HTML does not contain parchment-game-shell.
 Desktop production screenshot captured at output/playwright/board-brightness-14-cloud.png.
 390x844 production screenshot captured at output/playwright/board-brightness-14-mobile-cloud.png.
 ```
+
+## 2026-07-17 3D Board Table Seat Baseline 15
+
+### Objective
+
+Respond to feedback that the chessboard could still sit lower within the fixed room composition.
+
+### Changes
+
+- Lowered only the full 3D board group from `y = -0.26` to `y = -0.42`.
+- Kept the camera, room background plate, board scale, materials, lights, game rules, pieces, and HUD unchanged.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm run build passed.
+npm test passed: 10 test files, 38 tests.
+Desktop local production screenshot captured at output/playwright/board-lower-15-local.png.
+390x844 local production screenshot captured at output/playwright/board-lower-15-mobile-local.png.
+Cloud deployment and production screenshots are pending in this session.
+```

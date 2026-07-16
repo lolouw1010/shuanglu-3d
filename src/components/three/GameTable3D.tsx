@@ -435,7 +435,7 @@ function LacquerBoard({
   const canBearOff = targetMoves.some((move) => move.to === "off");
 
   return (
-    <group position={[0.04, -0.26, 0.12]} rotation={[0, -0.035, 0]} scale={[0.7, 0.7, 0.7]}>
+    <group position={[0.04, -0.42, 0.12]} rotation={[0, -0.035, 0]} scale={[0.7, 0.7, 0.7]}>
       <mesh castShadow receiveShadow position={[0, -0.17, 0]}>
         <boxGeometry args={[12.75, 0.34, 7.45]} />
         <meshPhysicalMaterial
