@@ -4315,3 +4315,27 @@ Desktop local production screenshot captured at output/playwright/board-lower-15
 390x844 local production screenshot captured at output/playwright/board-lower-15-mobile-local.png.
 Cloud deployment and production screenshots are pending in this session.
 ```
+
+## 2026-07-18 3D Board Character Reveal Baseline 16
+
+### Objective
+
+Respond to feedback that the lowered board still obscured too much of the seated characters in the fixed room composition.
+
+### Changes
+
+- Lowered the full 3D board group from `y = -0.42` to `y = -0.52`.
+- Reduced the board group's uniform scale from `0.70` to `0.66` so the further drop preserves the full board frame within the canvas.
+- Kept the camera, room background plate, materials, lights, game rules, pieces, and HUD unchanged.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm run build passed.
+npm test passed: 10 test files, 38 tests.
+Desktop local production screenshot captured at output/playwright/board-seat-16-local.png.
+390x844 local production screenshot captured at output/playwright/board-seat-16-mobile-local.png.
+Cloud deployment and production screenshots are pending in this session.
+```
