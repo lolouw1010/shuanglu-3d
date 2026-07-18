@@ -4313,7 +4313,7 @@ npm run build passed.
 npm test passed: 10 test files, 38 tests.
 Desktop local production screenshot captured at output/playwright/board-lower-15-local.png.
 390x844 local production screenshot captured at output/playwright/board-lower-15-mobile-local.png.
-Cloud deployment and production screenshots are pending in this session.
+Superseded by Baseline 16 before production deployment.
 ```
 
 ## 2026-07-18 3D Board Character Reveal Baseline 16
@@ -4337,5 +4337,9 @@ npm run build passed.
 npm test passed: 10 test files, 38 tests.
 Desktop local production screenshot captured at output/playwright/board-seat-16-local.png.
 390x844 local production screenshot captured at output/playwright/board-seat-16-mobile-local.png.
-Cloud deployment and production screenshots are pending in this session.
+Deployed application revision 07a05c661dea3c6d99cd7dd1222e6c33d307e187 after local verification passed.
+Production health check passed: / and /3d returned HTTP 200, and shuanglu-3d.service is active.
+Production HTML contains game-3d-page, board-top-orthographic-cropped.webp, and scene-dice-faces.
+Production HTML does not contain parchment-game-shell.
+Production browser screenshots were intentionally skipped to avoid reopening desktop test Chrome windows after the requested cleanup.
 ```
