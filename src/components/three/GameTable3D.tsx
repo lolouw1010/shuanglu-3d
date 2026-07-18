@@ -1,6 +1,6 @@
 "use client";
 
-import { ContactShadows, useTexture } from "@react-three/drei";
+import { ContactShadows, Html, useTexture } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { DoubleSide, LatheGeometry, SRGBColorSpace, Shape, Vector2 } from "three";
@@ -15,6 +15,7 @@ type GameTable3DProps = {
   availableMoves: Move[];
   selectedSource: Source | null;
   targetMoves: Move[];
+  onInvalidClick: () => void;
   onSelectSource: (source: Source) => void;
   onSelectTarget: (target: number | "off") => void;
 };
@@ -63,6 +64,10 @@ function pointPosition(index: number): PointPosition {
     z: 2.28,
     direction: -1,
   };
+}
+
+function uniqueSteps(moves: Move[]): number[] {
+  return Array.from(new Set(moves.map((move) => move.step))).sort((left, right) => left - right);
 }
 
 function pieceOffsets(count: number): Array<[number, number, number]> {
@@ -287,6 +292,61 @@ function TrayPieces({
   );
 }
 
+function ActionMarker({
+  label,
+  steps = [],
+  tone,
+  position,
+  onClick,
+}: {
+  label: string;
+  steps?: number[];
+  tone: "source" | "target" | "selected";
+  position: [number, number, number];
+  onClick: () => void;
+}) {
+  const palette =
+    tone === "target"
+      ? { background: "rgba(23, 91, 66, 0.94)", border: "#b9f5cf", color: "#f3fff6" }
+      : tone === "selected"
+        ? { background: "rgba(107, 68, 15, 0.95)", border: "#ffe4a3", color: "#fff9e9" }
+        : { background: "rgba(74, 45, 10, 0.94)", border: "#f3c86d", color: "#fff6df" };
+
+  return (
+    <Html center position={position} style={{ pointerEvents: "auto", userSelect: "none" }}>
+      <button
+        type="button"
+        aria-label={`${label}${steps.length ? `，骰步 ${steps.join("/")}` : ""}`}
+        onClick={(event) => {
+          event.stopPropagation();
+          onClick();
+        }}
+        style={{
+          alignItems: "center",
+          background: palette.background,
+          border: `1px solid ${palette.border}`,
+          borderRadius: "999px",
+          boxShadow: `0 0 0 1px rgba(8, 5, 3, 0.38), 0 4px 12px rgba(0, 0, 0, 0.36)`,
+          color: palette.color,
+          cursor: "pointer",
+          display: "inline-flex",
+          fontSize: "11px",
+          fontWeight: 700,
+          gap: "4px",
+          lineHeight: 1,
+          padding: "4px 6px",
+          whiteSpace: "nowrap",
+        }}
+      >
+        <span>{label}</span>
+        {steps.length ? (
+          <span style={{ color: "#fff3c7", fontVariantNumeric: "tabular-nums" }}>{steps.join("/")}</span>
+        ) : null}
+      </button>
+    </Html>
+  );
+}
+
 function BoardPoint3D({
   point,
   position,
@@ -294,6 +354,9 @@ function BoardPoint3D({
   isTarget,
   canSelect,
   hideTopPiece,
+  sourceSteps,
+  targetSteps,
+  onInvalidClick,
   onSelectSource,
   onSelectTarget,
 }: {
@@ -303,6 +366,9 @@ function BoardPoint3D({
   isTarget: boolean;
   canSelect: boolean;
   hideTopPiece: boolean;
+  sourceSteps: number[];
+  targetSteps: number[];
+  onInvalidClick: () => void;
   onSelectSource: () => void;
   onSelectTarget: () => void;
 }) {
@@ -317,56 +383,65 @@ function BoardPoint3D({
   );
   const baseColor = position.index % 2 === 0 ? "#d0a25a" : "#21100b";
   const activeColor = isTarget ? "#74d8a4" : isSource ? "#f4d16a" : canSelect ? "#d5b15d" : baseColor;
-  const laneOpacity = isTarget ? 0.48 : isSource || canSelect ? 0.26 : 0;
-  const pipOpacity = isTarget ? 0.86 : isSource || canSelect ? 0.56 : 0;
+  const laneOpacity = isTarget ? 0.46 : isSource ? 0.36 : canSelect ? 0.24 : 0;
+  const pipOpacity = isTarget ? 0.94 : isSource || canSelect ? 0.82 : 0;
+  const markerTone = isTarget ? "target" : isSource ? "selected" : canSelect ? "source" : null;
+  const markerLabel = isTarget ? "落" : isSource ? "已选" : canSelect ? "起" : null;
+  const markerSteps = isTarget ? targetSteps : sourceSteps;
+  const markerZ = position.direction * -POINT_LENGTH * 0.48;
 
   const handleClick = () => {
     if (isTarget) {
       onSelectTarget();
       return;
     }
-    if (canSelect) onSelectSource();
+    if (canSelect) {
+      onSelectSource();
+      return;
+    }
+    onInvalidClick();
   };
 
   return (
     <group
-      position={[position.x, 0.148, position.z]}
+      position={[position.x, 0.19, position.z]}
       onClick={(event) => {
         event.stopPropagation();
         handleClick();
       }}
     >
-      <mesh
-        receiveShadow
-        rotation={[-Math.PI / 2, 0, 0]}
-      >
+      <mesh receiveShadow renderOrder={2} rotation={[-Math.PI / 2, 0, 0]}>
         <shapeGeometry args={[triangle]} />
-        <meshStandardMaterial
+        <meshBasicMaterial
           color={activeColor}
-          emissive={isTarget || isSource || canSelect ? activeColor : "#120804"}
-          emissiveIntensity={isTarget ? 0.36 : isSource || canSelect ? 0.16 : 0.06}
-          metalness={0.3}
-          roughness={0.36}
           side={DoubleSide}
           transparent
           opacity={laneOpacity}
+          depthWrite={false}
         />
       </mesh>
       <mesh
-        position={[0, 0.018, position.direction * -POINT_LENGTH * 0.48]}
+        position={[0, 0.018, markerZ]}
+        renderOrder={3}
         rotation={[-Math.PI / 2, 0, 0]}
       >
         <circleGeometry args={[0.055, 18]} />
-        <meshStandardMaterial
+        <meshBasicMaterial
           color={isTarget ? "#c9ffe2" : "#e2b35a"}
-          emissive={isTarget ? "#2f8f5e" : "#5c3508"}
-          emissiveIntensity={isTarget ? 0.45 : 0.18}
-          metalness={0.35}
-          roughness={0.25}
           transparent
           opacity={pipOpacity}
+          depthWrite={false}
         />
       </mesh>
+      {markerTone && markerLabel ? (
+        <ActionMarker
+          label={markerLabel}
+          steps={markerSteps}
+          tone={markerTone}
+          position={[0, 0.09, markerZ]}
+          onClick={handleClick}
+        />
+      ) : null}
       {point.owner
         ? pieceOffsets(point.count).map(([x, y, depth], pieceIndex, offsets) =>
             hideTopPiece && pieceIndex === offsets.length - 1 ? null : (
@@ -405,6 +480,7 @@ function LacquerBoard({
   availableMoves,
   selectedSource,
   targetMoves,
+  onInvalidClick,
   onSelectSource,
   onSelectTarget,
   presentedMove,
@@ -492,6 +568,8 @@ function LacquerBoard({
 
       {state.points.map((point, index) => {
         const position = pointPosition(index);
+        const sourceMoves = availableMoves.filter((move) => move.from === index);
+        const pointTargetMoves = targetMoves.filter((move) => move.to === index);
         return (
           <BoardPoint3D
             key={index}
@@ -501,6 +579,9 @@ function LacquerBoard({
             isTarget={targetPoints.has(index)}
             canSelect={sourcePoints.has(index)}
             hideTopPiece={presentedMove?.move.to === index}
+            sourceSteps={uniqueSteps(sourceMoves)}
+            targetSteps={uniqueSteps(pointTargetMoves)}
+            onInvalidClick={onInvalidClick}
             onSelectSource={() => onSelectSource(index)}
             onSelectTarget={() => onSelectTarget(index)}
           />
@@ -518,6 +599,7 @@ function LacquerBoard({
           onClick={(event) => {
             event.stopPropagation();
             if (canSelectBar) onSelectSource("bar");
+            else onInvalidClick();
           }}
         >
           <boxGeometry args={[0.56, 0.18, 2.08]} />
@@ -533,6 +615,9 @@ function LacquerBoard({
         </mesh>
         <TrayPieces owner="white" count={state.bar.white} center={[0, 0.16, -0.62]} />
         <TrayPieces owner="black" count={state.bar.black} center={[0, 0.16, 0.62]} />
+        {canSelectBar ? (
+          <ActionMarker label="复马" tone="source" position={[0, 0.28, 0]} onClick={() => onSelectSource("bar")} />
+        ) : null}
       </group>
 
       <group position={[5.05, 0.38, 0]}>
@@ -542,6 +627,7 @@ function LacquerBoard({
           onClick={(event) => {
             event.stopPropagation();
             if (canBearOff) onSelectTarget("off");
+            else onInvalidClick();
           }}
         >
           <boxGeometry args={[0.56, 0.18, 2.08]} />
@@ -557,6 +643,9 @@ function LacquerBoard({
         </mesh>
         <TrayPieces owner="white" count={state.borneOff.white} center={[0, 0.16, -0.62]} />
         <TrayPieces owner="black" count={state.borneOff.black} center={[0, 0.16, 0.62]} />
+        {canBearOff ? (
+          <ActionMarker label="出马" tone="target" position={[0, 0.28, 0]} onClick={() => onSelectTarget("off")} />
+        ) : null}
       </group>
 
       <mesh position={[0, -0.3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
@@ -612,6 +701,7 @@ export function GameTable3D(props: GameTable3DProps) {
           camera={{ position: [-0.28, 3.92, 9.05], fov: 42 }}
           dpr={[1, 1.4]}
           gl={{ alpha: true }}
+          onPointerMissed={props.onInvalidClick}
           shadows="basic"
         >
           <Scene {...props} />

@@ -46,6 +46,7 @@ export function GameScreen() {
     backToMenu,
     toggleRules,
     rollCurrentPlayer,
+    reportInvalid3DClick,
     selectSource,
     selectTarget,
     runAITurn,
@@ -206,6 +207,7 @@ export function GameScreen() {
                 availableMoves={availableMoves}
                 selectedSource={selectedSource}
                 targetMoves={targetMoves}
+                onInvalidClick={reportInvalid3DClick}
                 onSelectSource={selectSource}
                 onSelectTarget={selectTarget}
               />

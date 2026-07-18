@@ -4343,3 +4343,33 @@ Production HTML contains game-3d-page, board-top-orthographic-cropped.webp, and 
 Production HTML does not contain parchment-game-shell.
 Production browser screenshots were intentionally skipped to avoid reopening desktop test Chrome windows after the requested cleanup.
 ```
+
+## 2026-07-18 3D Action Marker Baseline 17
+
+### Objective
+
+Make the fixed-camera 3D board as clear and reliable to operate as the 2D board without changing any game rules.
+
+### Changes
+
+- Raised each 3D point's visual and interactive triangle above the textured board surface so the board plane no longer obscures legal-point feedback or competes with its raycast hit area.
+- Added projected, clickable action markers only at legal points: gold `起` markers for selectable sources, gold `已选` for the active source, and green `落` markers for legal destinations.
+- Added the legal dice steps to each action marker so the player can read the intended move without inferring it from color alone.
+- Added visible, clickable `复马` and `出马` markers at the actual left and right 3D trays when those actions are legal.
+- Corrected the 3D coach copy to refer to the left-side `复马` marker rather than a non-existent center button.
+- Added context-aware feedback for invalid 3D clicks: it now explains whether to roll first, select `复马`, select a gold `起`, or select a green `落`.
+- Kept the rules engine, move legality, room background, fixed camera, board placement, pieces, and HUD layout unchanged.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm run build passed.
+npm test passed: 10 test files, 38 tests.
+Browser interaction QA passed: after rolling 6/4, four gold source markers appeared; clicking a source marker revealed the matching green target marker; clicking that target completed 5 -> 1 using 4 and preserved the remaining die 6.
+Browser console showed 0 errors.
+Desktop screenshots captured at output/playwright/3d-action-markers-17-source-local.png and output/playwright/3d-action-markers-17-target-local.png.
+390x844 screenshot captured at output/playwright/3d-action-markers-17-mobile-local.png; the existing fixed-camera mobile crop remains a separate follow-up.
+Cloud deployment and production verification are pending in this session.
+```

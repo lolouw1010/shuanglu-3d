@@ -55,6 +55,7 @@ type GameStore = {
   backToMenu: () => void;
   toggleRules: () => void;
   rollCurrentPlayer: (roll?: DiceRoll) => void;
+  reportInvalid3DClick: () => void;
   selectSource: (source: Source) => void;
   selectTarget: (target: number | "off") => void;
   runAITurn: () => void;
@@ -338,6 +339,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
           ? blockedRollMessage(rolled, next)
           : messageForState(next),
     });
+  },
+
+  reportInvalid3DClick: () => {
+    const { state, selectedSource } = get();
+    const message =
+      state.turnPhase === "awaiting_roll"
+        ? "请先掷骰。"
+        : state.turnPhase !== "awaiting_move"
+          ? messageForState(state)
+          : state.bar[state.currentPlayer] > 0 && selectedSource !== "bar"
+            ? "栏中有马，先点棋盘左侧的“复马”签标。"
+            : selectedSource !== null
+              ? "请点击绿色“落”签标。"
+              : "请点击金色“起”签标或发光的己方马。";
+    set({ message });
   },
 
   selectSource: (source) => {
