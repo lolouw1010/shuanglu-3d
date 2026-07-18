@@ -61,8 +61,10 @@ export function GameScreen() {
       ? `${window.location.origin}/?room=${online.roomId}`
       : "";
   const canAct =
-    mode !== "online" ||
-    (online?.seat !== "spectator" && online?.seat === state.currentPlayer);
+    mode === "ai"
+      ? state.currentPlayer === "white"
+      : mode !== "online" ||
+        (online?.seat !== "spectator" && online?.seat === state.currentPlayer);
   const availableMoves = canAct ? generateLegalMoves(state) : [];
   const highlightedBlackMoves =
     mode === "ai" ? latestContiguousMovesForPlayer(state, "black") : [];
@@ -79,12 +81,12 @@ export function GameScreen() {
   useEffect(() => {
     if (mode === "ai" && state.currentPlayer === "black") {
       const justAutoPassed = message.includes("回合交给黑方");
-      const aiDelay = justAutoPassed ? 1400 : boardView === "3d" ? 800 : 450;
+      const aiDelay = justAutoPassed ? 1400 : boardView === "3d" ? 920 : 450;
       const timer = window.setTimeout(runAITurn, aiDelay);
       return () => window.clearTimeout(timer);
     }
     return undefined;
-  }, [mode, boardView, state.currentPlayer, state.turnPhase, message, runAITurn]);
+  }, [mode, boardView, state.currentPlayer, state.turnPhase, state.moveHistory.length, message, runAITurn]);
 
   useEffect(() => {
     if (mode !== "online") return undefined;

@@ -434,45 +434,47 @@ export const useGameStore = create<GameStore>((set, get) => ({
   runAITurn: () => {
     const store = get();
     if (store.mode !== "ai") return;
-    let state = store.state;
+    const state = store.state;
     if (state.currentPlayer !== "black" || state.turnPhase === "game_over") return;
-
-    let aiMessage: string | null = null;
 
     if (state.turnPhase === "awaiting_roll") {
       const rolled = rollIntoState(state, rollDice());
-      state = finishRollIfNoMoves(rolled);
-      if (state.currentPlayer !== rolled.currentPlayer) {
-        aiMessage = blockedRollMessage(rolled, state);
-      }
+      const next = finishRollIfNoMoves(rolled);
+      set({
+        state: next,
+        selectedSource: null,
+        targetMoves: [],
+        message:
+          next.currentPlayer !== rolled.currentPlayer
+            ? blockedRollMessage(rolled, next)
+            : messageForState(next),
+      });
+      return;
     }
 
-    let guard = 0;
-    while (
-      state.currentPlayer === "black" &&
-      state.turnPhase === "awaiting_move" &&
-      guard < 8
-    ) {
-      const move = chooseAIMove(
-        state,
-        "black",
-        characters.black.aiProfile,
-      );
-      if (!move) {
-        state = endTurn(state);
-        break;
-      }
-      const beforeMove = state;
-      state = applyMove(state, move);
-      aiMessage = blockedRemainderMessage(beforeMove, move, state) ?? aiMessage;
-      guard += 1;
-    }
-
-    set({
+    const move = chooseAIMove(
       state,
+      "black",
+      characters.black.aiProfile,
+    );
+    if (!move) {
+      const next = endTurn(state);
+      set({
+        state: next,
+        selectedSource: null,
+        targetMoves: [],
+        message: messageForState(next),
+      });
+      return;
+    }
+
+    const next = applyMove(state, move);
+    const blockedRemainder = blockedRemainderMessage(state, move, next);
+    set({
+      state: next,
       selectedSource: null,
       targetMoves: [],
-      message: aiMessage ?? messageForState(state),
+      message: blockedRemainder ?? messageForState(next),
     });
   },
 }));

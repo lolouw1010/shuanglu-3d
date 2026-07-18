@@ -4377,3 +4377,29 @@ Production HTML contains game-3d-page, board-top-orthographic-cropped.webp, and 
 Production HTML does not contain parchment-game-shell.
 Production browser screenshots were intentionally skipped after the local interaction QA to avoid reopening desktop test Chrome windows.
 ```
+
+## 2026-07-19 3D Black Move Animation Baseline 18
+
+### Objective
+
+Make black AI moves visible as individual 3D piece movements rather than resolving an entire AI turn instantaneously.
+
+### Changes
+
+- Changed AI progression so one invocation handles exactly one transition: roll, one chosen move, or turn end.
+- In 3D mode, scheduled the next black AI transition after 920 ms, allowing the existing 680 ms in-scene piece flight to complete before another move begins.
+- Prevented interaction during an AI turn in AI mode, so the player cannot select black pieces while the move sequence is resolving.
+- Kept move selection, dice rules, legal-move generation, and the existing 2D pacing unchanged.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm run build passed.
+npm test passed: 10 test files, 38 tests.
+Browser interaction QA passed in one dedicated local browser session: black rolled 5/3, completed 16 -> 21 using 5 while 3 remained, then completed 18 -> 21 using 3 on the following scheduled transition.
+The black move record advanced from 1 to 2 rather than resolving both moves at once; browser console showed 0 errors.
+The dedicated test browser session and local production server were closed after QA.
+Production deployment and health verification pending.
+```
