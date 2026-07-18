@@ -4371,5 +4371,9 @@ Browser interaction QA passed: after rolling 6/4, four gold source markers appea
 Browser console showed 0 errors.
 Desktop screenshots captured at output/playwright/3d-action-markers-17-source-local.png and output/playwright/3d-action-markers-17-target-local.png.
 390x844 screenshot captured at output/playwright/3d-action-markers-17-mobile-local.png; the existing fixed-camera mobile crop remains a separate follow-up.
-Cloud deployment and production verification are pending in this session.
+Deployed application revision 198d4df9153b4d67082b17d361f82f500aeb6ca7 after local verification passed.
+Production health check passed: / and /3d returned HTTP 200, and shuanglu-3d.service is active.
+Production HTML contains game-3d-page, board-top-orthographic-cropped.webp, and scene-dice-faces.
+Production HTML does not contain parchment-game-shell.
+Production browser screenshots were intentionally skipped after the local interaction QA to avoid reopening desktop test Chrome windows.
 ```
