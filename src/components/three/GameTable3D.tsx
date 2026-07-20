@@ -91,6 +91,25 @@ function pointPiecePosition(index: number, count: number): [number, number, numb
   ];
 }
 
+function trayPiecePosition(
+  tray: "bar" | "borne_off",
+  owner: Player,
+  count: number,
+): [number, number, number] {
+  const visible = Math.min(Math.max(1, count), 6);
+  const index = visible - 1;
+  const lane = index % 2;
+  const row = Math.floor(index / 2);
+  const trayX = tray === "bar" ? -5.05 : 5.05;
+  const trayZ = owner === "white" ? -0.62 : 0.62;
+
+  return [
+    trayX + (lane - 0.5) * 0.16,
+    0.54 + row * 0.095,
+    trayZ + (row - 1) * 0.25,
+  ];
+}
+
 function usePresentedMove(state: BoardState): PresentedMove | null {
   const previousHistoryLength = useRef(state.moveHistory.length);
   const [presentedMove, setPresentedMove] = useState<PresentedMove | null>(null);
@@ -101,12 +120,7 @@ function usePresentedMove(state: BoardState): PresentedMove | null {
     previousHistoryLength.current = historyLength;
 
     const latest = state.moveHistory.at(-1);
-    if (
-      delta !== 1 ||
-      !latest ||
-      typeof latest.from !== "number" ||
-      typeof latest.to !== "number"
-    ) {
+    if (delta !== 1 || !latest) {
       setPresentedMove(null);
       return undefined;
     }
@@ -219,15 +233,19 @@ function AnimatedMovePiece({
   const group = useRef<Group>(null);
   const elapsed = useRef(0);
   const { move } = presentedMove;
-  const from = move.from as number;
-  const to = move.to as number;
   const start = useMemo(
-    () => pointPiecePosition(from, state.points[from].count + 1),
-    [from, state.points],
+    () =>
+      typeof move.from === "number"
+        ? pointPiecePosition(move.from, state.points[move.from].count + 1)
+        : trayPiecePosition("bar", move.player, state.bar[move.player] + 1),
+    [move.from, move.player, state.bar, state.points],
   );
   const end = useMemo(
-    () => pointPiecePosition(to, state.points[to].count),
-    [state.points, to],
+    () =>
+      typeof move.to === "number"
+        ? pointPiecePosition(move.to, state.points[move.to].count)
+        : trayPiecePosition("borne_off", move.player, state.borneOff[move.player]),
+    [move.player, move.to, state.borneOff, state.points],
   );
 
   useFrame((_, delta) => {
@@ -260,10 +278,12 @@ function TrayPieces({
   owner,
   count,
   center,
+  hideTopPiece = false,
 }: {
   owner: Player;
   count: number;
   center: [number, number, number];
+  hideTopPiece?: boolean;
 }) {
   const visible = Math.min(count, 6);
 
@@ -272,7 +292,7 @@ function TrayPieces({
       {Array.from({ length: visible }, (_, index) => {
         const lane = index % 2;
         const row = Math.floor(index / 2);
-        return (
+        return hideTopPiece && count <= 6 && index === visible - 1 ? null : (
           <VasePiece
             key={`${owner}-${index}`}
             owner={owner}
@@ -589,7 +609,11 @@ function LacquerBoard({
       })}
 
       {presentedMove ? (
-        <AnimatedMovePiece state={state} presentedMove={presentedMove} />
+        <AnimatedMovePiece
+          key={presentedMove.historyLength}
+          state={state}
+          presentedMove={presentedMove}
+        />
       ) : null}
 
       <group position={[-5.05, 0.38, 0]}>
@@ -641,8 +665,18 @@ function LacquerBoard({
             opacity={canBearOff ? 0.56 : 0}
           />
         </mesh>
-        <TrayPieces owner="white" count={state.borneOff.white} center={[0, 0.16, -0.62]} />
-        <TrayPieces owner="black" count={state.borneOff.black} center={[0, 0.16, 0.62]} />
+        <TrayPieces
+          owner="white"
+          count={state.borneOff.white}
+          center={[0, 0.16, -0.62]}
+          hideTopPiece={presentedMove?.move.to === "off" && presentedMove.move.player === "white"}
+        />
+        <TrayPieces
+          owner="black"
+          count={state.borneOff.black}
+          center={[0, 0.16, 0.62]}
+          hideTopPiece={presentedMove?.move.to === "off" && presentedMove.move.player === "black"}
+        />
         {canBearOff ? (
           <ActionMarker label="出马" tone="target" position={[0, 0.28, 0]} onClick={() => onSelectTarget("off")} />
         ) : null}

@@ -1,12 +1,12 @@
 # 3D Documentation Index
 
-Last updated: 2026-07-07 CST
+Last updated: 2026-07-20 CST
 
 ## Start Here
 
 - `PROJECT_STATUS.md` records the independent fixed-camera 3D status and next milestones.
 - `DEV_LOG.md` records chronological development work and decisions as they happened.
-- `DEPLOYMENT.md` records the planned isolated 3D deployment boundary.
+- `DEPLOYMENT.md` records the active isolated Linode deployment boundary and release procedure.
 - `UPSTREAM_SYNC.md` defines selective 2D-to-3D bug-fix synchronization.
 - `WORK_SUMMARY_2026-06-12.md` records the June 12 2D interface work summary, deployment verification, and Git sync state.
 
@@ -30,10 +30,12 @@ Last updated: 2026-07-07 CST
 ## Current Public Test Targets
 
 ```txt
-No 3D public deployment yet.
+Production: https://3d.shuanglu.uway.click
+Health endpoint: https://3d.shuanglu.uway.click/health
+Service: shuanglu-3d.service on 127.0.0.1:3003
 ```
 
-The local root route is the fixed-camera 3D application. The stable 2D production application remains a separate repository and deployment.
+The public root and `/3d` routes open the fixed-camera 3D application. The stable 2D production application remains a separate repository and deployment.
 
 ## Documentation Rules
 

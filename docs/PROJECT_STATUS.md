@@ -1,6 +1,6 @@
 # 3D Project Status
 
-Last updated: 2026-07-15 CST
+Last updated: 2026-07-20 CST
 
 ## Target
 
@@ -26,10 +26,10 @@ Fixed-camera playable visual baseline:
 - Black horses now use a brighter dark jade/bronze material with gold rim accents for better contrast against the lacquer board; the rough in-scene 3D dice have been removed, leaving dice state as compact HUD text.
 - The WebGL board is anchored lower in the fixed room plate so it reads as resting on the table rather than floating at chest height; the compact scene dice HUD now includes small CSS dice faces plus text state.
 - The board frame and surface material have been lightly brightened to improve point and horse readability without changing the fixed room lighting.
-- Point, bar, and borne-off state rendered and clickable.
-- Contiguous point-to-point moves receive a renderer-only lift, travel, and settle animation.
-- Authoritative state jumps, reloads, and non-point moves snap cleanly without replaying stale animation.
-- The 3D AI response delay leaves the human move animation enough time to settle.
+- Point, bar, and borne-off state rendered and clickable, with projected `起`/`已选`/`落` action markers at legal locations.
+- Every single renderer-observed move now receives a lift, travel, and settle animation: point-to-point, bar-entry, and borne-off moves.
+- Black AI turns advance one transition at a time: roll, one move, or turn end. In 3D, the next transition waits for the current piece flight to settle.
+- Authoritative state jumps and reloads snap cleanly without replaying stale animation.
 - Independent Linode production is live at `https://3d.shuanglu.uway.click` on internal port 3003.
 - The dedicated systemd service, Docker Nginx host, Let's Encrypt certificate, and renewal timer are active.
 - Rules and state remain outside the renderer.
@@ -37,7 +37,7 @@ Fixed-camera playable visual baseline:
 ## Next Milestones
 
 1. Continue fine-tuning the board material, side trays, and piece silhouettes against the approved concept.
-2. Add hit, bar-entry, and borne-off animation.
+2. Add a separate hit-to-bar animation for the displaced opposing piece.
 3. Add dice settle animation using the rule-determined result.
 4. Produce optimized GLB board and horse assets.
 5. Produce seated character GLBs only if the fixed background plate becomes insufficient.

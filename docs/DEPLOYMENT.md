@@ -6,6 +6,8 @@ Public hostname: `https://3d.shuanglu.uway.click`
 
 Initial deployed application revision: `b94a60226da66ad0c08e78ccc0ff239802a2adb5`
 
+Last confirmed application revision: `198d4df9153b4d67082b17d361f82f500aeb6ca7` (2026-07-20, before the next queued release).
+
 The 3D application must not reuse the 2D production directory, service, port, certificate, or release symlink.
 
 ## Planned Boundary
@@ -40,19 +42,19 @@ scripts/production-health-check.sh
 
 The deployment script requires a clean `main` equal to `origin/main`, verifies Node dependencies, typechecks, tests, and builds locally, then creates an immutable server release. The server builds again, smoke-tests on port 3103, atomically switches `current`, and restores the previous release if port 3003 does not become ready.
 
-## Deployment Gate
+## Release Gate
 
-Do not create the 3D production service until all of these pass independently:
+Do not publish a new 3D release until all applicable checks pass independently:
 
 - Node.js 20 clean install.
 - Typecheck.
 - Rule tests.
 - Production build.
-- Fixed-camera desktop browser smoke test.
-- Compact viewport smoke test.
+- Fixed-camera desktop browser smoke test when interaction or visual code changes.
+- Compact viewport smoke test when layout, camera, or responsive code changes.
 - Board source/target click test.
-- WebGL failure behavior.
-- Independent release and rollback script review.
+- WebGL failure behavior when renderer initialization changes.
+- Independent release and rollback script review when deployment code changes.
 
 Run from the independent 3D repository:
 

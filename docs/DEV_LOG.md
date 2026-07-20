@@ -4403,3 +4403,28 @@ The black move record advanced from 1 to 2 rather than resolving both moves at o
 The dedicated test browser session and local production server were closed after QA.
 Production deployment and health verification pending.
 ```
+
+## 2026-07-20 3D Special Move Animation Baseline 19
+
+### Objective
+
+Complete the visible single-piece movement language in the fixed 3D scene so legal `复马` and `出马` transitions do not snap while ordinary moves animate.
+
+### Changes
+
+- Extended the presented-move observer to accept every single new move record, instead of accepting only numeric point-to-point moves.
+- Added renderer-local start and end positions for the left return tray and right borne-off tray.
+- Reused the existing 680 ms lift, travel, and settle motion for `栏位 -> 棋点` and `棋点 -> 出马位` paths.
+- Hid a newly added borne-off tray piece while it is in flight so a single `出马` does not render as a duplicated horse.
+- Keyed the animated mesh by move-history sequence so a newly observed move always begins with a fresh animation clock.
+- Kept hit displacement as a separate future task: it requires a second, opposing piece animation rather than another path for the moving piece.
+
+### Verification
+
+```txt
+Node.js 20.20.2.
+npm run typecheck passed.
+npm test passed: 10 test files, 38 tests.
+npm run build passed.
+Production deployment and health verification pending.
+```
