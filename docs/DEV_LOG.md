@@ -4401,7 +4401,7 @@ npm test passed: 10 test files, 38 tests.
 Browser interaction QA passed in one dedicated local browser session: black rolled 5/3, completed 16 -> 21 using 5 while 3 remained, then completed 18 -> 21 using 3 on the following scheduled transition.
 The black move record advanced from 1 to 2 rather than resolving both moves at once; browser console showed 0 errors.
 The dedicated test browser session and local production server were closed after QA.
-Production deployment and health verification pending.
+Included in the 2026-07-20 production release `e4aa7505bb0688af258e8bc8183fd18e286c1af3` together with Baseline 19.
 ```
 
 ## 2026-07-20 3D Special Move Animation Baseline 19
@@ -4426,5 +4426,10 @@ Node.js 20.20.2.
 npm run typecheck passed.
 npm test passed: 10 test files, 38 tests.
 npm run build passed.
-Production deployment and health verification pending.
+Deployed application revision `e4aa7505bb0688af258e8bc8183fd18e286c1af3` after local verification passed.
+Remote production build and temporary-port smoke test passed before the atomic release switch.
+Production health check passed: / and /3d returned HTTP 200, and shuanglu-3d.service is active and enabled.
+Production HTML contains game-3d-page, board-top-orthographic-cropped.webp, and scene-dice-faces.
+Production HTML does not contain parchment-game-shell.
+Production browser screenshots were intentionally skipped to avoid reopening desktop test Chrome windows after the requested cleanup.
 ```

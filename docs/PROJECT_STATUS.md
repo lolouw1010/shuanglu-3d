@@ -31,6 +31,7 @@ Fixed-camera playable visual baseline:
 - Black AI turns advance one transition at a time: roll, one move, or turn end. In 3D, the next transition waits for the current piece flight to settle.
 - Authoritative state jumps and reloads snap cleanly without replaying stale animation.
 - Independent Linode production is live at `https://3d.shuanglu.uway.click` on internal port 3003.
+- The last confirmed production release is `e4aa7505bb0688af258e8bc8183fd18e286c1af3` (2026-07-20).
 - The dedicated systemd service, Docker Nginx host, Let's Encrypt certificate, and renewal timer are active.
 - Rules and state remain outside the renderer.
 

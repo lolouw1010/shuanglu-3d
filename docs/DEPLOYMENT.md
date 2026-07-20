@@ -6,7 +6,7 @@ Public hostname: `https://3d.shuanglu.uway.click`
 
 Initial deployed application revision: `b94a60226da66ad0c08e78ccc0ff239802a2adb5`
 
-Last confirmed application revision: `198d4df9153b4d67082b17d361f82f500aeb6ca7` (2026-07-20, before the next queued release).
+Last confirmed application revision: `e4aa7505bb0688af258e8bc8183fd18e286c1af3` (2026-07-20).
 
 The 3D application must not reuse the 2D production directory, service, port, certificate, or release symlink.
 
